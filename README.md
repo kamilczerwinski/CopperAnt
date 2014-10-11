@@ -1,5 +1,4 @@
-CopperAnt
+CopperAnt    [![Build Status](http://j.marcinkaciuba.pl/job/CopperAnt/badge/icon)](http://j.marcinkaciuba.pl/job/CopperAnt/)
 =========
-[![Build Status](http://j.marcinkaciuba.pl/buildStatus/icon?job=CopperAnt)](http://j.marcinkaciuba.pl/job/CopperAnt/)
 
 Network simulation - project realized by students of Cracow University of Technology. 
