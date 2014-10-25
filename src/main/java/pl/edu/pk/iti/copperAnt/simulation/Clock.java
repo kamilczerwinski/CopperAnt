@@ -2,9 +2,10 @@ package pl.edu.pk.iti.copperAnt.simulation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Clock {
+public class Clock implements Runnable {
 	long currentTime;
 	List<Event> events;
 
@@ -25,6 +26,27 @@ public class Clock {
 
 	public int getNumberOfWaitingEvent() {
 		return this.events.size();
+	}
+
+	@Override
+	public void run() {
+		while (events.size() > 0) {
+			this.currentTime = events.get(0).getTime();
+			List<Event> eventsWithCurrentTime = popAllEventsWithCurrentTime();
+			for (Event event : eventsWithCurrentTime) {
+				event.run(this);
+			}
+		}
+
+	}
+
+	private List<Event> popAllEventsWithCurrentTime() {
+		List<Event> result = new LinkedList<Event>();
+		while (!events.isEmpty() && events.get(0).getTime() == currentTime) {
+			result.add(events.get(0));
+			events.remove(0);
+		}
+		return result;
 	}
 
 	private int getCorrectIndex(Event eventToAdd) {

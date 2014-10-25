@@ -4,4 +4,6 @@ public interface Event {
 
 	long getTime();
 
+	void run(Clock clock);
+
 }
