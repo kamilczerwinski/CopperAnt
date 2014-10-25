@@ -18,7 +18,22 @@
 	<properties>
 		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.17</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 
 		<!-- Logging -->
@@ -44,6 +59,16 @@
 			<version>1.2.16</version>
 		</dependency>
 
+		<!-- Logging -->
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+
+
 	</dependencies>
+
 
 </project>
