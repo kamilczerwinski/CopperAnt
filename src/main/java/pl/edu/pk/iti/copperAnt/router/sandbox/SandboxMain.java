@@ -13,7 +13,7 @@ public class SandboxMain extends Application {
 	public void start(Stage stage) {
 
 		Pane pane = new AnchorPane();
-		pane.setStyle("-fx-background-color:cyan;");
+		pane.setStyle("-fx-background-color:white;");
 		Scene scene = new Scene(pane, 200, 200);
 
 		stage.setTitle("Router sandbox");
@@ -21,10 +21,11 @@ public class SandboxMain extends Application {
 
 		Router router = new Router();
 		router.setPrefSize(10, 10);
-		router.setLayoutY(5);
+		router.setLayoutY(50);
 		router.setLayoutX(35);
 		router.setVisible(true);
 		pane.getChildren().add(router);
+
 		stage.show();
 
 	}

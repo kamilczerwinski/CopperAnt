@@ -1,11 +1,13 @@
 package pl.edu.pk.iti.copperAnt.router;
 
 import javafx.scene.control.SkinBase;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class RouterSkin extends SkinBase<Router> {
-	private Circle frame;
+
+	private static Image image = new Image(RouterSkin.class.getResource(
+			"/images/router.jpg").toExternalForm());
 
 	protected RouterSkin(Router control) {
 		super(control);
@@ -13,10 +15,10 @@ public class RouterSkin extends SkinBase<Router> {
 	}
 
 	private void initGraphics() {
-		frame = new Circle(50, 50, 50);
-		frame.setFill(Color.RED);
-		frame.setVisible(true);
-		getChildren().setAll(frame);
-	}
+		ImageView imageView = new ImageView();
 
+		imageView.setImage(image);
+
+		getChildren().setAll(imageView);
+	}
 }
