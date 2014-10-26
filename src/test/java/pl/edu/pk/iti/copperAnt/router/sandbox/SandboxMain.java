@@ -27,6 +27,7 @@ public class SandboxMain extends Application {
 		pane.getChildren().add(router);
 
 		pane.getChildren().add(router.getWindow());
+		stage.setMaximized(true);
 		stage.show();
 
 	}
