@@ -26,6 +26,7 @@ public class SandboxMain extends Application {
 		router.setVisible(true);
 		pane.getChildren().add(router);
 
+		pane.getChildren().add(router.getWindow());
 		stage.show();
 
 	}

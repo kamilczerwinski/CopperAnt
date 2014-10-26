@@ -16,9 +16,8 @@ public class RouterSkin extends SkinBase<Router> {
 
 	private void initGraphics() {
 		ImageView imageView = new ImageView();
-
 		imageView.setImage(image);
-
 		getChildren().setAll(imageView);
+
 	}
 }
