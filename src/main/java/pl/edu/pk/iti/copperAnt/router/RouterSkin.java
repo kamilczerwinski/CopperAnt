@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 public class RouterSkin extends SkinBase<Router> {
 
 	private static Image image = new Image(RouterSkin.class.getResource(
-			"/images/router.jpg").toExternalForm());
+			"/images/router.png").toExternalForm());
 
 	protected RouterSkin(Router control) {
 		super(control);
