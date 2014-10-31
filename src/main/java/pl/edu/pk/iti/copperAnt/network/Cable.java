@@ -63,6 +63,10 @@ public class Cable {
 			b = port;
 			port.conntectCalble(this);
 		}
+	}
 
+	@Override
+	public String toString() {
+		return Integer.toHexString(hashCode()) + "[state=" + state + "]";
 	}
 }

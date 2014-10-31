@@ -18,7 +18,7 @@ public class Clock {
 	List<Event> events;
 
 	public Clock() {
-		this.currentTime = 0;
+		this.currentTime = -1;
 		events = new ArrayList<Event>();
 	}
 

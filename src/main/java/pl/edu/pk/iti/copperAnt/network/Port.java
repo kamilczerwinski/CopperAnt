@@ -23,4 +23,10 @@ public class Port {
 			cableToDisconnect.ejectFromPort(this);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "[" + Integer.toHexString(hashCode()) + "]";
+	}
+
 }

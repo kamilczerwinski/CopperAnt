@@ -16,4 +16,9 @@ public abstract class Event {
 
 	abstract public void run(Clock clock);
 
+	@Override
+	public String toString() {
+		return time + ": ";
+	}
+
 }
