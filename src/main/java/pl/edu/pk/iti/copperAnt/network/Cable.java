@@ -1,6 +1,5 @@
 package pl.edu.pk.iti.copperAnt.network;
 
-
 public class Cable {
 
 	Port a;
@@ -31,9 +30,9 @@ public class Cable {
 	}
 
 	public void ejectFromPort(Port port) {
-		if (port.equals(a)) {
+		if (port == a) {
 			a = null;
-		} else if (port.equals(b)) {
+		} else if (port == b) {
 			b = null;
 		}
 		port.disconnectCable();

@@ -8,15 +8,15 @@ import static pl.edu.pk.iti.copperAnt.network.TestHelper.portIsConnectedToOneOfC
 
 import org.junit.Test;
 
-public class PortTest {
+public class CableTest {
 
 	@Test
-	public void conntectCalbleImpactsCableFieldsTest() {
+	public void insertIntoImpactsPortFieldsTest() {
 		// given
 		Port port = new Port();
 		Cable cable = new Cable();
 		// when
-		port.conntectCalble(cable);
+		cable.insertInto(port);
 		// then
 		assertEquals(cable, port.getCable());
 		assertTrue("One of cable ends is conncted to port",
@@ -24,12 +24,12 @@ public class PortTest {
 	}
 
 	@Test
-	public void disconnectCableTest() {
+	public void ejectFromPortTest() {
 		Port port = new Port();
 		Cable cable = new Cable();
 		port.conntectCalble(cable);
 		// when
-		port.disconnectCable();
+		cable.ejectFromPort(port);
 		// then
 		assertNull(port.getCable());
 		assertFalse("None of cable ends is conncted to port",
@@ -37,16 +37,18 @@ public class PortTest {
 	}
 
 	@Test
-	public void cannotConnectWhenCableExistsTest() {
-		Port port = new Port();
-		Cable cable1 = new Cable();
-		Cable cable2 = new Cable();
-		port.conntectCalble(cable1);
+	public void cannotConnectMoreThanTwoPortsTest() {
+		Port port1 = new Port();
+		Port port2 = new Port();
+		Port port3 = new Port();
+		Cable cable = new Cable();
+		cable.insertInto(port1);
+		cable.insertInto(port2);
 		// when
-		port.conntectCalble(cable2);
+		cable.insertInto(port3);
 		// then
-		assertFalse(port.getCable().equals(cable2));
-		assertFalse(portIsConnectedToOneOfCableEnds(port, cable2));
+		assertFalse(port3.getCable() == null ? false : port3.getCable().equals(
+				cable));
+		assertFalse(portIsConnectedToOneOfCableEnds(port3, cable));
 	}
-
 }
