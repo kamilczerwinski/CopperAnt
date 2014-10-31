@@ -1,5 +1,6 @@
 package pl.edu.pk.iti.copperAnt.network;
 
+
 public class Port {
 	Cable cable;
 
@@ -9,15 +10,17 @@ public class Port {
 
 	Device device;
 
-	public void conntectCalble(Cable cable) throws Exception {
+	public void conntectCalble(Cable cable) {
 		if (this.cable == null) {
 			this.cable = cable;
-		} else {
-			throw new Exception("Cannot connect cable. Port is already used");
+			cable.insertInto(this);
 		}
 	}
 
 	public void disconnectCable() {
-		this.cable = null;
+		if (this.cable != null) {
+			this.cable = null;
+			cable.ejectFromPort(this);
+		}
 	}
 }

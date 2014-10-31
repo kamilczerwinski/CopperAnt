@@ -5,12 +5,12 @@ import pl.edu.pk.iti.copperAnt.network.CableState;
 import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
-public class CableReveivesEvent extends Event {
+public class CableReceivesEvent extends Event {
 
 	private Cable cable;
 	private Port port;
 
-	public CableReveivesEvent(long time, Port fromPort) {
+	public CableReceivesEvent(long time, Port fromPort) {
 		super(time);
 		cable = fromPort.getCable();
 		port = fromPort;
@@ -22,7 +22,7 @@ public class CableReveivesEvent extends Event {
 			cable.setState(CableState.BUSY);
 			clock.addEvent(new CableSendsEvent(time + getCabelDelay(), cable
 					.getOtherEnd(port)));
-		} else {
+		}else {
 			cable.setState(CableState.COLISION);
 		}
 	}

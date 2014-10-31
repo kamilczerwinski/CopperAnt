@@ -26,7 +26,7 @@ public class PortSendsEvent extends Event {
 		long timeOfNextEvent = intervalGenerator.getTimeInterval();
 		clock.addEvent(new PortSendsEvent(this.time + timeOfNextEvent,
 				this.port));
-		clock.addEvent(new CableReveivesEvent(this.time + timeOfProcessing,
+		clock.addEvent(new CableReceivesEvent(this.time + timeOfProcessing,
 				port));
 
 	}
