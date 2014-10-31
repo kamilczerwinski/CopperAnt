@@ -5,9 +5,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pl.edu.pk.iti.copperAnt.simulation.events.Event;
 
 public class Clock {
+	private static final Logger log = LoggerFactory.getLogger(Clock.class);
+	private FinishCondition finishCondition = new EmptyListFinishCondition();
+
 	long currentTime;
 	List<Event> events;
 
@@ -31,14 +37,14 @@ public class Clock {
 	}
 
 	public void run() {
-		while (events.size() > 0) {
+		while (!finishCondition.isSatisfied(this)) {
 			tick();
 		}
 
 	}
 
 	public void tick() {
-		if (events.size() > 0) {
+		if (!finishCondition.isSatisfied(this)) {
 			this.currentTime = events.get(0).getTime();
 			List<Event> eventsWithCurrentTime = popAllEventsWithCurrentTime();
 			for (Event event : eventsWithCurrentTime) {
@@ -69,4 +75,7 @@ public class Clock {
 		return i;
 	}
 
+	public void setFinishCondition(FinishCondition finishCondition) {
+		this.finishCondition = finishCondition;
+	}
 }

@@ -49,7 +49,7 @@ public class ClockTest {
 		clock.addEvent(new SimpleMockEvent(4));
 		// then
 		clock.run();
-		System.setOut(null);
+
 		assertEquals("SimpleMockEvent [time=1]\n"
 				+ "SimpleMockEvent [time=2]\n" + "SimpleMockEvent [time=2]\n"
 				+ "SimpleMockEvent [time=3]\n" + "SimpleMockEvent [time=4]\n"
@@ -69,7 +69,7 @@ public class ClockTest {
 		clock.addEvent(new ComplexMockEvent(4));
 		// then
 		clock.run();
-		System.setOut(null);
+
 		assertEquals("ComplexMockEvent [time=3]\n"
 				+ "ComplexMockEvent [time=4]\n" + "ComplexMockEvent [time=6]\n"
 				+ "SimpleMockEvent [time=13]\n" + "SimpleMockEvent [time=14]\n"
@@ -95,7 +95,6 @@ public class ClockTest {
 		clock.tick();
 		assertEquals("SimpleMockEvent [time=3]\n"
 				+ "SimpleMockEvent [time=6]\n", outContent.toString());
-		System.setOut(null);
 
 	}
 
