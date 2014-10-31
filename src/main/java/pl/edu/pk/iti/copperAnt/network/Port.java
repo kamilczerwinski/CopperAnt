@@ -1,6 +1,5 @@
 package pl.edu.pk.iti.copperAnt.network;
 
-
 public class Port {
 	Cable cable;
 
@@ -19,8 +18,9 @@ public class Port {
 
 	public void disconnectCable() {
 		if (this.cable != null) {
+			Cable cableToDisconnect = this.cable;
 			this.cable = null;
-			cable.ejectFromPort(this);
+			cableToDisconnect.ejectFromPort(this);
 		}
 	}
 }
