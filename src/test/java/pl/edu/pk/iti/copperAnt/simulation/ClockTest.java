@@ -7,6 +7,9 @@ import java.io.PrintStream;
 
 import org.junit.Test;
 
+import pl.edu.pk.iti.copperAnt.simulation.events.ComplexMockEvent;
+import pl.edu.pk.iti.copperAnt.simulation.events.SimpleMockEvent;
+
 public class ClockTest {
 
 	@Test
@@ -14,12 +17,12 @@ public class ClockTest {
 		// given
 		Clock clock = new Clock();
 		// when
-		clock.addEvent(new SimpleMockEvent().withTime(6));
-		clock.addEvent(new SimpleMockEvent().withTime(3));
-		clock.addEvent(new SimpleMockEvent().withTime(1));
-		clock.addEvent(new SimpleMockEvent().withTime(2));
-		clock.addEvent(new SimpleMockEvent().withTime(2));
-		clock.addEvent(new SimpleMockEvent().withTime(4));
+		clock.addEvent(new SimpleMockEvent(6));
+		clock.addEvent(new SimpleMockEvent(3));
+		clock.addEvent(new SimpleMockEvent(1));
+		clock.addEvent(new SimpleMockEvent(2));
+		clock.addEvent(new SimpleMockEvent(2));
+		clock.addEvent(new SimpleMockEvent(4));
 		// then
 		assertEquals(clock.getNumberOfWaitingEvent(), 6);
 		assertEquals(clock.getEventFromList(0).getTime(), 1);
@@ -38,16 +41,14 @@ public class ClockTest {
 		System.setOut(new PrintStream(outContent));
 		Clock clock = new Clock();
 		// when
-		clock.addEvent(new SimpleMockEvent().withTime(6));
-		clock.addEvent(new SimpleMockEvent().withTime(3));
-		clock.addEvent(new SimpleMockEvent().withTime(1));
-		clock.addEvent(new SimpleMockEvent().withTime(2));
-		clock.addEvent(new SimpleMockEvent().withTime(2));
-		clock.addEvent(new SimpleMockEvent().withTime(4));
+		clock.addEvent(new SimpleMockEvent(6));
+		clock.addEvent(new SimpleMockEvent(3));
+		clock.addEvent(new SimpleMockEvent(1));
+		clock.addEvent(new SimpleMockEvent(2));
+		clock.addEvent(new SimpleMockEvent(2));
+		clock.addEvent(new SimpleMockEvent(4));
 		// then
-		Thread thread = new Thread(clock);
-		thread.start();
-		thread.join();
+		clock.run();
 		System.setOut(null);
 		assertEquals("SimpleMockEvent [time=1]\n"
 				+ "SimpleMockEvent [time=2]\n" + "SimpleMockEvent [time=2]\n"
@@ -63,13 +64,11 @@ public class ClockTest {
 		System.setOut(new PrintStream(outContent));
 		Clock clock = new Clock();
 		// when
-		clock.addEvent(new ComplexMockEvent().withTime(6));
-		clock.addEvent(new ComplexMockEvent().withTime(3));
-		clock.addEvent(new ComplexMockEvent().withTime(4));
+		clock.addEvent(new ComplexMockEvent(6));
+		clock.addEvent(new ComplexMockEvent(3));
+		clock.addEvent(new ComplexMockEvent(4));
 		// then
-		Thread thread = new Thread(clock);
-		thread.start();
-		thread.join();
+		clock.run();
 		System.setOut(null);
 		assertEquals("ComplexMockEvent [time=3]\n"
 				+ "ComplexMockEvent [time=4]\n" + "ComplexMockEvent [time=6]\n"
@@ -78,6 +77,25 @@ public class ClockTest {
 				+ "SimpleMockEvent [time=103]\n"
 				+ "SimpleMockEvent [time=104]\n"
 				+ "SimpleMockEvent [time=106]\n", outContent.toString());
+
+	}
+
+	@Test
+	public void tickMethodTest() throws Exception {
+		// given
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outContent));
+		Clock clock = new Clock();
+		// when
+		clock.addEvent(new SimpleMockEvent(3));
+		clock.addEvent(new SimpleMockEvent(6));
+		// then
+		clock.tick();
+		assertEquals("SimpleMockEvent [time=3]\n", outContent.toString());
+		clock.tick();
+		assertEquals("SimpleMockEvent [time=3]\n"
+				+ "SimpleMockEvent [time=6]\n", outContent.toString());
+		System.setOut(null);
 
 	}
 

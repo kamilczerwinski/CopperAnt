@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Clock implements Runnable {
+import pl.edu.pk.iti.copperAnt.simulation.events.Event;
+
+public class Clock {
 	long currentTime;
 	List<Event> events;
 
@@ -28,16 +30,21 @@ public class Clock implements Runnable {
 		return this.events.size();
 	}
 
-	@Override
 	public void run() {
 		while (events.size() > 0) {
+			tick();
+		}
+
+	}
+
+	public void tick() {
+		if (events.size() > 0) {
 			this.currentTime = events.get(0).getTime();
 			List<Event> eventsWithCurrentTime = popAllEventsWithCurrentTime();
 			for (Event event : eventsWithCurrentTime) {
 				event.run(this);
 			}
 		}
-
 	}
 
 	private List<Event> popAllEventsWithCurrentTime() {
