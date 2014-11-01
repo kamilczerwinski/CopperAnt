@@ -26,6 +26,7 @@ public class Clock {
 	}
 
 	public void addEvent(Event eventToAdd) {
+		log.debug("Added event: " + eventToAdd);
 		if (eventToAdd.getTime() >= currentTime) {
 			events.add(getCorrectIndex(eventToAdd), eventToAdd);
 		}
@@ -52,6 +53,7 @@ public class Clock {
 			}
 
 		}
+		log.debug("Tick. Size of list:" + events.size());
 	}
 
 	private int getCorrectIndex(Event eventToAdd) {

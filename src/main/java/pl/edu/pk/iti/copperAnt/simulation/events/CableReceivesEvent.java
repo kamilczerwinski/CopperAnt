@@ -23,12 +23,14 @@ public class CableReceivesEvent extends Event {
 
 	@Override
 	public void run(Clock clock) {
+		cable.setBusyUntil(time + cable.getDelay());
 		if (cable.getState() == CableState.IDLE) {
 			cable.setState(CableState.BUSY);
 			clock.addEvent(new CableSendsEvent(time + cable.getDelay(), cable
 					.getOtherEnd(port)));
 		} else {
 			cable.setState(CableState.COLISION);
+			log.debug("There was collision. Package was lost.");
 		}
 		log.debug(this.toString());
 	}

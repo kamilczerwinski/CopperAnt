@@ -26,10 +26,10 @@ public class CableSendsEvent extends Event {
 	public void run(Clock clock) {
 		if (!cable.getState().equals(CableState.COLISION)) {
 			clock.addEvent(new PortReceivesEvent(time + DELAY, port));
-		} else {
-			log.debug("There was collision. Package was lost.");
 		}
-		cable.setState(CableState.IDLE);
+		if (cable.getBusyUntilTime() <= time) {
+			cable.setState(CableState.IDLE);
+		}
 		log.debug(toString());
 
 	}

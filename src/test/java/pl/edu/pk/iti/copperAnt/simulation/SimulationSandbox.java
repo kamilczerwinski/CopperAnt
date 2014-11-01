@@ -19,8 +19,8 @@ public class SimulationSandbox {
 		cable.insertInto(port2);
 
 		clock.addEvent(new PortSendsEvent(0, port1)
-				.withIntervalGenerator(new ConstantTimeIntervalGenerator(3)));
-		clock.addEvent(new PortSendsEvent(1, port2)
+				.withIntervalGenerator(new ConstantTimeIntervalGenerator(20)));
+		clock.addEvent(new PortSendsEvent(0, port2)
 				.withIntervalGenerator(new ConstantTimeIntervalGenerator(5)));
 		clock.run();
 	}

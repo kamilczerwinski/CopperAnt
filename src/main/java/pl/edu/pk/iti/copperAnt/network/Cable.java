@@ -6,6 +6,7 @@ public class Cable {
 	Port b;
 
 	CableState state;
+	private long busyUntilTime;
 
 	public Cable() {
 		state = CableState.IDLE;
@@ -68,11 +69,20 @@ public class Cable {
 
 	@Override
 	public String toString() {
-		return Integer.toHexString(hashCode()) + "[state=" + state + "]";
+		return Integer.toHexString(hashCode()) + "[state=" + state + "]"
+				+ "[busyUntilTime=" + busyUntilTime + "]";
 	}
 
 	public long getDelay() {
 		// TODO uzaleznić to od długości kabla
-		return 25;
+		return 2;
+	}
+
+	public void setBusyUntil(long time) {
+		this.busyUntilTime = time;
+	}
+
+	public long getBusyUntilTime() {
+		return busyUntilTime;
 	}
 }
