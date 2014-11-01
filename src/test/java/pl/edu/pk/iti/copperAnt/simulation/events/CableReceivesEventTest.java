@@ -12,6 +12,7 @@ import pl.edu.pk.iti.copperAnt.network.CableState;
 import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
+import pl.edu.pk.iti.copperAnt.simulation.MockDevice;
 
 @RunWith(JUnitParamsRunner.class)
 public class CableReceivesEventTest {
@@ -21,10 +22,10 @@ public class CableReceivesEventTest {
 	public void eventChangesCableStateTest(CableState expectedStateBeforeEvent,
 			CableState expectedStateAfterEvent) throws Exception {
 		// given
-		Port port = new Port();
+		Port port = new Port(new MockDevice());
 		Cable cable = new Cable();
 		port.conntectCalble(cable);
-		cable.insertInto(new Port());
+		cable.insertInto(new Port(new MockDevice()));
 		cable.setA(port);
 		cable.setState(expectedStateBeforeEvent);
 		CableReceivesEvent event = new CableReceivesEvent(0, port,

@@ -8,7 +8,7 @@ public class Computer implements Device {
 	private Port port;
 
 	public Computer() {
-		this.port = new Port();
+		this.port = new Port(this);
 	}
 
 	public Port getPort() {
@@ -17,7 +17,7 @@ public class Computer implements Device {
 
 	@Override
 	public void acceptPackage(Package pack) {
-		// TODO Auto-generated method stub
+		System.out.println("Computer received package");
 
 	}
 

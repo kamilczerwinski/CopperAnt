@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import pl.edu.pk.iti.copperAnt.network.Cable;
 import pl.edu.pk.iti.copperAnt.network.Computer;
+import pl.edu.pk.iti.copperAnt.network.Hub;
 import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
@@ -14,8 +15,8 @@ public class SimulationSandbox {
 	public void sandbox1() {
 		Clock clock = new Clock();
 		clock.setFinishCondition(new MaxTimeFinishCondition(100));
-		Port port1 = new Port();
-		Port port2 = new Port();
+		Port port1 = new Port(new MockDevice());
+		Port port2 = new Port(new MockDevice());
 		Cable cable = new Cable();
 		cable.insertInto(port1);
 		cable.insertInto(port2);
@@ -37,6 +38,28 @@ public class SimulationSandbox {
 
 		computer1.initTrafic(clock);
 		clock.run();
+	}
+
+	@Test
+	public void sandbox3() {
+		Clock clock = new Clock()
+				.withFinishCondition(new MaxTimeFinishCondition(100));
+		Hub hub = new Hub(3, clock);
+		Computer computer1 = new Computer();
+		Computer computer2 = new Computer();
+		Computer computer3 = new Computer();
+		connectComputerToHub(computer1, hub, 0);
+		connectComputerToHub(computer2, hub, 1);
+		connectComputerToHub(computer3, hub, 2);
+
+		computer1.initTrafic(clock);
+		clock.run();
+	}
+
+	private void connectComputerToHub(Computer computer, Hub hub, int portNr) {
+		Cable cable = new Cable();
+		cable.insertInto(computer.getPort());
+		cable.insertInto(hub.getPort(portNr));
 	}
 
 }

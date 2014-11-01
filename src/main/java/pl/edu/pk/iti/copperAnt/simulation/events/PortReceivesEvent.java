@@ -12,17 +12,19 @@ public class PortReceivesEvent extends Event {
 			.getLogger(PortReceivesEvent.class);
 
 	private static final long timeOfProcessing = 1;
-
 	private Port port;
+	private Package pack;
 
 	public PortReceivesEvent(long time, Port port, Package pack) {
 		super(time);
 		this.port = port;
+		this.pack = pack;
 
 	}
 
 	@Override
 	public void run(Clock clock) {
+		port.getDevice().acceptPackage(pack);
 		log.debug(this.toString());
 
 	}

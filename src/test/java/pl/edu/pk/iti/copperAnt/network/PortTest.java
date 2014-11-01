@@ -8,12 +8,14 @@ import static pl.edu.pk.iti.copperAnt.network.TestHelper.portIsConnectedToOneOfC
 
 import org.junit.Test;
 
+import pl.edu.pk.iti.copperAnt.simulation.MockDevice;
+
 public class PortTest {
 
 	@Test
 	public void conntectCalbleImpactsCableFieldsTest() {
 		// given
-		Port port = new Port();
+		Port port = new Port(new MockDevice());
 		Cable cable = new Cable();
 		// when
 		port.conntectCalble(cable);
@@ -25,7 +27,7 @@ public class PortTest {
 
 	@Test
 	public void disconnectCableTest() {
-		Port port = new Port();
+		Port port = new Port(new MockDevice());
 		Cable cable = new Cable();
 		port.conntectCalble(cable);
 		// when
@@ -38,7 +40,7 @@ public class PortTest {
 
 	@Test
 	public void cannotConnectWhenCableExistsTest() {
-		Port port = new Port();
+		Port port = new Port(new MockDevice());
 		Cable cable1 = new Cable();
 		Cable cable2 = new Cable();
 		port.conntectCalble(cable1);

@@ -2,12 +2,20 @@ package pl.edu.pk.iti.copperAnt.network;
 
 public class Port {
 	Cable cable;
+	final Device device;
+
+	public Device getDevice() {
+		return device;
+	}
+
+	public Port(Device device) {
+		super();
+		this.device = device;
+	}
 
 	public Cable getCable() {
 		return cable;
 	}
-
-	Device device;
 
 	public void conntectCalble(Cable cable) {
 		if (this.cable == null) {

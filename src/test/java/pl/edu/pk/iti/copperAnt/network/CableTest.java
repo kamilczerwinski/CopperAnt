@@ -8,13 +8,15 @@ import static pl.edu.pk.iti.copperAnt.network.TestHelper.portIsConnectedToOneOfC
 
 import org.junit.Test;
 
+import pl.edu.pk.iti.copperAnt.simulation.MockDevice;
+
 public class CableTest {
 
 	@Test
 	public void insertIntoImpactsPortFieldsTest() {
 		// given
-		Port port1 = new Port();
-		Port port2 = new Port();
+		Port port1 = new Port(new MockDevice());
+		Port port2 = new Port(new MockDevice());
 		Cable cable = new Cable();
 		// when
 		cable.insertInto(port1);
@@ -30,7 +32,7 @@ public class CableTest {
 
 	@Test
 	public void ejectFromPortTest() {
-		Port port = new Port();
+		Port port = new Port(new MockDevice());
 		Cable cable = new Cable();
 		port.conntectCalble(cable);
 		// when
@@ -43,9 +45,9 @@ public class CableTest {
 
 	@Test
 	public void cannotConnectMoreThanTwoPortsTest() {
-		Port port1 = new Port();
-		Port port2 = new Port();
-		Port port3 = new Port();
+		Port port1 = new Port(new MockDevice());
+		Port port2 = new Port(new MockDevice());
+		Port port3 = new Port(new MockDevice());
 		Cable cable = new Cable();
 		cable.insertInto(port1);
 		cable.insertInto(port2);

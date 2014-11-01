@@ -7,7 +7,6 @@ public class MockDevice implements Device {
 
 	@Override
 	public void acceptPackage(Package pack) {
-		System.out.println("Package accepted");
 
 	}
 
