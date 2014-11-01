@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.network.Cable;
 import pl.edu.pk.iti.copperAnt.network.CableState;
+import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
@@ -15,10 +16,14 @@ public class CableReceivesEvent extends Event {
 	private Cable cable;
 	private Port port;
 
-	public CableReceivesEvent(long time, Port fromPort) {
+	private Package pack;
+
+	public CableReceivesEvent(long time, Port fromPort, Package pack) {
 		super(time);
-		cable = fromPort.getCable();
-		port = fromPort;
+		this.pack = pack;
+		this.cable = fromPort.getCable();
+		this.port = fromPort;
+
 	}
 
 	@Override
@@ -27,7 +32,7 @@ public class CableReceivesEvent extends Event {
 		if (cable.getState() == CableState.IDLE) {
 			cable.setState(CableState.BUSY);
 			clock.addEvent(new CableSendsEvent(time + cable.getDelay(), cable
-					.getOtherEnd(port)));
+					.getOtherEnd(port), pack));
 		} else {
 			cable.setState(CableState.COLISION);
 			log.debug("There was collision. Package was lost.");

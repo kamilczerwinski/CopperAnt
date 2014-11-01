@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import pl.edu.pk.iti.copperAnt.network.Cable;
 import pl.edu.pk.iti.copperAnt.network.CableState;
+import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
@@ -26,7 +27,8 @@ public class CableReceivesEventTest {
 		cable.insertInto(new Port());
 		cable.setA(port);
 		cable.setState(expectedStateBeforeEvent);
-		CableReceivesEvent event = new CableReceivesEvent(0, port);
+		CableReceivesEvent event = new CableReceivesEvent(0, port,
+				new Package());
 		// when
 		event.run(new Clock());
 		// then

@@ -13,7 +13,11 @@ public class MaxTimeFinishCondition implements FinishCondition {
 
 	@Override
 	public boolean isSatisfied(Clock clock) {
-		Event firstEvent = clock.events.get(0);
-		return firstEvent == null || firstEvent.getTime() > maxTime;
+		if (!clock.events.isEmpty()) {
+			Event firstEvent = clock.events.get(0);
+			return firstEvent == null || firstEvent.getTime() > maxTime;
+		} else {
+			return true;
+		}
 	}
 }

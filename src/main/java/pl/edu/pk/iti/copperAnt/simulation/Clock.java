@@ -14,6 +14,7 @@ public class Clock {
 	private FinishCondition finishCondition = new EmptyListFinishCondition();
 
 	long currentTime;
+
 	List<Event> events;
 
 	public Clock() {
@@ -71,5 +72,14 @@ public class Clock {
 
 	public void setFinishCondition(FinishCondition finishCondition) {
 		this.finishCondition = finishCondition;
+	}
+
+	public Clock withFinishCondition(FinishCondition finishCondition) {
+		setFinishCondition(finishCondition);
+		return this;
+	}
+
+	public long getCurrentTime() {
+		return currentTime;
 	}
 }
