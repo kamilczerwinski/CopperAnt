@@ -3,7 +3,6 @@ package pl.edu.pk.iti.copperAnt.network;
 public class Cable {
 
 	Port a;
-
 	Port b;
 
 	CableState state;
@@ -56,17 +55,24 @@ public class Cable {
 	}
 
 	public void insertInto(Port port) {
-		if (a == null) {
-			a = port;
-			port.conntectCalble(this);
-		} else if (b == null) {
-			b = port;
-			port.conntectCalble(this);
+		if (port != a && port != b) {
+			if (a == null) {
+				a = port;
+				port.conntectCalble(this);
+			} else if (b == null) {
+				b = port;
+				port.conntectCalble(this);
+			}
 		}
 	}
 
 	@Override
 	public String toString() {
 		return Integer.toHexString(hashCode()) + "[state=" + state + "]";
+	}
+
+	public long getDelay() {
+		// TODO uzaleznić to od długości kabla
+		return 25;
 	}
 }

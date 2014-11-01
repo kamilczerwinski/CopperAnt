@@ -25,17 +25,12 @@ public class CableReceivesEvent extends Event {
 	public void run(Clock clock) {
 		if (cable.getState() == CableState.IDLE) {
 			cable.setState(CableState.BUSY);
-			clock.addEvent(new CableSendsEvent(time + getCabelDelay(), cable
+			clock.addEvent(new CableSendsEvent(time + cable.getDelay(), cable
 					.getOtherEnd(port)));
 		} else {
 			cable.setState(CableState.COLISION);
 		}
 		log.debug(this.toString());
-	}
-
-	private long getCabelDelay() {
-		// TODO uzaleznić to od długości kabla
-		return 5;
 	}
 
 	@Override

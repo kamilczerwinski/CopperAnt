@@ -98,4 +98,20 @@ public class ClockTest {
 
 	}
 
+	@Test
+	public void canHandleAddingEventsWithTheSameTimeTest() throws Exception {
+		// given
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outContent));
+		Clock clock = new Clock();
+		// when
+		clock.addEvent(new ComplexMockEvent(0, 0, 10));
+		// then
+		clock.run();
+		assertEquals("ComplexMockEvent [time=0]\n"
+				+ "SimpleMockEvent [time=0]\n" + "SimpleMockEvent [time=10]\n",
+				outContent.toString());
+
+	}
+
 }

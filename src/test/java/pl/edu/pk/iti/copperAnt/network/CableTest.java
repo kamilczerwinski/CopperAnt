@@ -13,14 +13,19 @@ public class CableTest {
 	@Test
 	public void insertIntoImpactsPortFieldsTest() {
 		// given
-		Port port = new Port();
+		Port port1 = new Port();
+		Port port2 = new Port();
 		Cable cable = new Cable();
 		// when
-		cable.insertInto(port);
+		cable.insertInto(port1);
+		cable.insertInto(port2);
 		// then
-		assertEquals(cable, port.getCable());
+		assertEquals(cable, port1.getCable());
 		assertTrue("One of cable ends is conncted to port",
-				portIsConnectedToOneOfCableEnds(port, cable));
+				portIsConnectedToOneOfCableEnds(port1, cable));
+		assertEquals(cable, port2.getCable());
+		assertTrue("One of cable ends is conncted to port",
+				portIsConnectedToOneOfCableEnds(port2, cable));
 	}
 
 	@Test
