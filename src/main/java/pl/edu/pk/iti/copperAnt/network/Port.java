@@ -18,9 +18,10 @@ public class Port {
 	}
 
 	public void conntectCalble(Cable cable) {
-		this.disconnectCable();
-		this.cable = cable;
-		cable.insertInto(this);
+		if (this.cable == null) {
+			this.cable = cable;
+			cable.insertInto(this);
+		}
 		
 	}
 
