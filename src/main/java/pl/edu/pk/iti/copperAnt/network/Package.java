@@ -10,7 +10,7 @@ public class Package {
 		return "no jet implemented";
 	}
 
-	public String getFromMax() {
+	public String getFromMac() {
 		return "no jet implemented";
 	}
 
