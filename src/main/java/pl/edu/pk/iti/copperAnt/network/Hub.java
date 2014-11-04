@@ -30,4 +30,13 @@ public class Hub implements Device {
 					port, pack));
 		}
 	}
+	
+	public String getIp() {
+		return "";
+	}
+	public String getMac() {
+		return m_Mac;
+	}
+	
+	private String m_Mac;
 }

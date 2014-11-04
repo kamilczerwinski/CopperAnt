@@ -7,5 +7,12 @@ public class Switch implements Device {
 		// TODO Auto-generated method stub
 
 	}
-
+	public String getIp() {
+		return "";
+	}
+	public String getMac() {
+		return m_Mac;
+	}
+	
+	private String m_Mac;
 }
