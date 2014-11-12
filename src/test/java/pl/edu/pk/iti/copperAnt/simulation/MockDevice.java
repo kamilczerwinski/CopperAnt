@@ -9,11 +9,4 @@ public class MockDevice implements Device {
 	public void acceptPackage(Package pack) {
 
 	}
-	
-	public String getIp() {
-		return "";
-	}
-	public String getMac() {
-		return "";
-	}
 }

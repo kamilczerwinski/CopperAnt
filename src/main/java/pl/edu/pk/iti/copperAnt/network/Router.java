@@ -51,4 +51,10 @@ public class Router implements Device {
 	
 
 
+	@Override
+	public int getDelay() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

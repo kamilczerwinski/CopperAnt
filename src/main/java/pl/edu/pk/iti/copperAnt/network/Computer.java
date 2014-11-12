@@ -31,10 +31,4 @@ public class Computer implements Device {
 		clock.addEvent(event);
 	}
 
-	public String getIp() {
-		return m_ip;
-	}
-	public String getMac() {
-		return m_Mac;
-	}
 }

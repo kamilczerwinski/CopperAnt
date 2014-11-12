@@ -1,4 +1,4 @@
-CopperAnt    [![Build Status](http://j.marcinkaciuba.pl/job/CopperAnt/badge/icon)](http://j.marcinkaciuba.pl/job/CopperAnt/)
+CopperAnt    [![Build Status](https://travis-ci.org/Teleinformatyka/CopperAnt.svg?branch=master)](https://travis-ci.org/Teleinformatyka/CopperAnt)        [![Coverage Status](https://coveralls.io/repos/Teleinformatyka/CopperAnt/badge.png)](https://coveralls.io/r/Teleinformatyka/CopperAnt)
 =========
 
 Network simulation - project realized by students of Cracow University of Technology. 

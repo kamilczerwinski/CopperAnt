@@ -13,6 +13,6 @@ public class Switch implements Device {
 	public String getMac() {
 		return m_Mac;
 	}
-	
+
 	private String m_Mac;
 }
