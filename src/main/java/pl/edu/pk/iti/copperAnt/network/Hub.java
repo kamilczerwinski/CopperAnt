@@ -7,7 +7,6 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Hub implements Device {
-	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private Clock clock;
 
@@ -26,8 +25,13 @@ public class Hub implements Device {
 	@Override
 	public void acceptPackage(Package pack) {
 		for (Port port : ports) {
-			clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + DELAY,
-					port, pack));
+			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
+					+ getDelay(), port, pack));
 		}
+	}
+
+	@Override
+	public int getDelay() {
+		return 0;
 	}
 }

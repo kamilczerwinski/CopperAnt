@@ -29,4 +29,9 @@ public class Computer implements Device {
 		clock.addEvent(event);
 	}
 
+	@Override
+	public int getDelay() {
+		return 0;
+	}
+
 }
