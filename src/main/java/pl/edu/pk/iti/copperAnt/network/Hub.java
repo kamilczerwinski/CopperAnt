@@ -29,4 +29,22 @@ public class Hub implements Device {
 					+ getDelay(), port, pack));
 		}
 	}
+
+	@Override
+	public int getDelay() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getIp() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getMac() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
