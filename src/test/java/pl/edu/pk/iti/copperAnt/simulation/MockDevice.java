@@ -9,4 +9,20 @@ public class MockDevice implements Device {
 	public void acceptPackage(Package pack) {
 
 	}
+
+	@Override
+	public int getDelay() {
+		return 0;
+	}
+
+	@Override
+	public String getIp() {
+		return null;
+	}
+
+	@Override
+	public String getMac() {
+		return null;
+	}
+
 }

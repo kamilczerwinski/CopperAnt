@@ -6,8 +6,8 @@ import pl.edu.pk.iti.copperAnt.simulation.events.CoputerSendsEvent;
 
 public class Computer implements Device {
 	private Port port;
-	private String m_Mac;
-	private String m_ip;
+	private String mac;
+	private String ip;
 
 	public Computer() {
 		this.port = new Port(this);
@@ -29,6 +29,20 @@ public class Computer implements Device {
 				new Package());
 		event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));
 		clock.addEvent(event);
+	}
+	@Override
+	public int getDelay() {
+		return 0;
+	}
+
+	@Override
+	public String getIp() {
+		return ip;
+	}
+
+	@Override
+	public String getMac() {
+		return mac;
 	}
 
 }

@@ -11,8 +11,14 @@ public class Switch implements Device {
 		return "";
 	}
 	public String getMac() {
-		return m_Mac;
+		return mac;
 	}
 
-	private String m_Mac;
+	private String mac;
+
+	@Override
+	public int getDelay() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
