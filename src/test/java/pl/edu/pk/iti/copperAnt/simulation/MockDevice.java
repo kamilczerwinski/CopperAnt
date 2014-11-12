@@ -10,4 +10,10 @@ public class MockDevice implements Device {
 
 	}
 
+	@Override
+	public int getDelay() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
