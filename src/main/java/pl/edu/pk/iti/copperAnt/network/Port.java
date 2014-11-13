@@ -6,7 +6,7 @@ public class Port {
 
     Cable cable;
     final Device device;
-    private String MAC;
+    final String MAC;
 
     public Device getDevice() {
         return device;
@@ -15,7 +15,7 @@ public class Port {
     public Port(Device device) {
         super();
         this.device = device;
-        setMAC();
+        this.MAC = setMAC();
     }
 
     public Cable getCable() {
@@ -26,7 +26,7 @@ public class Port {
         return MAC;
     }
 
-    public void setMAC() {
+    private String setMAC() {
         Random rand = new Random();
         byte[] macAddr = new byte[6];
         rand.nextBytes(macAddr);
@@ -44,7 +44,7 @@ public class Port {
             sb.append(String.format("%02x", b));
         }
 
-        this.MAC = sb.toString();
+        return sb.toString();
     }
 
     public void conntectCalble(Cable cable) {
