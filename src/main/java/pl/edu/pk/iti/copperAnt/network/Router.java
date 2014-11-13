@@ -3,7 +3,7 @@ package pl.edu.pk.iti.copperAnt.network;
 public class Router implements Device {
 
 	@Override
-	public void acceptPackage(Package pack) {
+	public void acceptPackage(Package pack, Port inPort) {
 		// TODO Auto-generated method stub
 
 	}

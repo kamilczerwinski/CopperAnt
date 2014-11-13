@@ -24,7 +24,7 @@ public class PortReceivesEvent extends Event {
 
 	@Override
 	public void run(Clock clock) {
-		port.getDevice().acceptPackage(pack);
+		port.getDevice().acceptPackage(pack,port);
 		log.debug(this.toString());
 
 	}
