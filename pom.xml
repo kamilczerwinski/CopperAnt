@@ -127,6 +127,21 @@
 			<version>1.2.16</version>
 		</dependency>
 
+
+		<!-- JavaFX -->
+		<dependency>
+			<groupId>org.jfxtras</groupId>
+			<artifactId>jfxtras-labs</artifactId>
+			<version>8.0-r1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfxtras</groupId>
+			<artifactId>jfxtras-window</artifactId>
+			<version>8.0-r1</version>
+		</dependency>
+
+
+
 		<!-- Testing -->
 
 		<dependency>

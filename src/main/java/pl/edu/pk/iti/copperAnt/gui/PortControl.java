@@ -28,6 +28,8 @@ public class PortControl extends Control {
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		getChildren().add(imageView);
+		setWidth(width);
+		setHeight(height);
 
 		prepareDiods();
 	}
