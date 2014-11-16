@@ -10,7 +10,6 @@ import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
 public class CableSendsEvent extends Event {
-	private static final long DELAY = 1;
 	private static final Logger log = LoggerFactory
 			.getLogger(CableSendsEvent.class);
 	private Port port;
@@ -28,12 +27,12 @@ public class CableSendsEvent extends Event {
 	@Override
 	public void run(Clock clock) {
 		if (!cable.getState().equals(CableState.COLISION)) {
-			clock.addEvent(new PortReceivesEvent(time + DELAY, port, pack));
+			clock.addEvent(new PortReceivesEvent(time, port, pack));
 		}
 		if (cable.getBusyUntilTime() <= time) {
 			cable.setState(CableState.IDLE);
 		}
-		log.debug(toString());
+		log.info(toString());
 
 	}
 
