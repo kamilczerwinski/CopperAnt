@@ -14,11 +14,15 @@ public class Clock {
 	private FinishCondition finishCondition = new EmptyListFinishCondition();
 
 	long currentTime;
+	long lastEventTime;
+	boolean realTime = false;
 
 	List<Event> events;
+	private long timeScale = 10;
 
 	public Clock() {
 		this.currentTime = -1;
+		this.lastEventTime = -1;
 		events = new ArrayList<Event>();
 	}
 
@@ -46,7 +50,14 @@ public class Clock {
 
 	public void tick() {
 		if (!finishCondition.isSatisfied(this)) {
+			this.lastEventTime = this.currentTime;
 			this.currentTime = events.get(0).getTime();
+			if (realTime) {
+				try {
+					Thread.sleep((currentTime - lastEventTime) * timeScale);
+				} catch (InterruptedException e) {
+				}
+			}
 			while (!events.isEmpty() && events.get(0).getTime() == currentTime) {
 				Event eventToRun = events.get(0);
 				events.remove(eventToRun);
@@ -81,5 +92,21 @@ public class Clock {
 
 	public long getCurrentTime() {
 		return currentTime;
+	}
+
+	public long getTimeScale() {
+		return timeScale;
+	}
+
+	public void setTimeScale(long timeScale) {
+		this.timeScale = timeScale;
+	}
+
+	public boolean isRealTime() {
+		return realTime;
+	}
+
+	public void setRealTime(boolean realTime) {
+		this.realTime = realTime;
 	}
 }
