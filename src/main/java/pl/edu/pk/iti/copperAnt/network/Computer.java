@@ -18,7 +18,7 @@ public class Computer implements Device {
 	}
 
 	@Override
-	public void acceptPackage(Package pack) {
+	public void acceptPackage(Package pack, Port inPort) {
 		System.out.println("Computer received package");
 
 	}
@@ -33,16 +33,6 @@ public class Computer implements Device {
 	@Override
 	public int getDelay() {
 		return 0;
-	}
-
-	@Override
-	public String getIp() {
-		return ip;
-	}
-
-	@Override
-	public String getMac() {
-		return mac;
 	}
 
 }

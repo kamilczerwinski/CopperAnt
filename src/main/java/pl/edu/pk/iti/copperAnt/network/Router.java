@@ -1,6 +1,7 @@
 package pl.edu.pk.iti.copperAnt.network;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
@@ -10,8 +11,10 @@ public class Router implements Device {
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private Clock clock;
-	private String m_Mac;
-	private String m_ip;
+    private HashMap<String, Port> routingTable;   // <Network, Port>
+	private String MAC;
+	private String ip;
+	private String network; 
 
 	public Router(int numberOfPorts, Clock clock) {
 		this.clock = clock;
@@ -24,29 +27,35 @@ public class Router implements Device {
 	public Port getPort(int portNumber) {
 		return ports.get(portNumber);
 	}
-	//FIXME: port zrodlowy by sie tez przydał
 	@Override
-	public void acceptPackage(Package pack) {
-		Port finded = null;
-		for (Port port : ports) {
-			// wysylanie do PC lub huba/switcha
-			if (port.getDevice().getIp() == pack.getToIp() || port.getDevice().getMac() == pack.getToMac()) {
-				clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + DELAY,
-						port, pack));
-				return;
-			} 
-			
-		}
-		// TODO: odeslanie odpowiedzi na port zrodlow ze host nie znaleziony
-	
+	public void acceptPackage(Package pack, Port inPort) {
+		String destinationIP = pack.getDestinationIP();
+	    String sourceIP = pack.getSourceIP();
+
+	  
+	    if (!routingTable.containsKey(sourceIP))  {
+	    	routingTable.put(sourceIP, inPort);
+	    }
+		
+	    if (routingTable.containsKey(destinationIP)) {
+	    	// IP in table
+	    	 clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
+	    			routingTable.get(destinationIP), pack));
+	    } else {
+	    	// Destination Host Unreachable
+	   	 clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
+	    			inPort, pack));
+	    	
+	    }
+		
 
 	}
 	
 	public String getIp() {
-		return m_ip;
+		return ip;
 	}
 	public String getMac() {
-		return m_Mac;
+		return MAC;
 	}
 	
 
