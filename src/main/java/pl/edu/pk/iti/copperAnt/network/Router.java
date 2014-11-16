@@ -38,11 +38,13 @@ public class Router implements Device {
 	public void acceptPackage(Package pack, Port inPort) {
 		String destinationIP = pack.getDestinationIP();
 	    String sourceIP = pack.getSourceIP();
-
+	   
 	  
 	    if (!routingTable.containsKey(sourceIP))  {
 	    	routingTable.put(sourceIP, inPort);
 	    }
+	    // NAT?
+	    pack.setSourceIP(this.getIP());
 		
 	    if (routingTable.containsKey(destinationIP)) {
 	    	// IP in table
@@ -58,7 +60,7 @@ public class Router implements Device {
 
 	}
 	
-	public String getIp() {
+	public String getIP() {
 		return ip;
 	}
 	public String getMac() {
