@@ -11,7 +11,6 @@ public class PortReceivesEvent extends Event {
 	private static final Logger log = LoggerFactory
 			.getLogger(PortReceivesEvent.class);
 
-	private static final long timeOfProcessing = 1;
 	private Port port;
 	private Package pack;
 
@@ -25,7 +24,7 @@ public class PortReceivesEvent extends Event {
 	@Override
 	public void run(Clock clock) {
 		port.getDevice().acceptPackage(pack);
-		log.debug(this.toString());
+		log.info(this.toString());
 
 	}
 
