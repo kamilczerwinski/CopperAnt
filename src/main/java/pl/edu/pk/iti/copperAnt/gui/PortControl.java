@@ -11,6 +11,8 @@ public class PortControl extends Control {
 	private static final int defaultIconWidth = 25;
 	private int width;
 	private int height;
+	private Rectangle redRectangle;
+	private Rectangle greenRectangle;
 
 	public PortControl() {
 		this(defaultIconWidth, defaultIconHeight);
@@ -31,12 +33,28 @@ public class PortControl extends Control {
 	}
 
 	private void prepareDiods() {
-		Rectangle redRectangle = new Rectangle(width / 2, height / 10);
-		redRectangle.setFill(Color.RED);
+		redRectangle = new Rectangle(width / 2, height / 10);
 		redRectangle.setX(width / 2);
-		Rectangle greenRectangle = new Rectangle(width / 2, height / 10);
-		greenRectangle.setFill(Color.GREEN);
+		turnOnRedDiode(false);
+		greenRectangle = new Rectangle(width / 2, height / 10);
+		turnOnGreenDiode(false);
 		getChildren().add(redRectangle);
 		getChildren().add(greenRectangle);
+	}
+
+	public void turnOnRedDiode(boolean on) {
+		if (on) {
+			redRectangle.setFill(Color.RED);
+		} else {
+			redRectangle.setFill(Color.GRAY);
+		}
+	}
+
+	public void turnOnGreenDiode(boolean on) {
+		if (on) {
+			greenRectangle.setFill(Color.GREENYELLOW);
+		} else {
+			greenRectangle.setFill(Color.GRAY);
+		}
 	}
 }
