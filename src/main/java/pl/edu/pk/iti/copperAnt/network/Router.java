@@ -11,10 +11,9 @@ public class Router implements Device {
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private Clock clock;
-    private HashMap<String, Port> routingTable;   // <Network, Port>
+    private HashMap<String, Port> routingTable;   // <IP, Port>
 	private String MAC;
 	private String ip;
-	private String network; 
 
 	public Router(int numberOfPorts, Clock clock) {
 		this.clock = clock;
@@ -22,11 +21,19 @@ public class Router implements Device {
 		for (int i = 0; i < numberOfPorts; i++) {
 			ports.add(new Port(this));
 		}
+		routingTable = new HashMap<String, Port>();
 	}
 
 	public Port getPort(int portNumber) {
 		return ports.get(portNumber);
 	}
+	
+	// to facilitate unit testing
+	public void addRouting(String ip, Port port) {
+    	routingTable.put(ip, port);
+
+	}
+	
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
 		String destinationIP = pack.getDestinationIP();

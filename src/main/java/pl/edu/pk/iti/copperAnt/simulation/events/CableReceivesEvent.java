@@ -37,7 +37,7 @@ public class CableReceivesEvent extends Event {
 			cable.setState(CableState.COLISION);
 			log.debug("There was collision. Package was lost.");
 		}
-		log.debug(this.toString());
+		log.info(this.toString());
 	}
 
 	@Override

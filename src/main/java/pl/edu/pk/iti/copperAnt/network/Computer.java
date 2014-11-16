@@ -1,4 +1,6 @@
 package pl.edu.pk.iti.copperAnt.network;
+import java.util.UUID;
+
 
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
@@ -11,6 +13,8 @@ public class Computer implements Device {
 
 	public Computer() {
 		this.port = new Port(this);
+		this.ip = UUID.randomUUID().toString();
+		this.mac = UUID.randomUUID().toString();
 	}
 
 	public Port getPort() {
@@ -25,8 +29,13 @@ public class Computer implements Device {
 
 	public void initTrafic(Clock clock) {
 		long time = clock.getCurrentTime();
+		Package pack = new Package();
+		pack.setDestinationIP(UUID.randomUUID().toString());
+		pack.setDestinationMAC(UUID.randomUUID().toString());
+		pack.setSourceIP(this.ip);
+		pack.setSourceMAC(this.mac);
 		CoputerSendsEvent event = new CoputerSendsEvent(time, this,
-				new Package());
+				pack);
 		event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));
 		clock.addEvent(event);
 	}
