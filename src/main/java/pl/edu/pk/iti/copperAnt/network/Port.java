@@ -22,7 +22,6 @@ public class Port {
 			this.cable = cable;
 			cable.insertInto(this);
 		}
-		
 	}
 
 	public void disconnectCable() {
