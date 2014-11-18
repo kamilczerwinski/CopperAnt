@@ -3,10 +3,10 @@ package pl.edu.pk.iti.copperAnt.network;
 public enum PackageType {
 	/*
 	 * 
-	 *  arp package  haven't source IP and destination mac because it is  sent to all devices in network
+	 *  DHCP package  haven't source IP and destination mac because it is  sent to all devices in network
 	 *  to get IP
 	 */
-	ARP, // to get IP; request without content and response with content IP
+	DHCP, // to get IP; request without content and response with content IP
 	
 	ECHO_REQUEST, // ping
 	ECHO_REPLY,  // pong

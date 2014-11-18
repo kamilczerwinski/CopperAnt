@@ -73,9 +73,9 @@ public class Router implements Device {
 	    	outPort = inPort;
 	    	
 	    } 
-	    if (pack.getType() == PackageType.ARP) {
+	    if (pack.getType() == PackageType.DHCP) {
 	    	sourceIP = generateIP();
-	    	response = new Package(PackageType.ARP, sourceIP);
+	    	response = new Package(PackageType.DHCP, sourceIP);
 	    	response.setDestinationMAC(pack.getDestinationMAC());
 	    	outPort = inPort;
 	    	
