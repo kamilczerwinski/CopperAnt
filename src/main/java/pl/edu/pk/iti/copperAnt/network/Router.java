@@ -74,10 +74,11 @@ public class Router implements Device {
 		String destinationIP = pack.getDestinationIP();
 	    String sourceIP = pack.getSourceIP();
 	    Port outPort = null;
-	    Package response = null;
+	    Package response = pack;
 	    if (!pack.validTTL()) {
 	    	response = new Package(PackageType.DESTINATION_UNREACHABLE, "TTL<0");
 	    	response.setDestinationIP(sourceIP);
+	    	response.setDestinationMAC(pack.getDestinationMAC());
 	    	outPort = inPort;
 	    	
 	    } 
@@ -88,14 +89,18 @@ public class Router implements Device {
 	    	outPort = inPort;
 	    	
   	    	
+	    } else if (pack.getType() == PackageType.ECHO_REQUEST && destinationIP == this.getIP()) {
+	    	response = new Package(PackageType.ECHO_REPLY, pack.getContent());
+	    	response.setDestinationMAC(pack.getSourceMAC());
+	    	response.setSourceIP(pack.getSourceIP());
+	    	outPort = inPort;
 	    }
 	     if (!routingTable.containsKey(sourceIP))  {
 	    	routingTable.put(sourceIP, inPort);
 	    }
-	    // NAT?
-	    pack.setSourceIP(this.getIP());
+	   
 		
-	    if (routingTable.containsKey(destinationIP)) {
+	    if (routingTable.containsKey(destinationIP) && destinationIP != this.getIP()) {
 	    	// IP in table
 	    	outPort = routingTable.get(destinationIP);
 	    	
@@ -106,6 +111,9 @@ public class Router implements Device {
 	   	 	response.setType(PackageType.DESTINATION_UNREACHABLE);
 	    	
 	    }
+	    // NAT?
+	    response.setSourceIP(this.getIP());
+	    
 	    clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
     			outPort, response));
 
