@@ -21,6 +21,9 @@ public class PortSendsEvent extends Event {
 		this.pack = pack;
 
 	}
+	public Package getPackage() {
+		return this.pack;
+	}
 
 	@Override
 	public void run(Clock clock) {

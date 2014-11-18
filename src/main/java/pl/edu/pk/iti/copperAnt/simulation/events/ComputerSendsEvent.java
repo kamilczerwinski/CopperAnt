@@ -9,16 +9,16 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
 import pl.edu.pk.iti.copperAnt.simulation.TimeIntervalGenerator;
 
-public class CoputerSendsEvent extends Event {
+public class ComputerSendsEvent extends Event {
 	private static final Logger log = LoggerFactory
-			.getLogger(CoputerSendsEvent.class);
+			.getLogger(ComputerSendsEvent.class);
 	private Computer computer;
 	private Package pack;
 	// TODO tu bedzie zastosowana inna implementacja
 	TimeIntervalGenerator intervalGenerator = new ConstantTimeIntervalGenerator(
 			100);
 
-	public CoputerSendsEvent(long time, Computer computer, Package pack) {
+	public ComputerSendsEvent(long time, Computer computer, Package pack) {
 		super(time);
 		this.computer = computer;
 		this.pack = pack;
@@ -30,7 +30,7 @@ public class CoputerSendsEvent extends Event {
 		PortSendsEvent event = new PortSendsEvent(time, computer.getPort(),
 				pack);
 
-		CoputerSendsEvent nextComputerSendsEvent = new CoputerSendsEvent(time
+		ComputerSendsEvent nextComputerSendsEvent = new ComputerSendsEvent(time
 				+ timeToNextEvent, computer, pack)
 				.withIntervalGenerator(this.intervalGenerator);
 		clock.addEvent(event);
@@ -46,10 +46,14 @@ public class CoputerSendsEvent extends Event {
 		this.intervalGenerator = intervalGenerator;
 	}
 
-	public CoputerSendsEvent withIntervalGenerator(
+	public ComputerSendsEvent withIntervalGenerator(
 			TimeIntervalGenerator generator) {
 		setIntervalGenerator(generator);
 		return this;
 	}
+	public Package getPackage() {
+		return this.pack;
+	}
+
 
 }

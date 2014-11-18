@@ -51,7 +51,7 @@
                     <repoToken>${env.COVER_ALL}</repoToken>
                 </configuration>
             </plugin>
-         <plugin>
+         	<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>2.18</version>
@@ -67,7 +67,7 @@
                   <outputDirectory>target/newsite</outputDirectory>
                 </configuration>
               </plugin>
-		</plugins>
+             </plugins>
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -158,6 +158,12 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 

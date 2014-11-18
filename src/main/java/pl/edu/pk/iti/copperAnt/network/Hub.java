@@ -23,7 +23,7 @@ public class Hub implements Device {
 	}
 
 	@Override
-	public void acceptPackage(Package pack) {
+	public void acceptPackage(Package pack, Port inPort) {
 		for (Port port : ports) {
 			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
 					+ getDelay(), port, pack));
@@ -32,6 +32,7 @@ public class Hub implements Device {
 
 	@Override
 	public int getDelay() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 }

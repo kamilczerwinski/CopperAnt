@@ -41,5 +41,8 @@ public class CableSendsEvent extends Event {
 		return super.toString() + "CableSendsEvent [port=" + port + ", cable="
 				+ cable + "]";
 	}
+	public Package getPackage() {
+		return this.pack;
+	}
 
 }

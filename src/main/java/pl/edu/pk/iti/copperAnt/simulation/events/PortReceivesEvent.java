@@ -18,12 +18,12 @@ public class PortReceivesEvent extends Event {
 		super(time);
 		this.port = port;
 		this.pack = pack;
-
+		this.pack.setSourceMAC(port.getMAC());
 	}
 
 	@Override
 	public void run(Clock clock) {
-		port.getDevice().acceptPackage(pack);
+		port.getDevice().acceptPackage(pack,port);
 		log.info(this.toString());
 
 	}
@@ -31,6 +31,9 @@ public class PortReceivesEvent extends Event {
 	@Override
 	public String toString() {
 		return super.toString() + "PortReceivesEvent [port=" + port + "]";
+	}
+	public Package getPackage() {
+		return this.pack;
 	}
 
 }
