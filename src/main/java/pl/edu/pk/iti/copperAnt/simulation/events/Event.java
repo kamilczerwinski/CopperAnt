@@ -1,5 +1,6 @@
 package pl.edu.pk.iti.copperAnt.simulation.events;
 
+import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
 public abstract class Event {
@@ -20,5 +21,8 @@ public abstract class Event {
 	public String toString() {
 		return time + ": ";
 	}
+	abstract public  Package getPackage();
+
+	
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
@@ -16,7 +17,7 @@ public class Router implements Device {
 	private String MAC;
 	private String ip;
 	private Properties config;
-	private String[] startIPparts;
+	private String[] startIPparts = {"192", "168", "0", "0"};
 
 	public Router(int numberOfPorts, Clock clock) {
 		this.clock = clock;
@@ -25,11 +26,14 @@ public class Router implements Device {
 			ports.add(new Port(this));
 		}
 		routingTable = new HashMap<String, Port>();
+		config = new Properties();
+		Random generator = new Random(); 
+		startIPparts[startIPparts.length - 2] = Integer.toString(generator.nextInt(254));
 	}
 
 	public Router(Properties config, Clock clock) {
 		this.clock = clock;
-		int numberOfPorts = (int)config.get("numbersOfPorts");
+		int numberOfPorts = Integer.parseInt((String)config.get("numbersOfPorts"));
 		this.config = config;
 		ports = new ArrayList<Port>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
@@ -37,7 +41,11 @@ public class Router implements Device {
 		}
 		routingTable = new HashMap<String, Port>();
 		String startIP = (String)config.get("DHCPstartIP");
-		startIPparts = startIP.split("."); // only IPv4
+		
+
+		if (!startIP.isEmpty())
+			startIPparts = startIP.split("\\."); // only IPv4
+			
 
 	}
 	

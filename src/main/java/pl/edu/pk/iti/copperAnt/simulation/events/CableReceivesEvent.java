@@ -25,6 +25,9 @@ public class CableReceivesEvent extends Event {
 		this.port = fromPort;
 
 	}
+	public Package getPackage() {
+		return this.pack;
+	}
 
 	@Override
 	public void run(Clock clock) {

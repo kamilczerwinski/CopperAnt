@@ -32,5 +32,8 @@ public class PortReceivesEvent extends Event {
 	public String toString() {
 		return super.toString() + "PortReceivesEvent [port=" + port + "]";
 	}
+	public Package getPackage() {
+		return this.pack;
+	}
 
 }

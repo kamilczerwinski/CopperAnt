@@ -4,7 +4,8 @@ import java.util.UUID;
 
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
-import pl.edu.pk.iti.copperAnt.simulation.events.CoputerSendsEvent;
+import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
+import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Computer implements Device {
 	private Port port;
@@ -49,7 +50,7 @@ public class Computer implements Device {
 		}
 		// ARP for MAC?
 		pack.setDestinationIP(new String(ip.deleteCharAt(ip.length() - 1)));
-		CoputerSendsEvent event = new CoputerSendsEvent(time, this,
+		ComputerSendsEvent event = new ComputerSendsEvent(time, this,
 				pack);
 		event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));
 		clock.addEvent(event);
@@ -58,10 +59,7 @@ public class Computer implements Device {
 	public void init(Clock clock) {
 		long time = clock.getCurrentTime();
 		Package pack = new Package(PackageType.DHCP, null);
-		CoputerSendsEvent event = new CoputerSendsEvent(time, this,
-				pack);
-		event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));
-		clock.addEvent(event);
+		clock.addEvent(new PortSendsEvent(time, this.port, pack));
 	}
 	@Override
 	public int getDelay() {
