@@ -5,8 +5,31 @@ public class Package {
     private String destinationMAC;
     private String sourceIP;
     private String destinationIP;
-    private int size = 0; // temporary value
+    private int ttl = 10;
+    private String content;
+    private PackageType type = PackageType.ECHO_REQUEST;
     
+    public Package(PackageType type, String content){
+    	this.type = type;
+    	this.content = content;
+    	
+    }
+    public String getContent() {
+    	return content;
+    }
+    public PackageType getType() {
+    	return type;
+    }
+    public void setType(PackageType type) {
+    	this.type = type;
+    }
+    public Package() {
+    	
+    }
+   
+    public boolean validTTL() {
+    	return --ttl > 0;
+    }
     public String getSourceMAC() {
         return sourceMAC;
     }
@@ -20,7 +43,7 @@ public class Package {
     }
     
     public String getDestinationIP() {
-        return destinationIP;
+    	return destinationIP;
     }
     
     public void setSourceMAC(String sMAC) {
@@ -40,7 +63,8 @@ public class Package {
     }
     
     public int getSize() {
-        // TODO wykorzystać do obliczania opóźnień
-        return size;
+    	// + 1 Because it always has 'header'
+    	return content.length() + 1;
+    	
     }
 }
