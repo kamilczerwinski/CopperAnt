@@ -12,12 +12,13 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 public class Router implements Device {
 	private static final long DELAY = 1;
 	private final List<Port> ports;
+	private final Port wanPort = new Port(this);
 	private Clock clock;
     private HashMap<String, Port> routingTable;   // <IP, Port>
 	private String MAC;
-	private String ip;
+	private IPAddress wanIP;
+	private IPAddress lanIP = new IPAddress("192.168.0.1");
 	private Properties config;
-	private String[] startIPparts = {"192", "168", "0", "0"};
 
 	public Router(int numberOfPorts, Clock clock) {
 		this.clock = clock;
@@ -28,7 +29,8 @@ public class Router implements Device {
 		routingTable = new HashMap<String, Port>();
 		config = new Properties();
 		Random generator = new Random(); 
-		startIPparts[startIPparts.length - 2] = Integer.toString(generator.nextInt(254));
+		lanIP.set(3, generator.nextInt(254) + 2);
+		
 	}
 
 	public Router(Properties config, Clock clock) {
@@ -43,26 +45,31 @@ public class Router implements Device {
 		String startIP = (String)config.get("DHCPstartIP");
 		
 
-		if (!startIP.isEmpty())
-			startIPparts = startIP.split("\\."); // only IPv4
+		if (!startIP.isEmpty()) {
+			lanIP = new IPAddress(startIP);
+		}
 			
 
 	}
 	
+	public void init() {
+		long time = clock.getCurrentTime();
+		Package pack = new Package(PackageType.DHCP, null);
+		clock.addEvent(new PortSendsEvent(time, this.wanPort, pack));
+		
+	}
+	
 	private String generateIP() {
-		startIPparts[startIPparts.length - 1] = Integer.toString(Integer.parseInt(startIPparts[startIPparts.length - 1]) + 1);
-	    StringBuilder ip = new StringBuilder();
-
-		for (int i = 0, len = startIPparts.length; i < len; ++i) {
-			ip.append(startIPparts[i] + ".");
-		}
-		return new String(ip.deleteCharAt(ip.length() - 1));
+		return lanIP.increment();
 
 	}
 	public Port getPort(int portNumber) {
 		return ports.get(portNumber);
 	}
-	
+	public Port getWanPort() {
+		return wanPort;
+		
+	}
 	// to facilitate unit testing
 	public void addRouting(String ip, Port port) {
     	routingTable.put(ip, port);
@@ -83,10 +90,17 @@ public class Router implements Device {
 	    	
 	    } 
 	    if (pack.getType() == PackageType.DHCP) {
-	    	sourceIP = generateIP();
-	    	response = new Package(PackageType.DHCP, sourceIP);
-	    	response.setDestinationMAC(pack.getDestinationMAC());
-	    	outPort = inPort;
+	    	// request to this router to get IP,  DHCP only local network
+	    	if (pack.getContent() == null && inPort != this.getWanPort()) {
+	    		sourceIP = generateIP();
+	    		response = new Package(PackageType.DHCP, sourceIP);
+	    		response.setDestinationMAC(pack.getDestinationMAC());
+	    		outPort = inPort;
+	    	} else {
+	    		// response from wan router
+	    		this.wanIP = new IPAddress(pack.getContent());
+	    		return;
+	    	}
 	    	
   	    	
 	    } else if (pack.getType() == PackageType.ECHO_REQUEST && destinationIP == this.getIP()) {
@@ -105,22 +119,22 @@ public class Router implements Device {
 	    	outPort = routingTable.get(destinationIP);
 	    	
 	    } else if (outPort == null) {
-	    	// Destination Host Unreachable
-	   	 	outPort = inPort;
+	    	// Destination Host Unreachable in router network send to wan router
+	   	 	outPort = this.getWanPort();
 	   	 	response = pack;
-	   	 	response.setType(PackageType.DESTINATION_UNREACHABLE);
 	    	
 	    }
-	    // NAT?
-	    response.setSourceIP(this.getIP());
-	    
+
 	    clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
     			outPort, response));
 
 	}
 	
 	public String getIP() {
-		return ip;
+		return lanIP.toString();
+	}
+	public String getWanIP() {
+		return wanIP.toString();
 	}
 	public String getMac() {
 		return this.ports.get(0).getMAC();

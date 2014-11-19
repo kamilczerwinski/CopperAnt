@@ -19,6 +19,7 @@ public class PortSendsEvent extends Event {
 		super(time);
 		this.port = port;
 		this.pack = pack;
+		this.pack.setSourceMAC(port.getMAC());
 
 	}
 	public Package getPackage() {
