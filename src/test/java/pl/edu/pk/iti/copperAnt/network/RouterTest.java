@@ -31,7 +31,7 @@ public class RouterTest {
 		router.acceptPackage(pack, router.getPort(0));
 		List<Event> capturedEvent = eventCaptor.getAllValues();
 		assertEquals(capturedEvent.size(), 1);
-		assertEquals(capturedEvent.get(0).toString(), expected.toString());
+		assertEquals(capturedEvent.get(0).getPackage(), pack);
 			
 		
 	}
