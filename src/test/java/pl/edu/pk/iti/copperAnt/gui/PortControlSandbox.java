@@ -1,5 +1,6 @@
 package pl.edu.pk.iti.copperAnt.gui;
 
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -12,6 +13,7 @@ public class PortControlSandbox extends AbstractControlSandbox {
 		addPort1(root);
 		addPort2(root);
 		addPort3(root);
+		addPort4(root);
 	}
 
 	private void addPort1(Pane root) {
@@ -47,6 +49,26 @@ public class PortControlSandbox extends AbstractControlSandbox {
 			}
 		});
 		root.getChildren().add(port);
+	}
+
+	private void addPort4(Pane root) {
+		PortControl port = new PortControl(100, 100);
+		port.setLayoutX(400);
+		port.setLayoutY(400);
+		root.getChildren().add(port);
+
+		Task<Void> task = new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				for (int i = 0; i < 100; i++) {
+					port.acceptPackage();
+					Thread.sleep(1000);
+				}
+				return null;
+			}
+		};
+		new Thread(task).start();
 	}
 
 	public static void main(String[] args) throws Exception {
