@@ -50,7 +50,7 @@ public class Computer implements Device {
 		pack.setSourceIP(this.ip.toString());
 		IPAddress dest = this.ip;
 		Random generator = new Random();
-		dest.set(generator.nextInt(4), generator.nextInt(254) + 1);
+		dest.set(generator.nextInt(4) + 1, generator.nextInt(254) + 1);
 		pack.setDestinationIP(dest.toString());
 		ComputerSendsEvent event = new ComputerSendsEvent(time, this, pack);
 		event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));

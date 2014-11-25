@@ -44,7 +44,7 @@ public class IPAddress {
 	}
 
 	public void set(int index, int value) {
-		ipParts[index] = value;
+		ipParts[index -1 ] = value;
 	}
 
 	/**
