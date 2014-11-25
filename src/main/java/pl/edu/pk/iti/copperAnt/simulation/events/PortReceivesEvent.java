@@ -18,7 +18,7 @@ public class PortReceivesEvent extends Event {
 		super(time);
 		this.port = port;
 		this.pack = pack;
-		this.pack.setSourceMAC(port.getMAC());
+
 	}
 
 	@Override
