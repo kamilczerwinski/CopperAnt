@@ -9,8 +9,7 @@ public class Port {
 	Cable cable;
 	final Device device;
 	final String MAC;
-
-	PortControl portControl;
+	final PortControl portControl;
 
 	public Device getDevice() {
 		return device;
@@ -20,6 +19,7 @@ public class Port {
 		super();
 		this.device = device;
 		this.MAC = setMAC();
+		this.portControl = new PortControl();
 	}
 
 	public Cable getCable() {
@@ -69,10 +69,6 @@ public class Port {
 
 	public PortControl getPortControl() {
 		return portControl;
-	}
-
-	public void setPortControl(PortControl portControl) {
-		this.portControl = portControl;
 	}
 
 	@Override

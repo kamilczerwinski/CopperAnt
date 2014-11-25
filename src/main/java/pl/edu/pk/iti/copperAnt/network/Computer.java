@@ -3,6 +3,7 @@ package pl.edu.pk.iti.copperAnt.network;
 import java.util.Random;
 import java.util.UUID;
 
+import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
@@ -11,15 +12,16 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 public class Computer implements Device {
 	private Port port;
 	private IPAddress ip;
+	private final ComputerControl control;
 
 	public Computer() {
-		this.port = new Port(this);
-		this.ip = null;
+		this(null);
 	}
 
 	public Computer(IPAddress ip) {
 		this.port = new Port(this);
 		this.ip = ip;
+		this.control = new ComputerControl(port.getPortControl());
 	}
 
 	public Port getPort() {
@@ -66,6 +68,10 @@ public class Computer implements Device {
 	@Override
 	public int getDelay() {
 		return 0;
+	}
+
+	public ComputerControl getControl() {
+		return control;
 	}
 
 }

@@ -7,8 +7,10 @@ import jfxtras.labs.util.event.MouseControlUtil;
 
 public class ComputerControl extends Control {
 	private final static int defaultSize = 100;
+	private final PortControl portControl;
 
-	public ComputerControl() {
+	public ComputerControl(PortControl portControl) {
+		this.portControl = portControl;
 		MouseControlUtil.makeDraggable(this);
 		setWidth(defaultSize);
 		setHeight(defaultSize);
@@ -17,11 +19,10 @@ public class ComputerControl extends Control {
 	}
 
 	private void drawPort() {
-		PortControl port = new PortControl((int) getWidth() / 3,
-				(int) getHeight() / 3);
-		port.setLayoutX(getWidth() - getWidth() / 3);
-		port.setLayoutY(getHeight() - getHeight() / 3);
-		getChildren().add(port);
+		// TODO change size
+		portControl.setLayoutX(getWidth() - getWidth() / 3);
+		portControl.setLayoutY(getHeight() - getHeight() / 3);
+		getChildren().add(portControl);
 
 	}
 

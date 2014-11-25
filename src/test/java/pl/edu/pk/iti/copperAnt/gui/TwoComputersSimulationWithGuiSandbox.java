@@ -8,7 +8,7 @@ import pl.edu.pk.iti.copperAnt.network.IPAddress;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.MaxTimeFinishCondition;
 
-public class SimulationWithGuiSandbox extends AbstractControlSandbox {
+public class TwoComputersSimulationWithGuiSandbox extends AbstractControlSandbox {
 
 	@Override
 	protected void addElements(Pane root) {
@@ -20,15 +20,13 @@ public class SimulationWithGuiSandbox extends AbstractControlSandbox {
 		clock.setRealTime(true);
 		clock.setTimeScale(100);
 		Computer computer1 = new Computer(new IPAddress("192.168.1.1"));
-		computer1.getPort().setPortControl(new PortControl());
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"));
-		computer2.getPort().setPortControl(new PortControl());
 		Cable cable = new Cable();
 		cable.insertInto(computer1.getPort());
 		cable.insertInto(computer2.getPort());
 
-		simulationCanvas.addControl(computer1.getPort().getPortControl(), 0, 0);
-		simulationCanvas.addControl(computer2.getPort().getPortControl(), 20, 0);
+		simulationCanvas.addControl(computer1.getControl(), 0, 0);
+		simulationCanvas.addControl(computer2.getControl(), 20, 0);
 
 		computer1.initTrafic(clock);
 		Task<Void> task = new Task<Void>() {

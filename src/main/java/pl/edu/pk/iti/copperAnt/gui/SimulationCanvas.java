@@ -38,7 +38,8 @@ public class SimulationCanvas extends Control {
 		ContextMenu contextMenu = new ContextMenu();
 
 		MenuItem addComputerItem = new MenuItem("add computer");
-		addComputerItem.setOnAction(e -> addControl(new ComputerControl()));
+		addComputerItem.setOnAction(e -> addControl(//
+				new ComputerControl(new PortControl())));
 		contextMenu.getItems().add(addComputerItem);
 
 		MenuItem addRouterItem = new MenuItem("add router");
