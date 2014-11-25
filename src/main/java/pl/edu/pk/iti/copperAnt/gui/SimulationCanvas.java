@@ -38,16 +38,16 @@ public class SimulationCanvas extends Control {
 		ContextMenu contextMenu = new ContextMenu();
 
 		MenuItem addComputerItem = new MenuItem("add computer");
-		addComputerItem.setOnAction(e -> add(new ComputerControl()));
+		addComputerItem.setOnAction(e -> addControl(new ComputerControl()));
 		contextMenu.getItems().add(addComputerItem);
 
 		MenuItem addRouterItem = new MenuItem("add router");
-		addRouterItem.setOnAction(e -> add(RouterControl
+		addRouterItem.setOnAction(e -> addControl(RouterControl
 				.prepareRouterWithPorts(4)));
 		contextMenu.getItems().add(addRouterItem);
 
 		MenuItem addSwitchItem = new MenuItem("add switch");
-		addSwitchItem.setOnAction(e -> add(SwitchControl
+		addSwitchItem.setOnAction(e -> addControl(SwitchControl
 				.prepareSwithcWithPorts(4)));
 		contextMenu.getItems().add(addSwitchItem);
 
@@ -59,9 +59,14 @@ public class SimulationCanvas extends Control {
 		setContextMenu(contextMenu);
 	}
 
-	private void add(Control control) {
+	private void addControl(Control control) {
+		addControl(control, nextDeviceX, nextDeviceY);
+
+	}
+
+	public void addControl(Control control, double x, double y) {
 		getChildren().add(control);
-		control.setLayoutX(nextDeviceX);
-		control.setLayoutY(nextDeviceY);
+		control.setLayoutX(x);
+		control.setLayoutY(y);
 	}
 }
