@@ -73,7 +73,7 @@ public class Port {
 		}
 	}
 
-	public PortControl getPortControl() {
+	public PortControl getControl() {
 		return portControl;
 	}
 

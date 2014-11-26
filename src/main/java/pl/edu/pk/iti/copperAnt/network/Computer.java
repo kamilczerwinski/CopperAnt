@@ -26,7 +26,7 @@ public class Computer implements Device {
 		this.port = new Port(this, withGui);
 		this.ip = ip;
 		if (withGui) {
-			this.control = new ComputerControl(port.getPortControl());
+			this.control = new ComputerControl(port.getControl());
 		}
 	}
 

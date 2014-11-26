@@ -30,7 +30,7 @@ public class PortSendsEvent extends Event {
 
 	@Override
 	public void run(Clock clock) {
-		PortControl portControl = port.getPortControl();
+		PortControl portControl = port.getControl();
 		if (portControl != null) {
 			portControl.acceptPackage();
 		}
