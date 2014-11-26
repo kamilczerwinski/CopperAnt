@@ -6,10 +6,11 @@ import java.util.List;
 
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.SwitchControl;
+import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Switch implements Device {
+public class Switch implements Device, WithControl {
 
 	private static final long DELAY = 1;
 	private final List<Port> ports;
@@ -111,6 +112,7 @@ public class Switch implements Device {
 		return 0;
 	}
 
+	@Override
 	public SwitchControl getControl() {
 		return control;
 	}

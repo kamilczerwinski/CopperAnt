@@ -11,11 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.RouterControl;
+import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Router implements Device {
+public class Router implements Device, WithControl {
 	private static final Logger log = LoggerFactory
 			.getLogger(ComputerSendsEvent.class);
 	private static final long DELAY = 1;
@@ -108,7 +109,8 @@ public class Router implements Device {
 
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
-		log.debug("Accept pacakge from " + pack.getSourceIP() + " to " + pack.getSourceIP());
+		log.debug("Accept pacakge from " + pack.getSourceIP() + " to "
+				+ pack.getSourceIP());
 		String destinationIP = pack.getDestinationIP();
 		String sourceIP = pack.getSourceIP();
 		Port outPort = null;
@@ -164,10 +166,10 @@ public class Router implements Device {
 			response = pack;
 
 		}
-		
+
 		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
-					outPort, response));
-		
+				outPort, response));
+
 	}
 
 	public String getIP() {

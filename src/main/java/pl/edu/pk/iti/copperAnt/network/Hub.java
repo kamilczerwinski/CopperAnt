@@ -5,10 +5,11 @@ import java.util.List;
 
 import pl.edu.pk.iti.copperAnt.gui.HubControl;
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
+import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Hub implements Device {
+public class Hub implements Device, WithControl {
 	private final List<Port> ports;
 	private Clock clock;
 	private HubControl control;
@@ -50,6 +51,7 @@ public class Hub implements Device {
 		return 0;
 	}
 
+	@Override
 	public HubControl getControl() {
 		return control;
 	}

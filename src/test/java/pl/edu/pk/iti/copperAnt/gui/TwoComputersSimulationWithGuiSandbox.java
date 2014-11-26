@@ -20,14 +20,16 @@ public class TwoComputersSimulationWithGuiSandbox extends
 				.withFinishCondition(new MaxTimeFinishCondition(100));
 		clock.setRealTime(true);
 		clock.setTimeScale(100);
+		Cable cable = new Cable(true);
 		Computer computer1 = new Computer(new IPAddress("192.168.1.1"), true);
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"), true);
-		Cable cable = new Cable();
 		cable.insertInto(computer1.getPort());
 		cable.insertInto(computer2.getPort());
 
-		simulationCanvas.addControl(computer1.getControl(), 0, 0);
-		simulationCanvas.addControl(computer2.getControl(), 20, 0);
+		simulationCanvas.addControlOf(cable, 0, 0);
+
+		simulationCanvas.addControlOf(computer1, 0, 0);
+		simulationCanvas.addControlOf(computer2, 100, 0);
 
 		computer1.initTrafic(clock);
 		Task<Void> task = new Task<Void>() {

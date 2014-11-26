@@ -1,15 +1,27 @@
 package pl.edu.pk.iti.copperAnt.network;
 
-public class Cable {
+import javafx.scene.control.Control;
+import pl.edu.pk.iti.copperAnt.gui.CableControl;
+import pl.edu.pk.iti.copperAnt.gui.WithControl;
+
+public class Cable implements WithControl {
 
 	Port a;
 	Port b;
 
 	CableState state;
 	private long busyUntilTime;
+	private CableControl control;
 
 	public Cable() {
+		this(false);
+	}
+
+	public Cable(boolean withGui) {
 		state = CableState.IDLE;
+		if (withGui) {
+			this.control = new CableControl();
+		}
 	}
 
 	public CableState getState() {
@@ -60,9 +72,17 @@ public class Cable {
 			if (a == null) {
 				a = port;
 				port.conntectCalble(this);
+				if (getControl() != null && port.getControl() != null) {
+					control.bindWithPort(port.getControl(),
+							CableControl.Side.START);
+				}
 			} else if (b == null) {
 				b = port;
 				port.conntectCalble(this);
+				if (getControl() != null && port.getControl() != null) {
+					control.bindWithPort(port.getControl(),
+							CableControl.Side.END);
+				}
 			}
 		}
 	}
@@ -84,5 +104,14 @@ public class Cable {
 
 	public long getBusyUntilTime() {
 		return busyUntilTime;
+	}
+
+	@Override
+	public Control getControl() {
+		return control;
+	}
+
+	public void setControl(CableControl control) {
+		this.control = control;
 	}
 }

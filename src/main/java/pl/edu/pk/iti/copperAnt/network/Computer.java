@@ -4,12 +4,13 @@ import java.util.Random;
 import java.util.UUID;
 
 import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
+import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Computer implements Device {
+public class Computer implements Device, WithControl {
 	private Port port;
 	private IPAddress ip;
 	private ComputerControl control;
@@ -76,6 +77,7 @@ public class Computer implements Device {
 		return 0;
 	}
 
+	@Override
 	public ComputerControl getControl() {
 		return control;
 	}
