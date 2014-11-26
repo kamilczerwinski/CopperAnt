@@ -7,15 +7,26 @@ public class Package {
     private String destinationIP;
     private int ttl = 10;
     private String content;
+    private String header;
     private PackageType type = PackageType.ECHO_REQUEST;
     
     public Package(PackageType type, String content){
     	this.type = type;
     	this.content = content;
+    	this.header = null;
+    	
+    }
+    public Package(PackageType type, String header, String content){
+    	this.type = type;
+    	this.content = content;
+    	this.header = header;
     	
     }
     public String getContent() {
     	return content;
+    }
+    public String getHeader() {
+    	return header;
     }
     public PackageType getType() {
     	return type;

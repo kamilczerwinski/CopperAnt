@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.SwitchControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
+import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Switch implements Device {
-
+	private static final Logger log = LoggerFactory
+			.getLogger(ComputerSendsEvent.class);
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
@@ -80,6 +85,7 @@ public class Switch implements Device {
 	public void acceptPackage(Package pack, Port inPort) {
 		String destinationMAC = pack.getDestinationMAC();
 		String sourceMAC = pack.getSourceMAC();
+		log.info("AcceptPackage from " + sourceMAC + " to " + destinationMAC);
 		Port outPort = null;
 
 		// Save source MAC & port to macTable, if it doesn't exist
@@ -90,16 +96,21 @@ public class Switch implements Device {
 		// Search for MAC & port in macTable
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
-			pack.setSourceMAC(outPort.getMAC());
+			log.debug("Know MAC address. Send to port");
+			//pack.setSourceMAC(outPort.getMAC());
 			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
 					+ getDelay(), outPort, pack));
 		} else {
 			// Send through all ports
 			// TODO: add exception for source port
+			log.debug("Unknow MAC address. Send to all ports");
+
 			for (Port port : ports) {
 				// pack.setSourceMAC(outPort.getMAC());
-				clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
-						+ getDelay(), port, pack));
+				if (port != inPort) {
+					clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
+							+ getDelay(), port, pack));
+				}
 			}
 			// TODO: maybe some ACK that package was/wasn't delivered ?
 		}

@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 public class IPAddress {
 	private int[] ipParts = { 192, 168, 0, 1 };
 	private int[] netmaskParts = { 255, 255, 255, 0 };
-
+	private int brodcast = 255; 
 	public IPAddress(String ip, String netmask) {
 		String[] ipParts = ip.split("\\.");
 		for (int i = 0; i < 4; ++i) {
@@ -14,6 +14,7 @@ public class IPAddress {
 		String[] netmaskParts = netmask.split("\\.");
 		for (int i = 0; i < 4; ++i) {
 			this.netmaskParts[i] = Integer.parseInt(netmaskParts[i]);
+			
 		}
 
 	}
@@ -22,6 +23,7 @@ public class IPAddress {
 		String[] ipParts = ip.split("\\.");
 		for (int i = 0; i < 4; ++i) {
 			this.ipParts[i] = Integer.parseInt(ipParts[i]);
+			
 		}
 	}
 
@@ -29,6 +31,13 @@ public class IPAddress {
 		StringBuilder ip = new StringBuilder();
 		for (int i = 0, len = 4; i < len; ++i) {
 			ip.append(ipParts[i] + ".");
+		}
+		return new String(ip.deleteCharAt(ip.length() - 1));
+	}
+	private String createSting(int[] parts) {
+		StringBuilder ip = new StringBuilder();
+		for (int i = 0, len = 4; i < len; ++i) {
+			ip.append(parts[i] + ".");
 		}
 		return new String(ip.deleteCharAt(ip.length() - 1));
 	}
@@ -46,7 +55,13 @@ public class IPAddress {
 	public void set(int index, int value) {
 		ipParts[index -1 ] = value;
 	}
-
+	
+	public String getBrodcast() {
+		int[] brodcatParts = ipParts;
+		brodcatParts[3] = brodcast;
+		return createSting(brodcatParts);
+		
+	}
 	/**
 	 * TCP/IP Address Utility Class
 	 *
