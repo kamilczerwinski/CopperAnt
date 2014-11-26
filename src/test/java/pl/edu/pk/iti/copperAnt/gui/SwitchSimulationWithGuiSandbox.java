@@ -23,6 +23,13 @@ public class SwitchSimulationWithGuiSandbox extends AbstractControlSandbox {
 		Computer computer1 = new Computer(new IPAddress("192.168.1.1"), true);
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"), true);
 		Computer computer3 = new Computer(new IPAddress("192.168.1.3"), true);
+		computer1.addKnownHost("192.168.1.2");
+		computer1.addKnownHost("192.168.1.3");
+		
+		computer2.addKnownHost("192.168.1.1");
+		computer2.addKnownHost("192.168.1.3");
+
+		computer3.addKnownHost("192.168.1.1");
 		Switch switch_ = new Switch(3, clock, true);
 		Cable cable = new Cable();
 		cable.insertInto(computer1.getPort());

@@ -21,6 +21,7 @@ public class PortSendsEvent extends Event {
 		this.port = port;
 		this.pack = pack;
 		this.pack.setSourceMAC(port.getMAC());
+		this.pack.setSourceIP(port.getDevice().getIP());
 
 	}
 
@@ -39,7 +40,7 @@ public class PortSendsEvent extends Event {
 		} else {
 			log.debug("Dropping package, cable not inserted!");
 		}
-			
+
 		log.info(this.toString());
 
 	}

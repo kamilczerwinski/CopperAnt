@@ -35,4 +35,8 @@ public class Hub implements Device {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	public String getIP() {
+		return null;
+	}
 }

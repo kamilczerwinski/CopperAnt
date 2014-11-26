@@ -10,12 +10,10 @@ import org.slf4j.LoggerFactory;
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.SwitchControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
-import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Switch implements Device {
-	private static final Logger log = LoggerFactory
-			.getLogger(ComputerSendsEvent.class);
+	private static final Logger log = LoggerFactory.getLogger(Switch.class);
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
@@ -97,7 +95,7 @@ public class Switch implements Device {
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
 			log.debug("Know MAC address. Send to port");
-			//pack.setSourceMAC(outPort.getMAC());
+			// pack.setSourceMAC(outPort.getMAC());
 			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
 					+ getDelay(), outPort, pack));
 		} else {
@@ -128,6 +126,10 @@ public class Switch implements Device {
 
 	public void setControl(SwitchControl control) {
 		this.control = control;
+	}
+
+	public String getIP() {
+		return this.managementIP;
 	}
 
 }
