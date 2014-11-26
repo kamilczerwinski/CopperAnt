@@ -87,6 +87,6 @@ public class Package {
 	}
 
 	public String toString() {
-    	return ""
+    	return "[]"
     }
 }
