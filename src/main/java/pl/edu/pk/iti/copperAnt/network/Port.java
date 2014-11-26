@@ -9,17 +9,23 @@ public class Port {
 	Cable cable;
 	final Device device;
 	final String MAC;
-	final PortControl portControl;
+	PortControl portControl;
 
 	public Device getDevice() {
 		return device;
 	}
 
 	public Port(Device device) {
+		this(device, false);
+	}
+
+	public Port(Device device, boolean withGui) {
 		super();
 		this.device = device;
 		this.MAC = setMAC();
-		this.portControl = new PortControl();
+		if (withGui) {
+			this.portControl = new PortControl();
+		}
 	}
 
 	public Cable getCable() {

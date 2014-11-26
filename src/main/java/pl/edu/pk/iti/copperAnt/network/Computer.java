@@ -12,16 +12,22 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 public class Computer implements Device {
 	private Port port;
 	private IPAddress ip;
-	private final ComputerControl control;
+	private ComputerControl control;
 
 	public Computer() {
 		this(null);
 	}
 
 	public Computer(IPAddress ip) {
-		this.port = new Port(this);
+		this(ip, false);
+	}
+
+	public Computer(IPAddress ip, boolean withGui) {
+		this.port = new Port(this, withGui);
 		this.ip = ip;
-		this.control = new ComputerControl(port.getPortControl());
+		if (withGui) {
+			this.control = new ComputerControl(port.getPortControl());
+		}
 	}
 
 	public Port getPort() {
