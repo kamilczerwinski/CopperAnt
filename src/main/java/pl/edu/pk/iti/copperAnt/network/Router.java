@@ -108,13 +108,13 @@ public class Router implements Device {
 
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
-		log.info("Accept pacakge from " + pack.getSourceIP() + " to " + pack.getSourceIP());
+		log.debug("Accept pacakge from " + pack.getSourceIP() + " to " + pack.getSourceIP());
 		String destinationIP = pack.getDestinationIP();
 		String sourceIP = pack.getSourceIP();
 		Port outPort = null;
 		Package response = pack;
 		if (!pack.validTTL()) {
-			log.info("Pack has not valid ttl!");
+			log.debug("Pack has not valid ttl!");
 			response = new Package(PackageType.DESTINATION_UNREACHABLE, "TTL<0");
 			response.setDestinationIP(sourceIP);
 			response.setDestinationMAC(pack.getDestinationMAC());
@@ -124,14 +124,14 @@ public class Router implements Device {
 		if (pack.getType() == PackageType.DHCP) {
 			// request to this router to get IP, DHCP only local network
 			if (pack.getContent() == null && inPort != this.getWanPort()) {
-				log.info("Request to router for IP");
+				log.debug("Request to router for IP");
 				sourceIP = generateIP();
 				response = new Package(PackageType.DHCP, sourceIP);
 				response.setDestinationMAC(pack.getDestinationMAC());
 				outPort = inPort;
 			} else {
 				// response from wan router
-				log.info("Get WAN ip");
+				log.debug("Get WAN ip");
 
 				this.wanIP = new IPAddress(pack.getContent());
 				return;
@@ -139,35 +139,38 @@ public class Router implements Device {
 
 		} else if (pack.getType() == PackageType.ECHO_REQUEST
 				&& destinationIP == this.getIP()) {
-			log.info("Response for ECHO_REQUEST");
+			log.debug("Response for ECHO_REQUEST");
 			response = new Package(PackageType.ECHO_REPLY, pack.getContent());
 			response.setDestinationMAC(pack.getSourceMAC());
 			response.setSourceIP(pack.getSourceIP());
 			outPort = inPort;
 		}
 		if (!routingTable.containsKey(sourceIP)) {
-			log.info("Adding source ip " + sourceIP + " to routingTable");
+			log.debug("Adding source ip " + sourceIP + " to routingTable");
 			routingTable.put(sourceIP, inPort);
 		}
 
 		if (routingTable.containsKey(destinationIP)
 				&& destinationIP != this.getIP()) {
 			// IP in table
-			log.info("Know IP, send to LAN port");
+			log.debug("Know IP, send to LAN port");
 
 			outPort = routingTable.get(destinationIP);
 
 		} else if (outPort == null) {
 			// Destination Host Unreachable in router network send to wan router
-			log.info("Unknow IP, send to WAN");
+			log.debug("Unknow IP, send to WAN");
 			outPort = this.getWanPort();
 			response = pack;
 
 		}
-
-		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
-				outPort, response));
-
+		if (outPort.getCable() != null) {
+			clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
+					outPort, response));
+		} else {
+			log.debug("Dropping package. Cable not inserted!");
+		}
+		
 	}
 
 	public String getIP() {
