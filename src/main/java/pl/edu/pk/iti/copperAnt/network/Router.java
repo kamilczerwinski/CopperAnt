@@ -164,12 +164,9 @@ public class Router implements Device {
 			response = pack;
 
 		}
-		if (outPort.getCable() != null) {
-			clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
+		
+		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
 					outPort, response));
-		} else {
-			log.debug("Dropping package. Cable not inserted!");
-		}
 		
 	}
 

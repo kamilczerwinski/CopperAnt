@@ -34,7 +34,12 @@ public class PortSendsEvent extends Event {
 		if (portControl != null) {
 			portControl.acceptPackage();
 		}
-		clock.addEvent(new CableReceivesEvent(this.time, port, pack));
+		if (this.port.getCable() != null) {
+			clock.addEvent(new CableReceivesEvent(this.time, port, pack));
+		} else {
+			log.debug("Dropping package, cable not inserted!");
+		}
+			
 		log.info(this.toString());
 
 	}
