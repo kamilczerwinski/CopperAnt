@@ -3,18 +3,32 @@ package pl.edu.pk.iti.copperAnt.network;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.pk.iti.copperAnt.gui.HubControl;
+import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Hub implements Device {
 	private final List<Port> ports;
 	private Clock clock;
+	private HubControl control;
 
 	public Hub(int numberOfPorts, Clock clock) {
+		this(numberOfPorts, clock, false);
+	}
+
+	public Hub(int numberOfPorts, Clock clock, boolean withGui) {
 		this.clock = clock;
 		ports = new ArrayList<Port>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
-			ports.add(new Port(this));
+			ports.add(new Port(this, withGui));
+		}
+		if (withGui) {
+			List<PortControl> list = new ArrayList<PortControl>(numberOfPorts);
+			for (Port port : ports) {
+				list.add(port.getControl());
+			}
+			control = new HubControl(list);
 		}
 	}
 
@@ -34,5 +48,13 @@ public class Hub implements Device {
 	public int getDelay() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public HubControl getControl() {
+		return control;
+	}
+
+	public void setControl(HubControl control) {
+		this.control = control;
 	}
 }
