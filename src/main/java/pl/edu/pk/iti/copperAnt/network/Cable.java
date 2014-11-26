@@ -30,6 +30,9 @@ public class Cable implements WithControl {
 
 	public void setState(CableState state) {
 		this.state = state;
+		if (this.control != null) {
+			control.setState(state);
+		}
 	}
 
 	public Port getOtherEnd(Port port) {
