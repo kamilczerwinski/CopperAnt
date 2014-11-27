@@ -70,4 +70,9 @@ public class SimulationCanvas extends Control {
 		control.setLayoutX(x);
 		control.setLayoutY(y);
 	}
+
+	public void addControlOf(WithControl withControl, double x, double y) {
+		Control control = withControl.getControl();
+		addControl(control, x, y);
+	}
 }

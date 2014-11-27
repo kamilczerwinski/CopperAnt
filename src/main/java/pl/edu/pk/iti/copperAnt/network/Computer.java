@@ -9,13 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
+import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
 import pl.edu.pk.iti.copperAnt.simulation.events.ARPResolveEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Computer implements Device {
+public class Computer implements Device, WithControl {
 	private Port port;
 	private IPAddress ip;
 	private ComputerControl control;
@@ -162,6 +163,7 @@ public class Computer implements Device {
 		return generator.nextInt(200);
 	}
 
+	@Override
 	public ComputerControl getControl() {
 		return control;
 	}

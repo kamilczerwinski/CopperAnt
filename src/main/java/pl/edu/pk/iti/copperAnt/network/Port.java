@@ -61,6 +61,7 @@ public class Port {
 		if (this.cable == null) {
 			this.cable = cable;
 			cable.insertInto(this);
+
 		}
 
 	}
