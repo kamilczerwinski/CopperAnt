@@ -152,7 +152,10 @@ public class Computer implements Device, WithControl {
 	public void init(Clock clock) {
 		long time = clock.getCurrentTime();
 		Package pack = new Package(PackageType.DHCP, null);
-		pack.setDestinationIP(ip.getBrodcast());
+		if (ip != null)
+			pack.setDestinationIP(ip.getBrodcast());
+		else
+			pack.setDestinationIP("255.255.255.255");
 		pack.setDestinationMAC(Package.MAC_BROADCAST);
 		clock.addEvent(new PortSendsEvent(time, this.port, pack));
 	}
