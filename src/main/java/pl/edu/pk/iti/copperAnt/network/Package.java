@@ -87,6 +87,8 @@ public class Package {
 	}
 
 	public String toString() {
-    	return "[]"
-    }
+		return "[sourceIP=" + sourceIP + " sourceMAC=" + sourceMAC + " destIP="
+				+ destinationIP + " destMAC=" + destinationMAC + "type=" + type
+				+ "]";
+	}
 }
