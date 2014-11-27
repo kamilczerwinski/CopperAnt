@@ -22,7 +22,7 @@ public class ComputerTest {
 		doNothing().when(clock).addEvent(eventCaptor.capture());
 		when(clock.getCurrentTime()).thenReturn(11L);
 
-		Computer comp = new Computer(new IPAddress("192.168.0.1"));
+		Computer comp = new Computer();
 
 		comp.init(clock);
 		List<Event> capturedEvent = eventCaptor.getAllValues();

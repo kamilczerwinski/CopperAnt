@@ -150,6 +150,8 @@ public class Computer implements Device {
 	}
 
 	public String getIP() {
-		return this.ip.toString();
+		if (this.ip != null)
+			return this.ip.toString();
+		return null;
 	}
 }

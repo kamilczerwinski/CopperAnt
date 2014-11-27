@@ -20,8 +20,10 @@ public class PortSendsEvent extends Event {
 		super(time);
 		this.port = port;
 		this.pack = pack;
-		this.pack.setSourceMAC(port.getMAC());
-		this.pack.setSourceIP(port.getDevice().getIP());
+		if (this.pack.getSourceMAC() == null)
+			this.pack.setSourceMAC(port.getMAC());
+		if (this.pack.getSourceIP() == null)
+			this.pack.setSourceIP(port.getDevice().getIP());
 
 	}
 
