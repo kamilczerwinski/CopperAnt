@@ -3,26 +3,21 @@ package pl.edu.pk.iti.copperAnt.simulation.events;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.network.Computer;
-import pl.edu.pk.iti.copperAnt.network.Device;
 import pl.edu.pk.iti.copperAnt.network.Package;
-import pl.edu.pk.iti.copperAnt.network.PackageType;
-import pl.edu.pk.iti.copperAnt.network.Port;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
-public class ARPResolveEvent  extends ComputerSendsEvent  {
+public class ARPResolveEvent extends ComputerSendsEvent {
 	private static final Logger log = LoggerFactory
 			.getLogger(ARPResolveEvent.class);
 
-	
 	private Event eventAfter;
-	
 
-	public ARPResolveEvent(long time, Computer device, Package pack, Event eventAfter) {
+	public ARPResolveEvent(long time, Computer device, Package pack,
+			Event eventAfter) {
 		super(time, device, pack);
 		this.eventAfter = eventAfter;
-		
+
 	}
 
 	public Package getPackage() {
@@ -32,9 +27,12 @@ public class ARPResolveEvent  extends ComputerSendsEvent  {
 	@Override
 	public void run(Clock clock) {
 		if (!this.computer.knownHost(this.pack.getContent())) {
-			clock.addEvent(new PortSendsEvent(time, this.computer.getPort(), pack));
+			clock.addEvent(new PortSendsEvent(time, this.computer.getPort(),
+					pack));
 		} else if (this.eventAfter != null) {
-			eventAfter.getPackage().setDestinationMAC(this.computer.getKnownHost(this.pack.getContent()));
+			eventAfter.getPackage().setDestinationMAC(
+					this.computer.getKnownHost(this.pack.getContent()));
+
 			clock.addEvent(eventAfter);
 		}
 		log.info(this.toString());
@@ -43,7 +41,8 @@ public class ARPResolveEvent  extends ComputerSendsEvent  {
 
 	@Override
 	public String toString() {
-		return super.toString() + "ARPResolveEvent [computer=" + this.computer + "]";
+		return super.toString() + "ARPResolveEvent [computer=" + this.computer
+				+ "]";
 	}
 
 }

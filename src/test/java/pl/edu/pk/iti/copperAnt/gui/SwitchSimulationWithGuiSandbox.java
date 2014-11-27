@@ -19,17 +19,17 @@ public class SwitchSimulationWithGuiSandbox extends AbstractControlSandbox {
 		Clock clock = new Clock()
 				.withFinishCondition(new MaxTimeFinishCondition(100));
 		clock.setRealTime(true);
-		clock.setTimeScale(100);
+		clock.setTimeScale(1000);
 		Computer computer1 = new Computer(new IPAddress("192.168.1.1"), true);
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"), true);
 		Computer computer3 = new Computer(new IPAddress("192.168.1.3"), true);
-		computer1.addKnownHost("192.168.1.2");
-		computer1.addKnownHost("192.168.1.3");
-		
-		computer2.addKnownHost("192.168.1.1");
-		computer2.addKnownHost("192.168.1.3");
+		computer1.addKnownHost("192.168.1.2", computer2.getPort().getMAC());
+		computer1.addKnownHost("192.168.1.3", computer3.getPort().getMAC());
 
-		computer3.addKnownHost("192.168.1.1");
+		computer2.addKnownHost("192.168.1.1", computer1.getPort().getMAC());
+		computer2.addKnownHost("192.168.1.3", computer3.getPort().getMAC());
+
+		computer3.addKnownHost("192.168.1.1", computer1.getPort().getMAC());
 		Switch switch_ = new Switch(3, clock, true);
 		Cable cable = new Cable();
 		cable.insertInto(computer1.getPort());

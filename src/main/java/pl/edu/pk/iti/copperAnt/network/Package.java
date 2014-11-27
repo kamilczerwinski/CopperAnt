@@ -9,11 +9,12 @@ public class Package {
 	private String content;
 	private String header;
 	private PackageType type = PackageType.ECHO_REQUEST;
+	public final static String MAC_BROADCAST = "00:00:00:00:00:00";
 
-	public Package(PackageType type, String content) {
+	public Package(PackageType type, String header) {
 		this.type = type;
-		this.content = content;
-		this.header = null;
+		this.content = header;
+		this.header = header;
 
 	}
 
@@ -88,7 +89,7 @@ public class Package {
 
 	public String toString() {
 		return "[sourceIP=" + sourceIP + " sourceMAC=" + sourceMAC + " destIP="
-				+ destinationIP + " destMAC=" + destinationMAC + "type=" + type
-				+ "]";
+				+ destinationIP + " destMAC=" + destinationMAC + " type="
+				+ type + " content=" + content + "]";
 	}
 }

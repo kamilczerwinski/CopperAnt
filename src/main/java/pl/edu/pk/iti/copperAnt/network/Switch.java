@@ -101,7 +101,8 @@ public class Switch implements Device {
 		} else {
 			// Send through all ports
 			// TODO: add exception for source port
-			log.debug("Unknow MAC address. Send to all ports");
+			log.debug("Unknow MAC " + destinationMAC
+					+ " address. Send to all ports");
 
 			for (Port port : ports) {
 				// pack.setSourceMAC(outPort.getMAC());

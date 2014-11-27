@@ -5,6 +5,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
@@ -19,6 +22,7 @@ public class Computer implements Device {
 	private HashMap<String, String> arpTable = new HashMap<String, String>();
 	private Clock clock;
 	private static int TIMEOUT_ADDRESS_RESOLVE = 10;
+	private static final Logger log = LoggerFactory.getLogger(Computer.class);
 
 	public Computer() {
 		this(null);
@@ -60,6 +64,13 @@ public class Computer implements Device {
 	public void acceptPackage(Package pack, Port inPort) {
 		// assume is response for arp package
 
+		if (!pack.getDestinationMAC().equals(port.getMAC())
+				&& !pack.getDestinationMAC().equals(Package.MAC_BROADCAST)) {
+			log.info("Dropping package! Wrong MAC! " + pack + " my MAC "
+					+ port.getMAC());
+			return;
+		}
+
 		if (pack.getType() == PackageType.DHCP && this.ip == null) {
 			this.ip = new IPAddress(pack.getContent());
 		} else if (pack.getType() == PackageType.ARP_REQ)
@@ -84,7 +95,7 @@ public class Computer implements Device {
 			}
 		}
 
-		System.out.println("Computer received package");
+		log.info("Computer received package " + pack);
 
 	}
 
@@ -101,26 +112,30 @@ public class Computer implements Device {
 		pack.setSourceIP(this.ip.toString());
 		IPAddress dest = this.ip;
 		Random generator = new Random();
-		if (generator.nextBoolean()) {
-			Set<String> ipAddreses = arpTable.keySet();
-			for (String ip : arpTable.keySet()) {
-				if (generator.nextInt(100) > 50) {
-					dest = new IPAddress(ip);
-				}
+		// if (generator.nextBoolean()) {
+		Set<String> ipAddreses = arpTable.keySet();
+		for (String ip : arpTable.keySet()) {
+			if (generator.nextInt(100) > 50) {
+				dest = new IPAddress(ip);
+				break;
 			}
-		} else {
-			dest.set(generator.nextInt(4) + 1, generator.nextInt(254) + 1);
 		}
+		/*
+		 * } else { dest.set(generator.nextInt(4) + 1, generator.nextInt(254) +
+		 * 1); }
+		 */
 		pack.setDestinationIP(dest.toString());
 		String destMAC = null;
 		if (arpTable.containsKey(dest.toString())) {
-			destMAC = arpTable.get(destMAC);
+			destMAC = arpTable.get(dest.toString());
+			pack.setDestinationMAC(destMAC);
 			event = new ComputerSendsEvent(time, this, pack);
 			event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));
 		} else {
 			Package resolvePack = new Package(PackageType.ARP_REQ,
 					dest.toString());
-			resolvePack.setDestinationMAC("00:00:00:00:00");
+			resolvePack.setDestinationMAC(Package.MAC_BROADCAST);
+			resolvePack.setDestinationIP(dest.toString());
 			ComputerSendsEvent eventAfter = new ComputerSendsEvent(time, this,
 					pack);
 			eventAfter.setIntervalGenerator(new ConstantTimeIntervalGenerator(
@@ -136,6 +151,8 @@ public class Computer implements Device {
 	public void init(Clock clock) {
 		long time = clock.getCurrentTime();
 		Package pack = new Package(PackageType.DHCP, null);
+		pack.setDestinationIP(ip.getBrodcast());
+		pack.setDestinationMAC(Package.MAC_BROADCAST);
 		clock.addEvent(new PortSendsEvent(time, this.port, pack));
 	}
 
