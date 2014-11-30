@@ -6,6 +6,7 @@ import org.junit.Test;
 import pl.edu.pk.iti.copperAnt.network.Cable;
 import pl.edu.pk.iti.copperAnt.network.Computer;
 import pl.edu.pk.iti.copperAnt.network.Hub;
+import pl.edu.pk.iti.copperAnt.network.IPAddress;
 
 public class RealTimeSimulationSandbox {
 
@@ -16,8 +17,8 @@ public class RealTimeSimulationSandbox {
 				.withFinishCondition(new MaxTimeFinishCondition(100));
 		clock.setRealTime(true);
 		clock.setTimeScale(500);
-		Computer computer1 = new Computer();
-		Computer computer2 = new Computer();
+		Computer computer1 = new Computer(new IPAddress("192.168.1.1"));
+		Computer computer2 = new Computer(new IPAddress("192.168.1.2"));
 		Cable cable = new Cable();
 		cable.insertInto(computer1.getPort());
 		cable.insertInto(computer2.getPort());
@@ -34,9 +35,9 @@ public class RealTimeSimulationSandbox {
 		clock.setRealTime(true);
 		clock.setTimeScale(500);
 		Hub hub = new Hub(3, clock);
-		Computer computer1 = new Computer();
-		Computer computer2 = new Computer();
-		Computer computer3 = new Computer();
+		Computer computer1 = new Computer(new IPAddress("192.168.1.1"));
+		Computer computer2 = new Computer(new IPAddress("192.168.1.2"));
+		Computer computer3 = new Computer(new IPAddress("192.168.1.3"));
 		connectComputerToHub(computer1, hub, 0);
 		connectComputerToHub(computer2, hub, 1);
 		connectComputerToHub(computer3, hub, 2);
