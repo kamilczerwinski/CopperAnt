@@ -33,9 +33,7 @@ public class Computer implements Device, WithControl {
 		this(ip, false);
 	}
 
-	public void addKnownHost(String ip) {
-		this.arpTable.put(ip, null);
-	}
+
 
 	public void addKnownHost(String ip, String mac) {
 		this.arpTable.put(ip, mac);
