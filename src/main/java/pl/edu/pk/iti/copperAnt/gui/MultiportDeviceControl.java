@@ -1,5 +1,6 @@
 package pl.edu.pk.iti.copperAnt.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.Control;
@@ -15,8 +16,9 @@ public abstract class MultiportDeviceControl extends Control {
 
 	public MultiportDeviceControl(List<PortControl> portList) {
 		MouseControlUtil.makeDraggable(this);
-		double portWith = portList.get(0).getWidth();
-		double portHeight = portList.get(0).getHeight();
+		double portWith = portList.isEmpty() ? 0 : portList.get(0).getWidth();
+		double portHeight = portList.isEmpty() ? 0 : portList.get(0)
+				.getHeight();
 		setWidth(Math.max(portList.size() * portWith, placeForIconHeight));
 		setHeight(placeForIconHeight + portHeight);
 		drawIcon(placeForIconHeight);
@@ -58,4 +60,11 @@ public abstract class MultiportDeviceControl extends Control {
 	}
 
 	protected abstract Image getIconImage(double size);
+	public static RouterControl prepareRouterWithPorts(int numberOfPorts) {
+		List<PortControl> list = new ArrayList<PortControl>(numberOfPorts);
+		for (int i = 0; i < numberOfPorts; i++) {
+			list.add(new PortControl());
+		}
+		return new RouterControl(list);
+	}
 }

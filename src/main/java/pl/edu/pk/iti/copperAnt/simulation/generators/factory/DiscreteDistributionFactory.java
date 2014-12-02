@@ -2,6 +2,7 @@ package pl.edu.pk.iti.copperAnt.simulation.generators.factory;
 
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.AbstractDiscreteDistribution;
+import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Binomial;
 import cern.jet.random.Poisson;
 import cern.jet.random.Exponential;
@@ -12,10 +13,13 @@ import cern.jet.random.engine.MersenneTwister;
 import cern.jet.random.engine.RandomEngine;
 
 public class DiscreteDistributionFactory implements DistributionFactory {
-	public  AbstractDiscreteDistribution create(String name, double arg0) {
+	
+
+	public  AbstractDistribution create(String name, double arg0) {
 			return DiscreteDistributionFactory.createStatic(name, arg0);
 	}
-	public static AbstractDiscreteDistribution createStatic(String name, double arg0) {
+	
+	public static AbstractDistribution createStatic(String name, double arg0) {
 		RandomEngine generator = new MersenneTwister();
 		
 		int arg0Int = (int)arg0;
@@ -34,5 +38,6 @@ public class DiscreteDistributionFactory implements DistributionFactory {
 		
 		
 		
+		}
 	}
 }
