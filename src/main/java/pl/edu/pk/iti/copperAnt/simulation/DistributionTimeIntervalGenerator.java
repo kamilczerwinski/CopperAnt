@@ -17,7 +17,6 @@ public class DistributionTimeIntervalGenerator extends WithDelay implements Time
 
 	@Override
 	public int getTimeInterval() {
-		// TODO Auto-generated method stub
 		return this.getDelay();
 	}
 }
