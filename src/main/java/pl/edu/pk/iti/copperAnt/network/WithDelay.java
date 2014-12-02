@@ -17,12 +17,16 @@ public  abstract class WithDelay {
 		
 	}
 	public WithDelay (Properties prop) {
-		if (prop.getProperty("delay-type") == "CContinousDistribution") {
+		this(prop.getProperty("delay-type"), prop.getProperty("delay-name"), Double.parseDouble(prop.getProperty("delay-arg0")));
+	}
+	
+	public WithDelay (String type, String name, double arg0) {
+		if (name == "ContinousDistribution") {
 			factory = new ContinousDistributionFactory();
 		} else {
 			factory = new DiscreteDistributionFactory();
 		}
-		distribution = factory.create(prop.getProperty("delay-distribution"), Double.parseDouble(prop.getProperty("delay-arg0")));
+		distribution = factory.create(type, arg0);
 		
 	}
 	
