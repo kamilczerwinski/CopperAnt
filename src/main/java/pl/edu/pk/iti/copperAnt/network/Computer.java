@@ -2,19 +2,22 @@ package pl.edu.pk.iti.copperAnt.network;
 import java.util.Random;
 import java.util.UUID;
 
-
+import cern.jet.random.AbstractDiscreteDistribution;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
+import pl.edu.pk.iti.copperAnt.simulation.generators.factory.DiscreteDistributionFactory;
 
 public class Computer implements Device {
 	private Port port;
 	private IPAddress ip;
+	private AbstractDiscreteDistribution distribution;
 
 	public Computer() {
 		this.port = new Port(this);
 		this.ip = null;
+		this.distribution = DiscreteDistributionFactory.createStatic("Poisson", 100.9);
 	}
 	
 	public Port getPort() {
@@ -58,7 +61,7 @@ public class Computer implements Device {
 	}
 	@Override
 	public int getDelay() {
-		return 0;
+		return this.distribution.nextInt();
 	}
 
 }

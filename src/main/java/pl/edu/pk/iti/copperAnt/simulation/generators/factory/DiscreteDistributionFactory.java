@@ -13,8 +13,11 @@ import cern.jet.random.engine.RandomEngine;
 
 public class DiscreteDistributionFactory implements DistributionFactory {
 	public  AbstractDiscreteDistribution create(String name, double arg0) {
+			return DiscreteDistributionFactory.createStatic(name, arg0);
+	}
+	public static AbstractDiscreteDistribution createStatic(String name, double arg0) {
 		RandomEngine generator = new MersenneTwister();
-			
+		
 		int arg0Int = (int)arg0;
 		switch (name) {
 		case "Binomial":
@@ -29,7 +32,6 @@ public class DiscreteDistributionFactory implements DistributionFactory {
 		default:
 			return new Poisson(arg0 * 1.0, generator);
 		
-		}
 		
 		
 	}
