@@ -30,7 +30,7 @@ public class RouterTest {
 		PortSendsEvent expected = new PortSendsEvent(clock.getCurrentTime() + router.getDelay(), router.getPort(0), pack);
 		router.acceptPackage(pack, router.getPort(0));
 		List<Event> capturedEvent = eventCaptor.getAllValues();
-		assertEquals(capturedEvent.size(), 1);
+		assertEquals(3, capturedEvent.size());
 		assertEquals(capturedEvent.get(0).getPackage(), pack);
 			
 		
@@ -81,7 +81,6 @@ public class RouterTest {
 		when(clock.getCurrentTime()).thenReturn(11L);
 		Properties config = new Properties();
 		config.setProperty("numbersOfPorts", "4");
-		config.setProperty("DHCPstartIP", "192.168.0.1");
 					
 		Router router = new Router(config, clock);
 		Package pack = new Package(PackageType.DHCP, null);
@@ -90,30 +89,11 @@ public class RouterTest {
 		List<Event> capturedEvent = eventCaptor.getAllValues();
 		assertEquals(capturedEvent.size(), 1);
 		Event event =  ((Event)capturedEvent.get(0));
-		assertEquals("192.168.0.2", event.getPackage().getContent());
+		assertEquals(router.getIP(0).toString(), event.getPackage().getContent());
 		assertEquals(PackageType.DHCP, event.getPackage().getType());
 	}	
 		
 
-	@Test
-	public void testReceivedWANIP() {
-		Clock clock = mock(Clock.class);
-		ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
-		doNothing().when(clock).addEvent(eventCaptor.capture());
-		when(clock.getCurrentTime()).thenReturn(11L);
-		Properties config = new Properties();
-		config.setProperty("numbersOfPorts", "4");
-		config.setProperty("DHCPstartIP", "192.168.0.1");
-					
-		Router router = new Router(config, clock);
-		Package pack = new Package(PackageType.DHCP, "192.168.4.11");
-		pack.setSourceMAC("aaaaaa");
-		router.acceptPackage(pack, router.getWanPort());
-		
-		List<Event> capturedEvent = eventCaptor.getAllValues();
-		assertEquals(capturedEvent.size(), 0);
-		assertEquals("192.168.4.11", router.getWanIP());
-	}	
 		
 	@Test
 	public void testTTl0() {
@@ -140,24 +120,6 @@ public class RouterTest {
 		assertEquals(PackageType.DESTINATION_UNREACHABLE, event.getPackage().getType());
 	}	
 	
-	@Test
-	public void testSentDHCPReq() {
-		Clock clock = mock(Clock.class);
-		ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
-		doNothing().when(clock).addEvent(eventCaptor.capture());
-		when(clock.getCurrentTime()).thenReturn(11L);
-		Properties config = new Properties();
-		config.setProperty("numbersOfPorts", "4");
-		config.setProperty("DHCPstartIP", "192.168.0.1");
-		Router router = new Router(config, clock);
-		router.init();
-		
-		List<Event> capturedEvent = eventCaptor.getAllValues();
-		assertEquals(capturedEvent.size(), 1);
-		Event event =  ((Event)capturedEvent.get(0));
-
-		assertEquals(event.getPackage().getType(), PackageType.DHCP);
-		assertEquals(event.getPackage().getContent(), null);
-	}
+	
 	
 }
