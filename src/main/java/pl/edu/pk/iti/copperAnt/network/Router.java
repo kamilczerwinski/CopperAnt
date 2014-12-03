@@ -15,8 +15,7 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Router implements Device, WithControl {
-	private static final Logger log = LoggerFactory.getLogger(Router.class);
+public class Router extends Device implements  WithControl  {
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private final Port wanPort = new Port(this);
@@ -27,6 +26,8 @@ public class Router implements Device, WithControl {
 	private IPAddress lanIP = new IPAddress("192.168.0.1");
 	private Properties config;
 	private RouterControl control;
+	private static final Logger log = LoggerFactory.getLogger(Router.class);
+
 
 	public Router(int numberOfPorts, Clock clock) {
 		this(numberOfPorts, clock, false);

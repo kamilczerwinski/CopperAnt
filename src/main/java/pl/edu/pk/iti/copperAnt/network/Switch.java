@@ -13,14 +13,15 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Switch implements Device, WithControl {
-	private static final Logger log = LoggerFactory.getLogger(Switch.class);
+public class Switch  extends Device implements  WithControl {
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
 	private Clock clock;
 	private String managementIP; // management IP
 	private SwitchControl control;
+	private static final Logger log = LoggerFactory.getLogger(Switch.class);
+
 
 	public Switch(int numberOfPorts, Clock clock) {
 		this(numberOfPorts, clock, false);
@@ -116,11 +117,7 @@ public class Switch implements Device, WithControl {
 		}
 	}
 
-	@Override
-	public int getDelay() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
 
 	@Override
 	public SwitchControl getControl() {

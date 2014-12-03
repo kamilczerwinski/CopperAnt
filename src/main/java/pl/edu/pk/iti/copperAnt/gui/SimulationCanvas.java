@@ -1,6 +1,12 @@
 package pl.edu.pk.iti.copperAnt.gui;
 
+import java.awt.List;
+import java.util.ArrayList;
+
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
 import javafx.scene.control.MenuItem;
@@ -13,7 +19,7 @@ public class SimulationCanvas extends Control {
 	private double nextDeviceY;
 
 	public SimulationCanvas() {
-		setWidth(1000);
+		setWidth(1900);
 		setHeight(1000);
 
 		// TODO ten prostokat to brzydki hack którego trzeba sie pozbyc
@@ -74,5 +80,9 @@ public class SimulationCanvas extends Control {
 	public void addControlOf(WithControl withControl, double x, double y) {
 		Control control = withControl.getControl();
 		addControl(control, x, y);
+	}
+	
+	public ObservableList<Node> getControls(){
+		return getChildren();
 	}
 }

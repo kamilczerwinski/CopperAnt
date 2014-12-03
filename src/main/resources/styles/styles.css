@@ -1,3 +1,8 @@
-/* for now it is empty */
 
-
+.popup {
+    -fx-background-color: white;
+    -fx-padding: 20 30;
+    -fx-border-color: black; 
+    -fx-border-width: 2;
+    -fx-font-size: 12;
+}

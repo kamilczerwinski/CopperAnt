@@ -13,6 +13,7 @@ public class RouterSimulationWithGuiSandbox extends AbstractControlSandbox {
 
 	@Override
 	protected void addElements(Pane root) {
+		
 		SimulationCanvas simulationCanvas = new SimulationCanvas();
 		root.getChildren().add(simulationCanvas);
 

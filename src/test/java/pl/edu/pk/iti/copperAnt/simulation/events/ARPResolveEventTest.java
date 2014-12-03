@@ -30,7 +30,7 @@ public class ARPResolveEventTest {
 		Package pack = new Package(PackageType.ARP_REQ, "192.168.1.1");
 		
 		ComputerSendsEvent after = new ComputerSendsEvent(0, comp, pack);
-		ARPResolveEvent test = new ARPResolveEvent(0, comp, pack, after);
+		ARPEvent test = new ARPEvent(0, comp, pack, after);
 		test.run(clock);
 		List<Event> capturedEvent = eventCaptor.getAllValues();
 		assertEquals(capturedEvent.size(), 1);

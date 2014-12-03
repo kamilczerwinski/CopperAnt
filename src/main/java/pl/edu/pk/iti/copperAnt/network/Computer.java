@@ -12,11 +12,12 @@ import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.ConstantTimeIntervalGenerator;
-import pl.edu.pk.iti.copperAnt.simulation.events.ARPResolveEvent;
+import pl.edu.pk.iti.copperAnt.simulation.DistributionTimeIntervalGenerator;
+import pl.edu.pk.iti.copperAnt.simulation.events.ARPEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Computer implements Device, WithControl {
+public class Computer extends Device implements WithControl {
 	private Port port;
 	private IPAddress ip;
 	private ComputerControl control;
@@ -34,6 +35,7 @@ public class Computer implements Device, WithControl {
 	}
 
 
+	
 
 	public void addKnownHost(String ip, String mac) {
 		this.arpTable.put(ip, mac);
@@ -77,8 +79,10 @@ public class Computer implements Device, WithControl {
 					&& pack.getHeader() == this.ip.toString()) {
 				Package outPack = new Package(PackageType.ARP_REP,
 						this.port.getMAC());
+				//FIXME: ----------------------------------------------
 				outPack.setDestinationIP(pack.getSourceIP());
 				outPack.setDestinationMAC(pack.getSourceMAC());
+				//---------------------------------------------
 				long time = clock.getCurrentTime();
 				clock.addEvent(new PortSendsEvent(time, this.port, outPack));
 
@@ -137,9 +141,8 @@ public class Computer implements Device, WithControl {
 			resolvePack.setDestinationIP(dest.toString());
 			ComputerSendsEvent eventAfter = new ComputerSendsEvent(time, this,
 					pack);
-			eventAfter.setIntervalGenerator(new ConstantTimeIntervalGenerator(
-					10));
-			event = new ARPResolveEvent(time + getDelay(), this, resolvePack,
+			eventAfter.setIntervalGenerator(new DistributionTimeIntervalGenerator());
+			event = new ARPEvent(time + getDelay(), this, resolvePack,
 					eventAfter);
 
 		}
@@ -156,12 +159,6 @@ public class Computer implements Device, WithControl {
 			pack.setDestinationIP("255.255.255.255");
 		pack.setDestinationMAC(Package.MAC_BROADCAST);
 		clock.addEvent(new PortSendsEvent(time, this.port, pack));
-	}
-
-	@Override
-	public int getDelay() {
-		Random generator = new Random();
-		return generator.nextInt(200);
 	}
 
 	@Override

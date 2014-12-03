@@ -22,8 +22,7 @@ public class PortSendsEvent extends Event {
 		this.pack = pack;
 		if (this.pack.getSourceMAC() == null)
 			this.pack.setSourceMAC(port.getMAC());
-		if (this.pack.getSourceIP() == null)
-			this.pack.setSourceIP(port.getDevice().getIP());
+		
 
 	}
 

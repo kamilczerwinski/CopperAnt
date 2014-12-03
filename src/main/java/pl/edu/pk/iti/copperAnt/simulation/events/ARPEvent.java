@@ -7,13 +7,13 @@ import pl.edu.pk.iti.copperAnt.network.Computer;
 import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
-public class ARPResolveEvent extends ComputerSendsEvent {
+public class ARPEvent extends ComputerSendsEvent {
 	private static final Logger log = LoggerFactory
-			.getLogger(ARPResolveEvent.class);
+			.getLogger(ARPEvent.class);
 
 	private Event eventAfter;
 
-	public ARPResolveEvent(long time, Computer device, Package pack,
+	public ARPEvent(long time, Computer device, Package pack,
 			Event eventAfter) {
 		super(time, device, pack);
 		this.eventAfter = eventAfter;
