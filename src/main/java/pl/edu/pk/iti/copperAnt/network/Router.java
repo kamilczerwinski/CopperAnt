@@ -22,6 +22,7 @@ public class Router implements Device, WithControl {
 	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private List<IPAddress> ipAddresses;
+	private List<IPAddress> dhcpAddressList;
 	private Clock clock;
 	private HashMap<String, Port> routingTable; // <IP, Port>
 	private String MAC;
@@ -36,8 +37,8 @@ public class Router implements Device, WithControl {
 	public Router(int numberOfPorts, Clock clock, boolean withGui) {
 		this.clock = clock;
 		ports = new ArrayList<Port>(numberOfPorts);
+		dhcpAddressList = new ArrayList<IPAddress>(numberOfPorts);
 		Random generator = new Random();
-		IPAddress base = new IPAddress("192.168.0.1");
 	
 		ipAddresses = new ArrayList<IPAddress>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
@@ -45,6 +46,7 @@ public class Router implements Device, WithControl {
 			IPAddress tmp = new IPAddress("192.168.0.1");
 			tmp.set(3, generator.nextInt(254) + 1);
 			ipAddresses.add(tmp);
+			dhcpAddressList.add(new IPAddress(tmp));
 		}
 		routingTable = new HashMap<String, Port>();
 		config = new Properties();
@@ -68,6 +70,8 @@ public class Router implements Device, WithControl {
 		String withGuiString = (String) config.getProperty("withGui", "false");
 		boolean withGui = withGuiString.equals("true") ? true : false;
 		ports = new ArrayList<Port>(numberOfPorts);
+		dhcpAddressList = new ArrayList<IPAddress>(numberOfPorts);
+
 		ipAddresses = new ArrayList<IPAddress>(numberOfPorts);
 
 		for (int i = 0; i < numberOfPorts; i++) {
@@ -75,6 +79,8 @@ public class Router implements Device, WithControl {
 			IPAddress tmp = new IPAddress("192.168.0.1");
 			tmp.set(3, generator.nextInt(254) + 1);
 			ipAddresses.add(tmp);
+			dhcpAddressList.add(new IPAddress(tmp));
+
 		}
 		routingTable = new HashMap<String, Port>();
 		
@@ -92,7 +98,7 @@ public class Router implements Device, WithControl {
 	
 
 	private String generateIP(int index) {
-		return ipAddresses.get(index).increment();
+		return dhcpAddressList.get(index).increment();
 
 	}
 
@@ -102,8 +108,11 @@ public class Router implements Device, WithControl {
 	public IPAddress getIP(int portNumber) {
 		return ipAddresses.get(portNumber);
 	}
-	
-	private boolean myIP(String addr) {
+	public String getIP(Port port) {
+		return ipAddresses.get(ports.indexOf(port)).toString();
+	}
+
+	private boolean inMyIP(String addr) {
 		for (IPAddress ip: ipAddresses) {
 			
 			if (ip.toString().equals(addr)) {
@@ -145,14 +154,14 @@ public class Router implements Device, WithControl {
 				outPort = inPort;
 			} else {
 				// response from wan router
-				// FIXME: what hapen when we connect two routers in DHCP mode?
+				// FIXME: what happen when we connect two routers in DHCP mode?
 				log.debug("Get WAN ip");
 
 				return;
 			}
 
 		} else if (pack.getType() == PackageType.ECHO_REQUEST
-				&& this.myIP(destinationIP)) {
+				&& this.inMyIP(destinationIP)) {
 			log.debug("Response for ECHO_REQUEST");
 			response = new Package(PackageType.ECHO_REPLY, pack.getContent());
 			response.setDestinationMAC(pack.getSourceMAC());
@@ -165,26 +174,34 @@ public class Router implements Device, WithControl {
 		}
 
 		if (routingTable.containsKey(destinationIP)
-				&& !this.myIP(destinationIP)) {
+				&& !this.inMyIP(destinationIP)) {
 			// IP in table
 			log.debug("Know IP, send to LAN port");
 
 			outPort = routingTable.get(destinationIP);
 
 		} else if (outPort == null) {
-			// Destination Host Unreachable in router network send to wan router
-			log.debug("Unknow IP, send to WAN");
-			
-			response = pack;
-			for (Port port: ports) {
-				if (port != inPort) {
-					clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
-							port, response));					
+			// routing
+			boolean isInSubnet = false;
+			for (int i = 0, len = ipAddresses.size(); i < len; ++i) {
+				if (IPAddress.isInSubnet(destinationIP, ipAddresses.get(i).getNetwork(), "255.255.255.0")) {
+					outPort = this.getPort(i);
+					isInSubnet = true;
 				}
 			}
-			return;
-
+			if (!isInSubnet) {
+				for (Port port : ports) {
+					if (port != inPort) {						
+						clock.addEvent(new PortSendsEvent(clock.getCurrentTime()				
+							+ getDelay(), port, pack));
+					}
+				}
+				return;
+			}
+			
+			
 		}
+		
 
 		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
 				outPort, response));
@@ -201,6 +218,7 @@ public class Router implements Device, WithControl {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 
 	public RouterControl getControl() {
 		return control;

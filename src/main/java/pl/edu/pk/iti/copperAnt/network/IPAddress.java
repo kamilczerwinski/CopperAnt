@@ -24,6 +24,12 @@ public class IPAddress {
 			this.ipParts[i] = Integer.parseInt(ipParts[i]);
 		}
 	}
+	public IPAddress(IPAddress obj) {
+		for (int i = 0; i< 4; i++) {
+			ipParts[i] = obj.ipParts[i];
+			netmaskParts[i] = obj.netmaskParts[i];
+		}
+	}
 
 	public String toString() {
 		StringBuilder ip = new StringBuilder();
@@ -42,9 +48,18 @@ public class IPAddress {
 		ipParts[3]++;
 		return this.toString();
 	}
+	public String decrement() {
+		ipParts[3]--;
+		return this.toString();
+	}
 
 	public void set(int index, int value) {
 		ipParts[index -1 ] = value;
+	}
+	
+	public String getNetwork() {
+		IPAddress tmp = new IPAddress(this);
+		return tmp.decrement();
 	}
 
 	/**

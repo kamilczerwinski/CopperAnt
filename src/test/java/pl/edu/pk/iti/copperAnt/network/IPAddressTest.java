@@ -38,7 +38,11 @@ public class IPAddressTest {
 		ip.increment(3);
 		assertEquals(ip.toString(), "192.168.1.1");
 	}
-	
+	@Test
+	public void testNetwork() {
+		IPAddress ip = new IPAddress("192.168.0.1", "255.255.255.0");
+		assertEquals(ip.getNetwork(), "192.168.0.0");
+	}
 	@Test
 	public void testSet() {
 		IPAddress ip = new IPAddress("192.168.0.1", "255.255.255.128");
@@ -49,6 +53,7 @@ public class IPAddressTest {
 	public void testIsInSubnet() {
 		assertTrue(IPAddress.isInSubnet("192.168.0.12", "192.168.0.0", "255.255.255.0"));
 	}
+	
 	
 	@Test
 	public void testIsNotInSubnet() {
