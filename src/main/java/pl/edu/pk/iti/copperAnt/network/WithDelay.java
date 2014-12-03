@@ -1,5 +1,40 @@
 package pl.edu.pk.iti.copperAnt.network;
 
-public interface WithDelay {
-	public int getDelay();
+import java.util.Properties;
+
+import pl.edu.pk.iti.copperAnt.simulation.generators.factory.ContinousDistributionFactory;
+import pl.edu.pk.iti.copperAnt.simulation.generators.factory.DiscreteDistributionFactory;
+import pl.edu.pk.iti.copperAnt.simulation.generators.factory.DistributionFactory;
+
+import cern.jet.random.AbstractDistribution;
+
+public abstract class WithDelay {
+	protected DistributionFactory factory;
+	protected AbstractDistribution distribution;
+
+	public WithDelay() {
+		factory = new DiscreteDistributionFactory();
+		distribution = factory.create("Poission", 100);
+
+	}
+
+	public WithDelay(Properties prop) {
+		this(prop.getProperty("delay-type"), prop.getProperty("delay-name"),
+				Double.parseDouble(prop.getProperty("delay-arg0")));
+	}
+
+	public WithDelay(String type, String name, double arg0) {
+		if (name.equals("ContinousDistribution")) {
+			factory = new ContinousDistributionFactory();
+		} else {
+			factory = new DiscreteDistributionFactory();
+		}
+		distribution = factory.create(type, arg0);
+
+	}
+
+	public int getDelay() {
+		return distribution.nextInt();
+
+	}
 }
