@@ -6,6 +6,8 @@ import pl.edu.pk.iti.copperAnt.simulation.generators.factory.ContinousDistributi
 import pl.edu.pk.iti.copperAnt.simulation.generators.factory.DiscreteDistributionFactory;
 import pl.edu.pk.iti.copperAnt.simulation.generators.factory.DistributionFactory;
 
+import cern.jet.random.AbstractDistribution;
+
 public abstract class WithDelay {
 	protected DistributionFactory factory;
 	protected AbstractDistribution distribution;
