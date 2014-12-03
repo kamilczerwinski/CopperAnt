@@ -13,10 +13,8 @@ public class ARPEvent extends ComputerSendsEvent {
 
 	private Event eventAfter;
 
-	public ARPEvent(long time, Computer device, Package pack,
-			Event eventAfter) {
+	public ARPEvent(long time, Computer device, Package pack) {
 		super(time, device, pack);
-		this.eventAfter = eventAfter;
 
 	}
 
@@ -29,11 +27,6 @@ public class ARPEvent extends ComputerSendsEvent {
 		if (!this.computer.knownHost(this.pack.getContent())) {
 			clock.addEvent(new PortSendsEvent(time, this.computer.getPort(),
 					pack));
-		} else if (this.eventAfter != null) {
-			eventAfter.getPackage().setDestinationMAC(
-					this.computer.getKnownHost(this.pack.getContent()));
-
-			clock.addEvent(eventAfter);
 		}
 		log.info(this.toString());
 

@@ -1,6 +1,7 @@
 package pl.edu.pk.iti.copperAnt.network;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -8,6 +9,10 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import cern.jet.math.Mult;
 import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
@@ -25,6 +30,7 @@ public class Computer extends Device implements WithControl {
 	private Clock clock;
 	private static int TIMEOUT_ADDRESS_RESOLVE = 10;
 	private static final Logger log = LoggerFactory.getLogger(Computer.class);
+	private Multimap<String, Package> packageQueue =  HashMultimap.create(); //Ip package to send;
 
 	public Computer() {
 		this(null);
@@ -97,6 +103,18 @@ public class Computer extends Device implements WithControl {
 
 			}
 		}
+		for (String toSendIP: packageQueue.keySet()) {
+			if (this.knownHost(toSendIP)) {
+				for (Package toSend: packageQueue.get(toSendIP)) {
+					toSend.setDestinationMAC(this.getKnownHost(toSendIP));
+					ComputerSendsEvent event = new ComputerSendsEvent(clock.getCurrentTime() + this.getDelay(), this, toSend);
+					event.setIntervalGenerator(new DistributionTimeIntervalGenerator());
+					clock.addEvent(event);
+					packageQueue.remove(toSendIP, toSend);
+				}
+			}
+		}
+
 
 		log.info("Computer received package " + pack);
 
@@ -133,17 +151,15 @@ public class Computer extends Device implements WithControl {
 			destMAC = arpTable.get(dest.toString());
 			pack.setDestinationMAC(destMAC);
 			event = new ComputerSendsEvent(time, this, pack);
-			event.setIntervalGenerator(new ConstantTimeIntervalGenerator(10));
+			event.setIntervalGenerator(new DistributionTimeIntervalGenerator());
 		} else {
 			Package resolvePack = new Package(PackageType.ARP_REQ,
 					dest.toString());
 			resolvePack.setDestinationMAC(Package.MAC_BROADCAST);
 			resolvePack.setDestinationIP(dest.toString());
-			ComputerSendsEvent eventAfter = new ComputerSendsEvent(time, this,
-					pack);
-			eventAfter.setIntervalGenerator(new DistributionTimeIntervalGenerator());
-			event = new ARPEvent(time + getDelay(), this, resolvePack,
-					eventAfter);
+			
+			event = new ARPEvent(time + getDelay(), this, resolvePack);
+			packageQueue.put(dest.toString(), pack);
 
 		}
 

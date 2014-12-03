@@ -17,10 +17,10 @@ import pl.edu.pk.iti.copperAnt.network.PackageType;
 import pl.edu.pk.iti.copperAnt.network.Package;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
-public class ARPResolveEventTest {
+public class ARPEventTest {
 	
 	@Test
-	public void testRunAfterEvent() {
+	public void testRun() {
 		Computer comp = new Computer(new IPAddress("192.168.2.1"));
 		comp.addKnownHost("192.168.1.1","a");
 		Clock clock = mock(Clock.class);
@@ -30,11 +30,10 @@ public class ARPResolveEventTest {
 		Package pack = new Package(PackageType.ARP_REQ, "192.168.1.1");
 		
 		ComputerSendsEvent after = new ComputerSendsEvent(0, comp, pack);
-		ARPEvent test = new ARPEvent(0, comp, pack, after);
+		ARPEvent test = new ARPEvent(0, comp, pack);
 		test.run(clock);
 		List<Event> capturedEvent = eventCaptor.getAllValues();
-		assertEquals(capturedEvent.size(), 1);
-		assertEquals(capturedEvent.get(0).getClass(), after.getClass());
+		assertEquals(capturedEvent.size(), 0);
 		
 	}
 }
