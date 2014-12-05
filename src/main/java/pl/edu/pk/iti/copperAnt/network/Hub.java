@@ -9,7 +9,7 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Hub implements Device, WithControl {
+public class Hub   extends Device implements  WithControl {
 	private final List<Port> ports;
 	private Clock clock;
 	private HubControl control;

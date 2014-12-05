@@ -16,7 +16,7 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Router implements Device, WithControl {
+public class Router extends Device implements  WithControl  {
 	private static final Logger log = LoggerFactory
 			.getLogger(ComputerSendsEvent.class);
 	private static final long DELAY = 1;
