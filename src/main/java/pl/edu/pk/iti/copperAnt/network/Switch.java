@@ -10,7 +10,7 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Switch implements Device, WithControl {
+public class Switch  extends Device implements  WithControl {
 
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
@@ -105,11 +105,7 @@ public class Switch implements Device, WithControl {
 		}
 	}
 
-	@Override
-	public int getDelay() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 
 	@Override
 	public SwitchControl getControl() {

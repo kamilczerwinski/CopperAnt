@@ -1,7 +1,7 @@
 package pl.edu.pk.iti.copperAnt.network;
 
-public interface Device extends WithDelay {
+public abstract class Device  extends WithDelay {
 
-	public void acceptPackage(Package pack, Port inPort);
+	public abstract void acceptPackage(Package pack, Port inPort);
 
 }
