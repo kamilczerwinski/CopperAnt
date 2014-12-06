@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import org.javatuples.Triplet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +20,8 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 public class Router implements Device, WithControl {
 	private static final Logger log = LoggerFactory
 			.getLogger(ComputerSendsEvent.class);
-	private final List<Port> ports;
-	private List<IPAddress> ipAddresses;
-	private List<IPAddress> dhcpAddressList;
 	
-	private HashMap<Port, IPAddress> portIP;
+	private List<Triplet<Port, IPAddress, IPAddress>> portIP; // Port ip dhcpip
 	private Clock clock;
 	private HashMap<String, Port> routingTable; // <IP, Port>
 
@@ -36,17 +34,14 @@ public class Router implements Device, WithControl {
 
 	public Router(int numberOfPorts, Clock clock, boolean withGui) {
 		this.clock = clock;
-		ports = new ArrayList<Port>(numberOfPorts);
-		dhcpAddressList = new ArrayList<IPAddress>(numberOfPorts);
+		
 		Random generator = new Random();
-	portIP = new HashMap<Port, IPAddress>();
-		ipAddresses = new ArrayList<IPAddress>(numberOfPorts);
+		portIP = new ArrayList<Triplet<Port, IPAddress, IPAddress>>();
+		
 		for (int i = 0; i < numberOfPorts; i++) {
-			ports.add(new Port(this, withGui));
 			IPAddress tmp = new IPAddress("192.168.0.1");
 			tmp.set(3, generator.nextInt(254) + 1);
-			ipAddresses.add(tmp);
-			dhcpAddressList.add(new IPAddress(tmp));
+			portIP.add(new Triplet<Port, IPAddress, IPAddress>(new Port(this, withGui), tmp, tmp));
 			
 		}
 		routingTable = new HashMap<String, Port>();
@@ -54,69 +49,53 @@ public class Router implements Device, WithControl {
 		
 		if (withGui) {
 			List<PortControl> list = new ArrayList<PortControl>(numberOfPorts);
-			for (Port port : ports) {
-				list.add(port.getControl());
+			for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
+				list.add(trip.getValue0().getControl());
 			}
 			control = new RouterControl(list);
 		}
 	}
 
 	public Router(Properties config, Clock clock) {
-		this.clock = clock;
-		int numberOfPorts = Integer.parseInt((String) config
-				.get("numbersOfPorts"));
-		this.config = config;
-		Random generator = new Random();
-
-		String withGuiString = (String) config.getProperty("withGui", "false");
-		boolean withGui = withGuiString.equals("true") ? true : false;
-		ports = new ArrayList<Port>(numberOfPorts);
-		dhcpAddressList = new ArrayList<IPAddress>(numberOfPorts);
-
-		ipAddresses = new ArrayList<IPAddress>(numberOfPorts);
-
-		for (int i = 0; i < numberOfPorts; i++) {
-			ports.add(new Port(this, withGui));
-			IPAddress tmp = new IPAddress("192.168.0.1");
-			tmp.set(3, generator.nextInt(254) + 1);
-			ipAddresses.add(tmp);
-			dhcpAddressList.add(new IPAddress(tmp));
-
-		}
-		routingTable = new HashMap<String, Port>();
-		
-
-		
-		if (withGui) {
-			List<PortControl> list = new ArrayList<PortControl>(numberOfPorts);
-			for (Port port : ports) {
-				list.add(port.getControl());
-			}
-			control = new RouterControl(list);
-		}
+		this(Integer.parseInt(config.getProperty("numbersOfPorts")),clock, config.getProperty("withGui", "false").equals("true"));
+	
 	}
 
 	
 
 	private String generateIP(int index) {
-		return dhcpAddressList.get(index).increment();
+		return portIP.get(index).getValue2().increment();
+
+	}
+	private String generateIP(Port inPort) {
+		for (Triplet<Port, IPAddress, IPAddress> trip: portIP) {
+			if (trip.getValue0() == inPort) {
+				return trip.getValue2().increment();
+			}
+		}
+		return null;
 
 	}
 
 	public Port getPort(int portNumber) {
-		return ports.get(portNumber);
+		return portIP.get(portNumber).getValue0();
 	}
 	public String getIP(int portNumber) {
-		return ipAddresses.get(portNumber).toString();
+		return portIP.get(portNumber).getValue1().toString();
 	}
 	public String getIP(Port port) {
-		return ipAddresses.get(ports.indexOf(port)).toString();
+		for (Triplet<Port, IPAddress, IPAddress> trip: portIP) {
+			if (trip.getValue0() == port) {
+				return trip.getValue1().toString();
+			}
+		}
+		return null;
 	}
 
 	private boolean isMyIP(String addr) {
-		for (IPAddress ip: ipAddresses) {
-			
-			if (ip.toString().equals(addr)) {
+		
+		for (Triplet<Port, IPAddress, IPAddress> trip: portIP) {
+			if (trip.getValue1().toString().equals(addr)) {
 				return true;
 			}
 		}
@@ -149,7 +128,7 @@ public class Router implements Device, WithControl {
 			// request to this router to get IP, DHCP only local network
 			if (pack.getContent() == null) {
 				log.debug("Request to router for IP");
-				sourceIP = generateIP(ports.indexOf(inPort));
+				sourceIP = generateIP(inPort);
 				response = new Package(PackageType.DHCP, sourceIP);
 				response.setDestinationMAC(pack.getDestinationMAC());
 				outPort = inPort;
@@ -184,18 +163,19 @@ public class Router implements Device, WithControl {
 		} else if (outPort == null) {
 			// routing
 			boolean isInSubnet = false;
-			for (int i = 0, len = ipAddresses.size(); i < len; ++i) {
-				if (ipAddresses.get(i).isInRange(destinationIP)) {
-					outPort = this.getPort(i);
+			for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
+				if (trip.getValue1().isInRange(destinationIP)) {
+					outPort = trip.getValue0();
 					isInSubnet = true;
 					break;
 				}
 			}
 			if (!isInSubnet) {
-				for (Port port : ports) {
-					if (port != inPort) {						
+				for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
+
+					if (trip.getValue0() != inPort) {						
 						clock.addEvent(new PortSendsEvent(clock.getCurrentTime()				
-							+ getDelay(), port, pack));
+							+ getDelay(), trip.getValue0(), pack));
 					}
 				}
 				return;
@@ -212,7 +192,7 @@ public class Router implements Device, WithControl {
 
 	
 	public String getMac() {
-		return this.ports.get(0).getMAC();
+		return this.portIP.get(0).getValue0().getMAC();
 	}
 
 	@Override
