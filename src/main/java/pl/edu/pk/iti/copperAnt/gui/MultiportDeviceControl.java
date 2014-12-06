@@ -12,17 +12,18 @@ import javafx.scene.shape.Rectangle;
 import jfxtras.labs.util.event.MouseControlUtil;
 
 public abstract class MultiportDeviceControl extends Control {
-	private static final double placeForIconHeight = 100;
+	private static final double placeForIconHeight = 210;
+	private static final double placeForPortsHeight = placeForIconHeight/1.8;
 
 	public MultiportDeviceControl(List<PortControl> portList) {
 		MouseControlUtil.makeDraggable(this);
 		double portWith = portList.isEmpty() ? 0 : portList.get(0).getWidth();
 		double portHeight = portList.isEmpty() ? 0 : portList.get(0)
 				.getHeight();
-		setWidth(Math.max(portList.size() * portWith, placeForIconHeight));
-		setHeight(placeForIconHeight + portHeight);
+		setWidth( placeForIconHeight);
+		setHeight(placeForIconHeight);
 		drawIcon(placeForIconHeight);
-		drawPortsWithLines(portList, placeForIconHeight);
+		drawPortsInBlock(portList, placeForPortsHeight);//drawPortsWithLines(portList, placeForIconHeight);
 		drawBorder();
 	}
 
@@ -59,6 +60,34 @@ public abstract class MultiportDeviceControl extends Control {
 		}
 	}
 
+	private void drawPortsInBlock(List<PortControl> portList,
+			double placeForIconHeight) {
+		double shiftX = 27;
+		double portX = shiftX;
+		double portY = placeForIconHeight;
+		
+		double DeviceHeight = getHeight();
+		double DeviceWidth = getWidth()*0.8 + shiftX;
+
+		for (int i = 0; i < portList.size(); i++) {
+			PortControl port = portList.get(i);
+			if ((i%5) == 0) {
+				if (i != 0)
+					portX += port.getWidth();
+				
+				if ((port.getWidth()*4 + portX) > DeviceWidth) {
+					portY += port.getHeight() + 2;
+					portX = shiftX;
+				}
+			}
+			port.setLayoutX(portX);
+			port.setLayoutY(portY);
+			getChildren().add(port);
+			
+			portX += portList.get(0).getWidth();
+		}
+	}
+	
 	protected abstract Image getIconImage(double size);
 	public static RouterControl prepareRouterWithPorts(int numberOfPorts) {
 		List<PortControl> list = new ArrayList<PortControl>(numberOfPorts);
