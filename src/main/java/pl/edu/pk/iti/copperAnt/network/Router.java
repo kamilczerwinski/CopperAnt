@@ -41,7 +41,7 @@ public class Router extends Device implements  WithControl  {
 		for (int i = 0; i < numberOfPorts; i++) {
 			IPAddress tmp = new IPAddress("192.168.0.1");
 			tmp.set(3, generator.nextInt(254) + 1);
-			portIP.add(new Triplet<Port, IPAddress, IPAddress>(new Port(this, withGui), tmp, tmp));
+			portIP.add(new Triplet<Port, IPAddress, IPAddress>(new Port(this, withGui), tmp, new IPAddress(tmp)));
 			
 		}
 		routingTable = new HashMap<String, Port>();

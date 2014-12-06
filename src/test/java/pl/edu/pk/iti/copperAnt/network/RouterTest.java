@@ -18,7 +18,7 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 
 public class RouterTest {
-	/*@Test
+	@Test
 	public void testEmtpyRoutingTable() {
 		Clock clock = mock(Clock.class);
 		ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
@@ -89,7 +89,7 @@ public class RouterTest {
 		List<Event> capturedEvent = eventCaptor.getAllValues();
 		assertEquals(capturedEvent.size(), 1);
 		Event event =  ((Event)capturedEvent.get(0));
-		assertEquals(new IPAddress(router.getIP(0)).increment(), event.getPackage().getContent());
+		assertEquals(event.getPackage().getContent(), new IPAddress(router.getIP(0)).increment());
 		assertEquals(PackageType.DHCP, event.getPackage().getType());
 	}	
 		
@@ -119,7 +119,7 @@ public class RouterTest {
 		assertEquals("TTL<0", event.getPackage().getContent());
 		assertEquals(PackageType.DESTINATION_UNREACHABLE, event.getPackage().getType());
 	}	
-	*/
+	
 	@Test
 	public void testRouting() {
 		Clock clock = mock(Clock.class);
