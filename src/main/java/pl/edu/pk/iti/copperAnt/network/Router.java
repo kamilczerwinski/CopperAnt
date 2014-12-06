@@ -19,13 +19,13 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 public class Router implements Device, WithControl {
 	private static final Logger log = LoggerFactory
 			.getLogger(ComputerSendsEvent.class);
-	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private List<IPAddress> ipAddresses;
 	private List<IPAddress> dhcpAddressList;
+	
+	private HashMap<Port, IPAddress> portIP;
 	private Clock clock;
 	private HashMap<String, Port> routingTable; // <IP, Port>
-	private String MAC;
 
 	private Properties config;
 	private RouterControl control;
@@ -39,7 +39,7 @@ public class Router implements Device, WithControl {
 		ports = new ArrayList<Port>(numberOfPorts);
 		dhcpAddressList = new ArrayList<IPAddress>(numberOfPorts);
 		Random generator = new Random();
-	
+	portIP = new HashMap<Port, IPAddress>();
 		ipAddresses = new ArrayList<IPAddress>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
 			ports.add(new Port(this, withGui));
@@ -47,6 +47,7 @@ public class Router implements Device, WithControl {
 			tmp.set(3, generator.nextInt(254) + 1);
 			ipAddresses.add(tmp);
 			dhcpAddressList.add(new IPAddress(tmp));
+			
 		}
 		routingTable = new HashMap<String, Port>();
 		config = new Properties();
@@ -105,14 +106,14 @@ public class Router implements Device, WithControl {
 	public Port getPort(int portNumber) {
 		return ports.get(portNumber);
 	}
-	public IPAddress getIP(int portNumber) {
-		return ipAddresses.get(portNumber);
+	public String getIP(int portNumber) {
+		return ipAddresses.get(portNumber).toString();
 	}
 	public String getIP(Port port) {
 		return ipAddresses.get(ports.indexOf(port)).toString();
 	}
 
-	private boolean inMyIP(String addr) {
+	private boolean isMyIP(String addr) {
 		for (IPAddress ip: ipAddresses) {
 			
 			if (ip.toString().equals(addr)) {
@@ -161,7 +162,7 @@ public class Router implements Device, WithControl {
 			}
 
 		} else if (pack.getType() == PackageType.ECHO_REQUEST
-				&& this.inMyIP(destinationIP)) {
+				&& this.isMyIP(destinationIP)) {
 			log.debug("Response for ECHO_REQUEST");
 			response = new Package(PackageType.ECHO_REPLY, pack.getContent());
 			response.setDestinationMAC(pack.getSourceMAC());
@@ -174,7 +175,7 @@ public class Router implements Device, WithControl {
 		}
 
 		if (routingTable.containsKey(destinationIP)
-				&& !this.inMyIP(destinationIP)) {
+				&& !this.isMyIP(destinationIP)) {
 			// IP in table
 			log.debug("Know IP, send to LAN port");
 
@@ -184,9 +185,10 @@ public class Router implements Device, WithControl {
 			// routing
 			boolean isInSubnet = false;
 			for (int i = 0, len = ipAddresses.size(); i < len; ++i) {
-				if (IPAddress.isInSubnet(destinationIP, ipAddresses.get(i).getNetwork(), "255.255.255.0")) {
+				if (ipAddresses.get(i).isInRange(destinationIP)) {
 					outPort = this.getPort(i);
 					isInSubnet = true;
+					break;
 				}
 			}
 			if (!isInSubnet) {

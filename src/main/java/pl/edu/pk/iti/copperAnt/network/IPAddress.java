@@ -2,11 +2,15 @@ package pl.edu.pk.iti.copperAnt.network;
 
 import java.util.StringTokenizer;
 
+import org.apache.commons.net.util.SubnetUtils;
+
 public class IPAddress {
 	private int[] ipParts = { 192, 168, 0, 1 };
 	private int[] netmaskParts = { 255, 255, 255, 0 };
+	private static final String  NETMASK = "255.255.255.0";
+	private SubnetUtils subnet;
 
-	public IPAddress(String ip, String netmask) {
+	private IPAddress(String ip, String netmask) {
 		String[] ipParts = ip.split("\\.");
 		for (int i = 0; i < 4; ++i) {
 			this.ipParts[i] = Integer.parseInt(ipParts[i]);
@@ -15,20 +19,20 @@ public class IPAddress {
 		for (int i = 0; i < 4; ++i) {
 			this.netmaskParts[i] = Integer.parseInt(netmaskParts[i]);
 		}
+		subnet = new SubnetUtils(ip, netmask);
 
 	}
 
 	public IPAddress(String ip) {
-		String[] ipParts = ip.split("\\.");
-		for (int i = 0; i < 4; ++i) {
-			this.ipParts[i] = Integer.parseInt(ipParts[i]);
-		}
+		this(ip, "255.255.255.0");
 	}
-	public IPAddress(IPAddress obj) {
+	public IPAddress(IPAddress ipObj) {
 		for (int i = 0; i< 4; i++) {
-			ipParts[i] = obj.ipParts[i];
-			netmaskParts[i] = obj.netmaskParts[i];
+			ipParts[i] = ipObj.ipParts[i];
+			netmaskParts[i] = ipObj.netmaskParts[i];
 		}
+		subnet = new SubnetUtils(ipObj.toString(), ipObj.getNetwork());
+
 	}
 
 	public String toString() {
@@ -41,25 +45,39 @@ public class IPAddress {
 
 	public String increment(int index) {
 		ipParts[index - 1]++;
+		subnet = new SubnetUtils(this.toString(), IPAddress.NETMASK);
 		return this.toString();
 	}
 
 	public String increment() {
 		ipParts[3]++;
+		subnet = new SubnetUtils(this.toString(), IPAddress.NETMASK);
+
 		return this.toString();
 	}
 	public String decrement() {
-		ipParts[3]--;
+		if (ipParts[3] > 0)
+			ipParts[3]--;
+		subnet = new SubnetUtils(this.toString(), IPAddress.NETMASK);
+
 		return this.toString();
 	}
 
 	public void set(int index, int value) {
 		ipParts[index -1 ] = value;
+		subnet = new SubnetUtils(this.toString(), IPAddress.NETMASK);
+
 	}
 	
 	public String getNetwork() {
-		IPAddress tmp = new IPAddress(this);
-		return tmp.decrement();
+		return subnet.getInfo().getNetworkAddress();
+	}
+	
+	public String getBroadcastAddress() {
+		return subnet.getInfo().getBroadcastAddress();
+	}
+	public boolean isInRange(String ip) {
+		return subnet.getInfo().isInRange(ip);
 	}
 
 	/**
