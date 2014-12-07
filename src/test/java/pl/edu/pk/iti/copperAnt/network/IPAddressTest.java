@@ -21,34 +21,66 @@ public class IPAddressTest {
 	}
 	@Test
 	public void testCreate2() {
-		IPAddress ip = new IPAddress("192.168.0.1", "255.255.255.128");
+		IPAddress ip = new IPAddress("192.168.0.1");
 		assertEquals(ip.toString(), "192.168.0.1");
 	}
 	
 	@Test
 	public void testincrement() {
-		IPAddress ip = new IPAddress("192.168.0.1", "255.255.255.128");
+		IPAddress ip = new IPAddress("192.168.0.1");
 		ip.increment();
 		assertEquals(ip.toString(), "192.168.0.2");
 	}
 	
 	@Test
 	public void testincrement2() {
-		IPAddress ip = new IPAddress("192.168.0.1", "255.255.255.128");
+		IPAddress ip = new IPAddress("192.168.0.1");
 		ip.increment(3);
 		assertEquals(ip.toString(), "192.168.1.1");
 	}
-	
+	@Test
+	public void testNetwork() {
+		IPAddress ip = new IPAddress("192.168.0.1");
+		assertEquals(ip.getNetwork(), "192.168.0.0");
+	}
+
+	@Test
+	public void testNetwork2() {
+		IPAddress ip = new IPAddress("192.168.0.155");
+		assertEquals(ip.getNetwork(), "192.168.0.0");
+	}
 	@Test
 	public void testSet() {
-		IPAddress ip = new IPAddress("192.168.0.1", "255.255.255.128");
+		IPAddress ip = new IPAddress("192.168.0.1");
 		ip.set(3, 127);
 		assertEquals(ip.toString(), "192.168.127.1");
 	}
 	@Test
 	public void testIsInSubnet() {
-		assertTrue(IPAddress.isInSubnet("192.168.0.12", "192.168.0.0", "255.255.255.0"));
+		IPAddress ip = new IPAddress("192.168.0.155");
+
+		assertTrue(IPAddress.isInSubnet(ip.toString(), ip.getNetwork(), "255.255.255.0"));
 	}
+	
+	@Test
+	public void testIsInRange() {
+		IPAddress ip = new IPAddress("192.168.0.155");
+
+		assertTrue(ip.isInRange("192.168.0.15"));
+	}
+	@Test
+	public void testIsInRange2() {
+		IPAddress ip = new IPAddress("192.168.0.155");
+
+		assertTrue(ip.isInRange("192.168.0.135"));
+	}
+	@Test
+	public void testIsNotInRange() {
+		IPAddress ip = new IPAddress("192.168.0.155");
+
+		assertFalse(ip.isInRange("192.163.0.15"));
+	}
+	
 	
 	@Test
 	public void testIsNotInSubnet() {

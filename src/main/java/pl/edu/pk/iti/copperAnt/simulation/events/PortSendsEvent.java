@@ -23,7 +23,9 @@ public class PortSendsEvent extends Event {
 		this.pack.setSourceMAC(port.getMAC());
 
 	}
-
+	public Port getPort() {
+		return this.port;
+	}
 	public Package getPackage() {
 		return this.pack;
 	}

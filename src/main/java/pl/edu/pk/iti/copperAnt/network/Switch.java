@@ -12,7 +12,6 @@ import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Switch  extends Device implements  WithControl {
 
-	private static final long DELAY = 1;
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
 	private Clock clock;
