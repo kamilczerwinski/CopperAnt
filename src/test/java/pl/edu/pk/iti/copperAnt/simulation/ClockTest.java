@@ -11,23 +11,21 @@ import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import pl.edu.pk.iti.copperAnt.simulation.events.ComplexMockEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.Event;
-import pl.edu.pk.iti.copperAnt.simulation.events.SimpleMockEvent;
 
 public class ClockTest {
 
 	@Test
-	public void addEventTest() {
+	public void addEventSortsEventsTest() {
 		// given
 		Clock clock = new Clock();
 		// when
-		clock.addEvent(new SimpleMockEvent(6));
-		clock.addEvent(new SimpleMockEvent(3));
-		clock.addEvent(new SimpleMockEvent(1));
-		clock.addEvent(new SimpleMockEvent(2));
-		clock.addEvent(new SimpleMockEvent(2));
-		clock.addEvent(new SimpleMockEvent(4));
+		clock.addEvent(mockEventAtTime(6L));
+		clock.addEvent(mockEventAtTime(3L));
+		clock.addEvent(mockEventAtTime(1L));
+		clock.addEvent(mockEventAtTime(2L));
+		clock.addEvent(mockEventAtTime(2L));
+		clock.addEvent(mockEventAtTime(4L));
 		// then
 		assertEquals(clock.getNumberOfWaitingEvent(), 6);
 		assertEquals(clock.getEventFromList(0).getTime(), 1);
@@ -43,18 +41,12 @@ public class ClockTest {
 	public void runEventsInCorrectOrderTest() throws InterruptedException {
 		// given
 		Clock clock = new Clock();
-		Event eventAt1 = mock(Event.class);
-		when(eventAt1.getTime()).thenReturn(1L);
-		Event eventAt2 = mock(Event.class);
-		when(eventAt2.getTime()).thenReturn(2L);
-		Event eventAt3 = mock(Event.class);
-		when(eventAt3.getTime()).thenReturn(3L);
-		Event eventAt4 = mock(Event.class);
-		when(eventAt4.getTime()).thenReturn(4L);
-		Event eventAt5 = mock(Event.class);
-		when(eventAt5.getTime()).thenReturn(5L);
-		Event eventAt6 = mock(Event.class);
-		when(eventAt6.getTime()).thenReturn(6L);
+		Event eventAt1 = mockEventAtTime(1L);
+		Event eventAt2 = mockEventAtTime(2L);
+		Event eventAt3 = mockEventAtTime(3L);
+		Event eventAt4 = mockEventAtTime(4L);
+		Event eventAt5 = mockEventAtTime(5L);
+		Event eventAt6 = mockEventAtTime(6L);
 
 		// when
 		clock.addEvent(eventAt6);
@@ -79,14 +71,18 @@ public class ClockTest {
 
 	}
 
+	private Event mockEventAtTime(Long time) {
+		Event eventAt1 = mock(Event.class);
+		when(eventAt1.getTime()).thenReturn(time);
+		return eventAt1;
+	}
+
 	@Test
 	public void runEventsWithConsequencesTest() throws InterruptedException {
 		// given
 		Clock clock = new Clock();
-		Event eventMock = mock(Event.class);
-		when(eventMock.getTime()).thenReturn(10L);
-		Event nextEventMock = mock(Event.class);
-		when(nextEventMock.getTime()).thenReturn(100L);
+		Event eventMock = mockEventAtTime(10L);
+		Event nextEventMock = mockEventAtTime(100L);
 		Answer<Object> answer = new Answer<Object>() {
 
 			@Override
@@ -112,15 +108,21 @@ public class ClockTest {
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		Clock clock = new Clock();
+		Event mockEventAtTime = mockEventAtTime(3L);
+		Event mockEventAtTime2 = mockEventAtTime(6L);
+		clock.addEvent(mockEventAtTime);
+		clock.addEvent(mockEventAtTime2);
 		// when
-		clock.addEvent(new SimpleMockEvent(3));
-		clock.addEvent(new SimpleMockEvent(6));
+		clock.tick();
 		// then
+		verify(mockEventAtTime).run(clock);
+		verify(mockEventAtTime2, never()).run(clock);
+
+		// when
 		clock.tick();
-		assertEquals("SimpleMockEvent [time=3]\n", outContent.toString());
-		clock.tick();
-		assertEquals("SimpleMockEvent [time=3]\n"
-				+ "SimpleMockEvent [time=6]\n", outContent.toString());
+		// then
+		verify(mockEventAtTime).run(clock);
+		verify(mockEventAtTime2).run(clock);
 
 	}
 
@@ -130,13 +132,23 @@ public class ClockTest {
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		Clock clock = new Clock();
+		Event mockEventAtTime = mockEventAtTime(3L);
+		Event mockEventAtTime2 = mockEventAtTime(3L);
+		Answer<Object> answer = new Answer<Object>() {
+
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				clock.addEvent(mockEventAtTime2);
+				return null;
+			}
+		};
+		doAnswer(answer).when(mockEventAtTime).run(clock);
 		// when
-		clock.addEvent(new ComplexMockEvent(0, 0, 10));
+		clock.addEvent(mockEventAtTime);
 		// then
 		clock.run();
-		assertEquals("ComplexMockEvent [time=0]\n"
-				+ "SimpleMockEvent [time=0]\n" + "SimpleMockEvent [time=10]\n",
-				outContent.toString());
+		verify(mockEventAtTime).run(clock);
+		verify(mockEventAtTime2).run(clock);
 
 	}
 
