@@ -1,11 +1,16 @@
 package pl.edu.pk.iti.copperAnt.network;
 
 import javafx.scene.control.Control;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.edu.pk.iti.copperAnt.gui.CableControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
 
 public class Cable implements WithControl {
 
+    
+        private static final Logger cable_log = LoggerFactory.getLogger("cable_logs");
+    
 	Port a;
 	Port b;
 
@@ -14,7 +19,8 @@ public class Cable implements WithControl {
 	private CableControl control;
 
 	public Cable() {
-		this(false);
+            this(false);
+            cable_log.info("New cable created without GUI");
 	}
 
 	public Cable(boolean withGui) {
@@ -22,6 +28,7 @@ public class Cable implements WithControl {
 		if (withGui) {
 			this.control = new CableControl();
 		}
+                cable_log.info("New cable created with GUI");
 	}
 
 	public CableState getState() {

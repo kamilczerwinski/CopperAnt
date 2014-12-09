@@ -17,6 +17,10 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Router extends Device implements WithControl {
+
+	private static final Logger router_log = LoggerFactory
+			.getLogger("router_logs");
+
 	private List<Triplet<Port, IPAddress, IPAddress>> portIP; // Port ip dhcpip
 
 	private HashMap<String, Port> routingTable; // <IP, Port>
@@ -27,6 +31,7 @@ public class Router extends Device implements WithControl {
 
 	public Router(int numberOfPorts) {
 		this(numberOfPorts, false);
+		router_log.info("New router created without GUI");
 	}
 
 	public Router(int numberOfPorts, boolean withGui) {
@@ -51,6 +56,7 @@ public class Router extends Device implements WithControl {
 			}
 			control = new RouterControl(list);
 		}
+		router_log.info("New router created with GUI");
 	}
 
 	public Router(Properties config) {

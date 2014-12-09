@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,10 @@ import pl.edu.pk.iti.copperAnt.simulation.events.ARPEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 
 public class Computer extends Device implements WithControl {
+
+	private static final Logger computer_log = LoggerFactory
+			.getLogger("computer_logs");
+
 	private Port port;
 	private IPAddress ip;
 	private ComputerControl control;
@@ -40,6 +46,8 @@ public class Computer extends Device implements WithControl {
 
 	public Computer(IPAddress ip) {
 		this(ip, false);
+		computer_log.info("New computer created without GUI");
+
 	}
 
 	public void addKnownHost(String ip, String mac) {
@@ -52,6 +60,7 @@ public class Computer extends Device implements WithControl {
 
 	public String getKnownHost(String ip) {
 		return arpTable.get(ip);
+
 	}
 
 	public Computer(IPAddress ip, boolean withGui) {
@@ -60,6 +69,7 @@ public class Computer extends Device implements WithControl {
 		if (withGui) {
 			this.control = new ComputerControl(port.getControl());
 		}
+		computer_log.info("New computer created with GUI");
 	}
 
 	public Port getPort() {
