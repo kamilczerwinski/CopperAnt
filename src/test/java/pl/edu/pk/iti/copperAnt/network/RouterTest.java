@@ -157,4 +157,15 @@ public class RouterTest {
 		assertEquals(event.getPort(), router.getPort(2));
 	}
 
+	@Test
+	public void setAndGetIpTest() {
+		// given
+		Router router = new Router(3);
+		// when
+		router.setIpForPort(2, new IPAddress("192.168.1.12"));
+		String ip = router.getIP(2);
+		// then
+		assertEquals("192.168.1.12", ip);
+	}
+
 }

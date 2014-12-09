@@ -21,7 +21,6 @@ public class Switch extends Device implements WithControl {
 
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
-	private Clock clock;
 	private SwitchControl control;
 	private static final Logger log = LoggerFactory.getLogger(Switch.class);
 
@@ -31,7 +30,6 @@ public class Switch extends Device implements WithControl {
 	}
 
 	public Switch(int numberOfPorts, boolean withGui) {
-		this.clock = Clock.getInstance();
 		ports = new ArrayList<>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
 			ports.add(new Port(this, withGui));

@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.RouterControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
-import pl.edu.pk.iti.copperAnt.simulation.Clock;
-import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Router extends Device implements WithControl {
 
@@ -192,10 +190,6 @@ public class Router extends Device implements WithControl {
 
 	}
 
-	public String getMac() {
-		return this.portIP.get(0).getValue0().getMAC();
-	}
-
 	@Override
 	public int getDelay() {
 		// TODO Auto-generated method stub
@@ -208,6 +202,13 @@ public class Router extends Device implements WithControl {
 
 	public void setControl(RouterControl control) {
 		this.control = control;
+	}
+
+	public void setIpForPort(int portNumber, IPAddress ip) {
+		Triplet<Port, IPAddress, IPAddress> newValue = portIP.get(portNumber)
+				.setAt1(ip);
+		portIP.remove(portNumber);
+		portIP.add(portNumber, newValue);
 	}
 
 }

@@ -2,13 +2,13 @@ package pl.edu.pk.iti.copperAnt.network;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.gui.HubControl;
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
-import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
 public class Hub extends Device implements WithControl {
 
