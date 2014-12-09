@@ -25,7 +25,7 @@ public class ComputerSendsEvent extends Event {
 	}
 
 	@Override
-	public void run(Clock clock) {
+	public void run() {
 		long timeToNextEvent = intervalGenerator.getTimeInterval();
 		PortSendsEvent event = new PortSendsEvent(time, computer.getPort(),
 				pack);
@@ -33,8 +33,8 @@ public class ComputerSendsEvent extends Event {
 		ComputerSendsEvent nextComputerSendsEvent = new ComputerSendsEvent(time
 				+ timeToNextEvent, computer, pack)
 				.withIntervalGenerator(this.intervalGenerator);
-		clock.addEvent(event);
-		clock.addEvent(nextComputerSendsEvent);
+		Clock.getInstance().addEvent(event);
+		Clock.getInstance().addEvent(nextComputerSendsEvent);
 		log.info(this.toString());
 	}
 
@@ -51,9 +51,9 @@ public class ComputerSendsEvent extends Event {
 		setIntervalGenerator(generator);
 		return this;
 	}
+
 	public Package getPackage() {
 		return this.pack;
 	}
-
 
 }

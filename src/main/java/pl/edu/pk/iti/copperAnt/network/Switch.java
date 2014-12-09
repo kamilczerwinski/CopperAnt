@@ -15,15 +15,14 @@ public class Switch extends Device implements WithControl {
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
 	private Clock clock;
-	private String managementIP; // management IP
 	private SwitchControl control;
 
-	public Switch(int numberOfPorts, Clock clock) {
-		this(numberOfPorts, clock, false);
+	public Switch(int numberOfPorts) {
+		this(numberOfPorts, false);
 	}
 
-	public Switch(int numberOfPorts, Clock clock, boolean withGui) {
-		this.clock = clock;
+	public Switch(int numberOfPorts, boolean withGui) {
+		this.clock = Clock.getInstance();
 		ports = new ArrayList<>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
 			ports.add(new Port(this, withGui));
@@ -91,14 +90,14 @@ public class Switch extends Device implements WithControl {
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
 			pack.setSourceMAC(outPort.getMAC());
-			outPort.sendPackage(pack, clock, getDelay());
+			outPort.sendPackage(pack, getDelay());
 
 		} else {
 			// Send through all ports
 			// TODO: add exception for source port
 			for (Port port : ports) {
 				// pack.setSourceMAC(outPort.getMAC());
-				port.sendPackage(pack, clock, getDelay());
+				port.sendPackage(pack, getDelay());
 			}
 			// TODO: maybe some ACK that package was/wasn't delivered ?
 		}

@@ -8,7 +8,6 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.DistributionTimeIntervalGenerator;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
-import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Computer extends Device implements WithControl {
 	private Port port;
@@ -49,10 +48,11 @@ public class Computer extends Device implements WithControl {
 
 	}
 
-	public void initTrafic(Clock clock) {
+	public void initTrafic() {
 		if (this.ip == null) {
 			return;
 		}
+		Clock clock = Clock.getInstance();
 		long time = clock.getCurrentTime() + this.getDelay();
 		Package pack = new Package(PackageType.ECHO_REQUEST, UUID.randomUUID()
 				.toString());
@@ -66,9 +66,9 @@ public class Computer extends Device implements WithControl {
 		clock.addEvent(event);
 	}
 
-	public void init(Clock clock) {
+	public void init() {
 		Package pack = new Package(PackageType.DHCP, null);
-		port.sendPackage(pack, clock, getDelay());
+		port.sendPackage(pack, getDelay());
 	}
 
 	@Override

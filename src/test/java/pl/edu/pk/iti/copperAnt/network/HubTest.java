@@ -13,8 +13,7 @@ public class HubTest {
 
 	@Test
 	public void acceptPackageForwardsPachagesToAllPorts() {
-		Clock clock = new Clock();
-		Hub hub = new Hub(4, clock);
+		Hub hub = new Hub(4);
 		Cable cable0 = new Cable();
 		Cable cable1 = new Cable();
 		Cable cable2 = new Cable();
@@ -37,7 +36,7 @@ public class HubTest {
 		cable3.insertInto(mockPort3);
 
 		hub.acceptPackage(new Package(), hub.getPort(0));
-		clock.run();
+		Clock.getInstance().run();
 		verify(mockPort0).receivePackage(any(Package.class));
 		verify(mockPort1).receivePackage(any(Package.class));
 		verify(mockPort2).receivePackage(any(Package.class));

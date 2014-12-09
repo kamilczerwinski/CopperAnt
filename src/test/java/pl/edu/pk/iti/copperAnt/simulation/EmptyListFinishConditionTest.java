@@ -10,7 +10,7 @@ public class EmptyListFinishConditionTest {
 	@Test
 	public void testIsSatisfied() {
 		// given
-		Clock clock = new Clock();
+		Clock clock = Clock.getInstance();
 		clock.setFinishCondition(new EmptyListFinishCondition());
 		clock.addEvent(new SimpleMockEvent(10));
 		// when

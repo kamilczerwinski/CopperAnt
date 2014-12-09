@@ -22,18 +22,16 @@ public class Router extends Device implements WithControl {
 			.getLogger(ComputerSendsEvent.class);
 
 	private List<Triplet<Port, IPAddress, IPAddress>> portIP; // Port ip dhcpip
-	private Clock clock;
 	private HashMap<String, Port> routingTable; // <IP, Port>
 
 	private Properties config;
 	private RouterControl control;
 
-	public Router(int numberOfPorts, Clock clock) {
-		this(numberOfPorts, clock, false);
+	public Router(int numberOfPorts) {
+		this(numberOfPorts, false);
 	}
 
-	public Router(int numberOfPorts, Clock clock, boolean withGui) {
-		this.clock = clock;
+	public Router(int numberOfPorts, boolean withGui) {
 
 		Random generator = new Random();
 		portIP = new ArrayList<Triplet<Port, IPAddress, IPAddress>>();
@@ -57,9 +55,9 @@ public class Router extends Device implements WithControl {
 		}
 	}
 
-	public Router(Properties config, Clock clock) {
-		this(Integer.parseInt(config.getProperty("numbersOfPorts")), clock,
-				config.getProperty("withGui", "false").equals("true"));
+	public Router(Properties config) {
+		this(Integer.parseInt(config.getProperty("numbersOfPorts")), config
+				.getProperty("withGui", "false").equals("true"));
 
 	}
 
@@ -178,7 +176,7 @@ public class Router extends Device implements WithControl {
 
 					Port port = trip.getValue0();
 					if (port != inPort) {
-						port.sendPackage(pack, clock, getDelay());
+						port.sendPackage(pack, getDelay());
 					}
 				}
 				return;
@@ -186,7 +184,7 @@ public class Router extends Device implements WithControl {
 
 		}
 
-		outPort.sendPackage(response, clock, getDelay());
+		outPort.sendPackage(response, getDelay());
 
 	}
 

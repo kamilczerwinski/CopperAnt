@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
@@ -14,11 +15,15 @@ import org.mockito.stubbing.Answer;
 import pl.edu.pk.iti.copperAnt.simulation.events.Event;
 
 public class ClockTest {
+	@Before
+	public void setUp() {
+		Clock.resetInstance();
+	}
 
 	@Test
 	public void addEventSortsEventsTest() {
 		// given
-		Clock clock = new Clock();
+		Clock clock = Clock.getInstance();
 		// when
 		clock.addEvent(mockEventAtTime(6L));
 		clock.addEvent(mockEventAtTime(3L));
@@ -40,7 +45,7 @@ public class ClockTest {
 	@Test
 	public void runEventsInCorrectOrderTest() throws InterruptedException {
 		// given
-		Clock clock = new Clock();
+		Clock clock = Clock.getInstance();
 		Event eventAt1 = mockEventAtTime(1L);
 		Event eventAt2 = mockEventAtTime(2L);
 		Event eventAt3 = mockEventAtTime(3L);
@@ -62,12 +67,12 @@ public class ClockTest {
 		InOrder inOrder = inOrder(eventAt1, eventAt2, eventAt3, eventAt4,
 				eventAt5, eventAt6);
 
-		inOrder.verify(eventAt1).run(clock);
-		inOrder.verify(eventAt2).run(clock);
-		inOrder.verify(eventAt3).run(clock);
-		inOrder.verify(eventAt4).run(clock);
-		inOrder.verify(eventAt5).run(clock);
-		inOrder.verify(eventAt6).run(clock);
+		inOrder.verify(eventAt1).run();
+		inOrder.verify(eventAt2).run();
+		inOrder.verify(eventAt3).run();
+		inOrder.verify(eventAt4).run();
+		inOrder.verify(eventAt5).run();
+		inOrder.verify(eventAt6).run();
 
 	}
 
@@ -80,7 +85,7 @@ public class ClockTest {
 	@Test
 	public void runEventsWithConsequencesTest() throws InterruptedException {
 		// given
-		Clock clock = new Clock();
+		Clock clock = Clock.getInstance();
 		Event eventMock = mockEventAtTime(10L);
 		Event nextEventMock = mockEventAtTime(100L);
 		Answer<Object> answer = new Answer<Object>() {
@@ -91,14 +96,14 @@ public class ClockTest {
 				return null;
 			}
 		};
-		doAnswer(answer).when(eventMock).run(clock);
+		doAnswer(answer).when(eventMock).run();
 		// when
 		clock.addEvent(eventMock);
 		clock.run();
 		// then
 		InOrder inOrder = inOrder(eventMock, nextEventMock);
-		inOrder.verify(eventMock).run(clock);
-		inOrder.verify(nextEventMock).run(clock);
+		inOrder.verify(eventMock).run();
+		inOrder.verify(nextEventMock).run();
 
 	}
 
@@ -107,7 +112,7 @@ public class ClockTest {
 		// given
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		Clock clock = new Clock();
+		Clock clock = Clock.getInstance();
 		Event mockEventAtTime = mockEventAtTime(3L);
 		Event mockEventAtTime2 = mockEventAtTime(6L);
 		clock.addEvent(mockEventAtTime);
@@ -115,14 +120,14 @@ public class ClockTest {
 		// when
 		clock.tick();
 		// then
-		verify(mockEventAtTime).run(clock);
-		verify(mockEventAtTime2, never()).run(clock);
+		verify(mockEventAtTime).run();
+		verify(mockEventAtTime2, never()).run();
 
 		// when
 		clock.tick();
 		// then
-		verify(mockEventAtTime).run(clock);
-		verify(mockEventAtTime2).run(clock);
+		verify(mockEventAtTime).run();
+		verify(mockEventAtTime2).run();
 
 	}
 
@@ -131,7 +136,7 @@ public class ClockTest {
 		// given
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		Clock clock = new Clock();
+		Clock clock = Clock.getInstance();
 		Event mockEventAtTime = mockEventAtTime(3L);
 		Event mockEventAtTime2 = mockEventAtTime(3L);
 		Answer<Object> answer = new Answer<Object>() {
@@ -142,13 +147,13 @@ public class ClockTest {
 				return null;
 			}
 		};
-		doAnswer(answer).when(mockEventAtTime).run(clock);
+		doAnswer(answer).when(mockEventAtTime).run();
 		// when
 		clock.addEvent(mockEventAtTime);
 		// then
 		clock.run();
-		verify(mockEventAtTime).run(clock);
-		verify(mockEventAtTime2).run(clock);
+		verify(mockEventAtTime).run();
+		verify(mockEventAtTime2).run();
 
 	}
 

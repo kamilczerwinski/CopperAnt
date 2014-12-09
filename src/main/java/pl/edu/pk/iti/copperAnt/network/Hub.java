@@ -14,12 +14,12 @@ public class Hub extends Device implements WithControl {
 	private Clock clock;
 	private HubControl control;
 
-	public Hub(int numberOfPorts, Clock clock) {
-		this(numberOfPorts, clock, false);
+	public Hub(int numberOfPorts) {
+		this(numberOfPorts, false);
 	}
 
-	public Hub(int numberOfPorts, Clock clock, boolean withGui) {
-		this.clock = clock;
+	public Hub(int numberOfPorts, boolean withGui) {
+		this.clock = Clock.getInstance();
 		ports = new ArrayList<Port>(numberOfPorts);
 		for (int i = 0; i < numberOfPorts; i++) {
 			ports.add(new Port(this, withGui));
@@ -40,7 +40,7 @@ public class Hub extends Device implements WithControl {
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
 		for (Port port : ports) {
-			port.sendPackage(pack, clock, getDelay());
+			port.sendPackage(pack, getDelay());
 		}
 	}
 

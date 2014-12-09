@@ -17,14 +17,15 @@ public class ComputerTest {
 	@Test
 	public void testSendDHCPPackage() {
 		Clock clock = mock(Clock.class);
+		Clock.setInstance(clock);
 		ArgumentCaptor<Event> eventCaptor = ArgumentCaptor
 				.forClass(Event.class);
 		doNothing().when(clock).addEvent(eventCaptor.capture());
 		when(clock.getCurrentTime()).thenReturn(11L);
 
-		Computer comp = new Computer();
+		Computer computer = new Computer();
 
-		comp.init(clock);
+		computer.init();
 		List<Event> capturedEvent = eventCaptor.getAllValues();
 		assertEquals(capturedEvent.size(), 1);
 		Event event = ((Event) capturedEvent.get(0));
