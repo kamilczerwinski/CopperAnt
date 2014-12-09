@@ -18,7 +18,6 @@ public class Switch  extends Device implements  WithControl {
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
 	private Clock clock;
-	private String managementIP; // management IP
 	private SwitchControl control;
 	private static final Logger log = LoggerFactory.getLogger(Switch.class);
 
@@ -96,24 +95,20 @@ public class Switch  extends Device implements  WithControl {
 		// Search for MAC & port in macTable
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
-			log.debug("Know MAC address. Send to port");
-			// pack.setSourceMAC(outPort.getMAC());
+			log.debug("Known MAC address. Send to port");
 			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
 					+ getDelay(), outPort, pack));
 		} else {
 			// Send through all ports
-			// TODO: add exception for source port
-			log.debug("Unknow MAC " + destinationMAC
+			log.debug("Unknown MAC " + destinationMAC
 					+ " address. Send to all ports");
 
 			for (Port port : ports) {
-				// pack.setSourceMAC(outPort.getMAC());
 				if (port != inPort) {
 					clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
 							+ getDelay(), port, pack));
 				}
 			}
-			// TODO: maybe some ACK that package was/wasn't delivered ?
 		}
 	}
 
@@ -127,9 +122,4 @@ public class Switch  extends Device implements  WithControl {
 	public void setControl(SwitchControl control) {
 		this.control = control;
 	}
-
-	public String getIP() {
-		return this.managementIP;
-	}
-
 }
