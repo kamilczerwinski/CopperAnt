@@ -6,8 +6,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class PortControl extends Control {
-	private static final int defaultIconHeight = 25;
-	private static final int defaultIconWidth = 25;
+	private static final int defaultIconHeight = 14;
+	private static final int defaultIconWidth = 14;
 	private int width;
 	private int height;
 	private DiodeControl redDiode;
