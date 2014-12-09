@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.SwitchControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
@@ -11,11 +14,11 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Switch extends Device implements WithControl {
-
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
 	private Clock clock;
 	private SwitchControl control;
+	private static final Logger log = LoggerFactory.getLogger(Switch.class);
 
 	public Switch(int numberOfPorts) {
 		this(numberOfPorts, false);
@@ -75,10 +78,12 @@ public class Switch extends Device implements WithControl {
 	 * @param inPort
 	 *            - receiving port
 	 */
+
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
 		String destinationMAC = pack.getDestinationMAC();
 		String sourceMAC = pack.getSourceMAC();
+		log.info("AcceptPackage from " + sourceMAC + " to " + destinationMAC);
 		Port outPort = null;
 
 		// Save source MAC & port to macTable, if it doesn't exist
@@ -89,17 +94,20 @@ public class Switch extends Device implements WithControl {
 		// Search for MAC & port in macTable
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
-			pack.setSourceMAC(outPort.getMAC());
-			outPort.sendPackage(pack);
-
+			log.debug("Known MAC address. Send to port");
+			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
+					+ getDelay(), outPort, pack));
 		} else {
 			// Send through all ports
-			// TODO: add exception for source port
+			log.debug("Unknown MAC " + destinationMAC
+					+ " address. Send to all ports");
+
 			for (Port port : ports) {
-				// pack.setSourceMAC(outPort.getMAC());
-				port.sendPackage(pack);
+				if (port != inPort) {
+					clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
+							+ getDelay(), port, pack));
+				}
 			}
-			// TODO: maybe some ACK that package was/wasn't delivered ?
 		}
 	}
 
@@ -111,5 +119,4 @@ public class Switch extends Device implements WithControl {
 	public void setControl(SwitchControl control) {
 		this.control = control;
 	}
-
 }

@@ -58,4 +58,6 @@ public class Hub extends Device implements WithControl {
 	public void setControl(HubControl control) {
 		this.control = control;
 	}
+
+
 }

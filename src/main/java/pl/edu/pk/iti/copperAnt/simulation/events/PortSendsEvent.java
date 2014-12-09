@@ -20,7 +20,9 @@ public class PortSendsEvent extends Event {
 		super(time);
 		this.port = port;
 		this.pack = pack;
-		this.pack.setSourceMAC(port.getMAC());
+		if (this.pack.getSourceMAC() == null)
+			this.pack.setSourceMAC(port.getMAC());
+		
 
 	}
 

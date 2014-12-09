@@ -12,8 +12,8 @@ import pl.edu.pk.iti.copperAnt.simulation.TimeIntervalGenerator;
 public class ComputerSendsEvent extends Event {
 	private static final Logger log = LoggerFactory
 			.getLogger(ComputerSendsEvent.class);
-	private Computer computer;
-	private Package pack;
+	protected Computer computer;
+	protected Package pack;
 	// TODO tu bedzie zastosowana inna implementacja
 	TimeIntervalGenerator intervalGenerator = new ConstantTimeIntervalGenerator(
 			100);
@@ -22,6 +22,8 @@ public class ComputerSendsEvent extends Event {
 		super(time);
 		this.computer = computer;
 		this.pack = pack;
+		if (this.pack.getSourceIP() == null)
+			this.pack.setSourceIP(computer.getIP());
 	}
 
 	@Override

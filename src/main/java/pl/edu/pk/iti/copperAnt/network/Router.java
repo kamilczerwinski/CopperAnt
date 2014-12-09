@@ -14,18 +14,16 @@ import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.RouterControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
-import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Router extends Device implements WithControl {
-	private static final Logger log = LoggerFactory
-			.getLogger(ComputerSendsEvent.class);
-
 	private List<Triplet<Port, IPAddress, IPAddress>> portIP; // Port ip dhcpip
+
 	private HashMap<String, Port> routingTable; // <IP, Port>
 
 	private Properties config;
 	private RouterControl control;
+	private static final Logger log = LoggerFactory.getLogger(Router.class);
 
 	public Router(int numberOfPorts) {
 		this(numberOfPorts, false);

@@ -23,19 +23,17 @@ public class ComputerTest {
 	@Test
 	public void testSendDHCPPackage() {
 		Clock clock = mock(Clock.class);
+
 		Clock.setInstance(clock);
 		ArgumentCaptor<Event> eventCaptor = ArgumentCaptor
 				.forClass(Event.class);
 		doNothing().when(clock).addEvent(eventCaptor.capture());
 		when(clock.getCurrentTime()).thenReturn(11L);
-
 		Computer computer = new Computer();
-
 		computer.init();
 		List<Event> capturedEvent = eventCaptor.getAllValues();
 		assertEquals(capturedEvent.size(), 1);
 		Event event = ((Event) capturedEvent.get(0));
-
 		assertEquals(event.getPackage().getType(), PackageType.DHCP);
 		assertEquals(event.getPackage().getContent(), null);
 

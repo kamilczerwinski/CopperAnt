@@ -15,7 +15,6 @@ public class SwitchSimulationWithGuiSandbox extends AbstractControlSandbox {
 	protected void addElements(Pane root) {
 		SimulationCanvas simulationCanvas = new SimulationCanvas();
 		root.getChildren().add(simulationCanvas);
-
 		Clock.getInstance()
 				.setFinishCondition(new MaxTimeFinishCondition(1000));
 		Clock.getInstance().setRealTime(true);
@@ -24,6 +23,14 @@ public class SwitchSimulationWithGuiSandbox extends AbstractControlSandbox {
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"), true);
 		Computer computer3 = new Computer(new IPAddress("192.168.1.3"), true);
 		Switch switch_ = new Switch(3, true);
+		computer1.addKnownHost("192.168.1.2", computer2.getPort().getMAC());
+		computer1.addKnownHost("192.168.1.3", computer3.getPort().getMAC());
+
+		computer2.addKnownHost("192.168.1.1", computer1.getPort().getMAC());
+		computer2.addKnownHost("192.168.1.3", computer3.getPort().getMAC());
+
+		computer3.addKnownHost("192.168.1.1", computer1.getPort().getMAC());
+
 		Cable cable = new Cable(true);
 		cable.insertInto(computer1.getPort());
 		cable.insertInto(switch_.getPort(0));
@@ -42,6 +49,10 @@ public class SwitchSimulationWithGuiSandbox extends AbstractControlSandbox {
 		simulationCanvas.addControlOf(computer3, 200, 200);
 
 		computer1.initTrafic();
+
+		// dajcie sie poznac :)
+		computer2.init();
+		computer3.init();
 		Task<Void> task = new Task<Void>() {
 
 			@Override
