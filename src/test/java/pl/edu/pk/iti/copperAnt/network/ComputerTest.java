@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -14,6 +15,11 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.Event;
 
 public class ComputerTest {
+	@Before
+	public void setUp() {
+		Clock.resetInstance();
+	}
+
 	@Test
 	public void testSendDHCPPackage() {
 		Clock clock = mock(Clock.class);

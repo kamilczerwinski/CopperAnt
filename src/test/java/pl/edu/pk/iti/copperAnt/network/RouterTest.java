@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Properties;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -17,6 +18,11 @@ import pl.edu.pk.iti.copperAnt.simulation.events.Event;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class RouterTest {
+	@Before
+	public void setUp() {
+		Clock.resetInstance();
+	}
+
 	@Test
 	public void testEmtpyRoutingTable() {
 		Clock clock = mock(Clock.class);

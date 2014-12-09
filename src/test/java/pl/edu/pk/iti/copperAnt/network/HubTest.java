@@ -5,11 +5,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 
 public class HubTest {
+	@Before
+	public void setUp() {
+		Clock.resetInstance();
+	}
 
 	@Test
 	public void acceptPackageForwardsPachagesToAllPorts() {
