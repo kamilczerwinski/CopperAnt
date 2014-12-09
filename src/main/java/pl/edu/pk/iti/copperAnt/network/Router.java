@@ -176,7 +176,7 @@ public class Router extends Device implements WithControl {
 
 					Port port = trip.getValue0();
 					if (port != inPort) {
-						port.sendPackage(pack, getDelay());
+						port.sendPackage(pack);
 					}
 				}
 				return;
@@ -184,7 +184,7 @@ public class Router extends Device implements WithControl {
 
 		}
 
-		outPort.sendPackage(response, getDelay());
+		outPort.sendPackage(response);
 
 	}
 

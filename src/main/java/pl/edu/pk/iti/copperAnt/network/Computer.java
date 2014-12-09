@@ -68,7 +68,7 @@ public class Computer extends Device implements WithControl {
 
 	public void init() {
 		Package pack = new Package(PackageType.DHCP, null);
-		port.sendPackage(pack, getDelay());
+		port.sendPackage(pack);
 	}
 
 	@Override

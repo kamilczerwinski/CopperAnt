@@ -90,14 +90,14 @@ public class Switch extends Device implements WithControl {
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
 			pack.setSourceMAC(outPort.getMAC());
-			outPort.sendPackage(pack, getDelay());
+			outPort.sendPackage(pack);
 
 		} else {
 			// Send through all ports
 			// TODO: add exception for source port
 			for (Port port : ports) {
 				// pack.setSourceMAC(outPort.getMAC());
-				port.sendPackage(pack, getDelay());
+				port.sendPackage(pack);
 			}
 			// TODO: maybe some ACK that package was/wasn't delivered ?
 		}

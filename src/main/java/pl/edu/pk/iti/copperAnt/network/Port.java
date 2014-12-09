@@ -85,10 +85,10 @@ public class Port {
 		return "[" + Integer.toHexString(hashCode()) + "]";
 	}
 
-	public void sendPackage(Package pack, long deviceDelay) {
+	public void sendPackage(Package pack) {
 		Clock clock = Clock.getInstance();
-		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + deviceDelay,
-				this, pack));
+		clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
+				+ device.getDelay(), this, pack));
 	}
 
 	public void receivePackage(Package pack) {
