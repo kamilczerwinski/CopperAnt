@@ -3,6 +3,8 @@ package pl.edu.pk.iti.copperAnt.network;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
 import pl.edu.pk.iti.copperAnt.gui.SwitchControl;
@@ -11,6 +13,8 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Switch  extends Device implements  WithControl {
+    
+    private static final Logger switch_log = LoggerFactory.getLogger("switch_logs");
 
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
@@ -20,6 +24,7 @@ public class Switch  extends Device implements  WithControl {
 
 	public Switch(int numberOfPorts, Clock clock) {
 		this(numberOfPorts, clock, false);
+                switch_log.info("New switch created without GUI");
 	}
 
 	public Switch(int numberOfPorts, Clock clock, boolean withGui) {
@@ -36,6 +41,7 @@ public class Switch  extends Device implements  WithControl {
 			}
 			control = new SwitchControl(list);
 		}
+                switch_log.info("New computer created with GUI");
 	}
 
 	public Port getPort(int portNumber) {

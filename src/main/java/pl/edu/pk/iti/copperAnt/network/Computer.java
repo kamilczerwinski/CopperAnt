@@ -2,6 +2,8 @@ package pl.edu.pk.iti.copperAnt.network;
 
 import java.util.Random;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.gui.ComputerControl;
 import pl.edu.pk.iti.copperAnt.gui.WithControl;
@@ -11,6 +13,9 @@ import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Computer extends Device implements WithControl {
+    
+    private static final Logger computer_log = LoggerFactory.getLogger("computer_logs");
+    
 	private Port port;
 	private IPAddress ip;
 	private ComputerControl control;
@@ -21,6 +26,7 @@ public class Computer extends Device implements WithControl {
 
 	public Computer(IPAddress ip) {
 		this(ip, false);
+                computer_log.info("New computer created without GUI");
 	}
 
 	public Computer(IPAddress ip, boolean withGui) {
@@ -29,6 +35,7 @@ public class Computer extends Device implements WithControl {
 		if (withGui) {
 			this.control = new ComputerControl(port.getControl());
 		}
+                computer_log.info("New computer created with GUI");
 	}
 
 	public Port getPort() {

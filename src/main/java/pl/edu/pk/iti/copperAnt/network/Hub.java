@@ -2,6 +2,8 @@ package pl.edu.pk.iti.copperAnt.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.edu.pk.iti.copperAnt.gui.HubControl;
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
@@ -10,12 +12,16 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Hub   extends Device implements  WithControl {
+    
+    private static final Logger hub_log = LoggerFactory.getLogger("hub_logs");
+    
 	private final List<Port> ports;
 	private Clock clock;
 	private HubControl control;
 
 	public Hub(int numberOfPorts, Clock clock) {
 		this(numberOfPorts, clock, false);
+                hub_log.info("New hub created without GUI");
 	}
 
 	public Hub(int numberOfPorts, Clock clock, boolean withGui) {
@@ -31,6 +37,7 @@ public class Hub   extends Device implements  WithControl {
 			}
 			control = new HubControl(list);
 		}
+                hub_log.info("New computer created with GUI");
 	}
 
 	public Port getPort(int portNumber) {
