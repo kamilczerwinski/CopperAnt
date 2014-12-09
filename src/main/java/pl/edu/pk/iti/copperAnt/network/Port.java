@@ -3,6 +3,8 @@ package pl.edu.pk.iti.copperAnt.network;
 import java.util.Random;
 
 import pl.edu.pk.iti.copperAnt.gui.PortControl;
+import pl.edu.pk.iti.copperAnt.simulation.Clock;
+import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class Port {
 
@@ -83,4 +85,12 @@ public class Port {
 		return "[" + Integer.toHexString(hashCode()) + "]";
 	}
 
+	public void sendPackage(Package pack, Clock clock, long deviceDelay) {
+		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + deviceDelay,
+				this, pack));
+	}
+
+	public void receivePackage(Package pack) {
+		device.acceptPackage(pack, this);
+	}
 }

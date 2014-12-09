@@ -17,9 +17,9 @@ public class SwitchSimulationWithGuiSandbox extends AbstractControlSandbox {
 		root.getChildren().add(simulationCanvas);
 
 		Clock clock = new Clock()
-				.withFinishCondition(new MaxTimeFinishCondition(100));
+				.withFinishCondition(new MaxTimeFinishCondition(1000));
 		clock.setRealTime(true);
-		clock.setTimeScale(100);
+		clock.setTimeScale(50);
 		Computer computer1 = new Computer(new IPAddress("192.168.1.1"), true);
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"), true);
 		Computer computer3 = new Computer(new IPAddress("192.168.1.3"), true);

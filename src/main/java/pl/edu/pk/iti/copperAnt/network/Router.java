@@ -17,10 +17,10 @@ import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.ComputerSendsEvent;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Router extends Device implements  WithControl  {
+public class Router extends Device implements WithControl {
 	private static final Logger log = LoggerFactory
 			.getLogger(ComputerSendsEvent.class);
-	
+
 	private List<Triplet<Port, IPAddress, IPAddress>> portIP; // Port ip dhcpip
 	private Clock clock;
 	private HashMap<String, Port> routingTable; // <IP, Port>
@@ -34,19 +34,20 @@ public class Router extends Device implements  WithControl  {
 
 	public Router(int numberOfPorts, Clock clock, boolean withGui) {
 		this.clock = clock;
-		
+
 		Random generator = new Random();
 		portIP = new ArrayList<Triplet<Port, IPAddress, IPAddress>>();
-		
+
 		for (int i = 0; i < numberOfPorts; i++) {
 			IPAddress tmp = new IPAddress("192.168.0.1");
 			tmp.set(3, generator.nextInt(254) + 1);
-			portIP.add(new Triplet<Port, IPAddress, IPAddress>(new Port(this, withGui), tmp, new IPAddress(tmp)));
-			
+			portIP.add(new Triplet<Port, IPAddress, IPAddress>(new Port(this,
+					withGui), tmp, new IPAddress(tmp)));
+
 		}
 		routingTable = new HashMap<String, Port>();
 		config = new Properties();
-		
+
 		if (withGui) {
 			List<PortControl> list = new ArrayList<PortControl>(numberOfPorts);
 			for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
@@ -57,18 +58,18 @@ public class Router extends Device implements  WithControl  {
 	}
 
 	public Router(Properties config, Clock clock) {
-		this(Integer.parseInt(config.getProperty("numbersOfPorts")),clock, config.getProperty("withGui", "false").equals("true"));
-	
-	}
+		this(Integer.parseInt(config.getProperty("numbersOfPorts")), clock,
+				config.getProperty("withGui", "false").equals("true"));
 
-	
+	}
 
 	private String generateIP(int index) {
 		return portIP.get(index).getValue2().increment();
 
 	}
+
 	private String generateIP(Port inPort) {
-		for (Triplet<Port, IPAddress, IPAddress> trip: portIP) {
+		for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
 			if (trip.getValue0() == inPort) {
 				return trip.getValue2().increment();
 			}
@@ -80,11 +81,13 @@ public class Router extends Device implements  WithControl  {
 	public Port getPort(int portNumber) {
 		return portIP.get(portNumber).getValue0();
 	}
+
 	public String getIP(int portNumber) {
 		return portIP.get(portNumber).getValue1().toString();
 	}
+
 	public String getIP(Port port) {
-		for (Triplet<Port, IPAddress, IPAddress> trip: portIP) {
+		for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
 			if (trip.getValue0() == port) {
 				return trip.getValue1().toString();
 			}
@@ -93,8 +96,8 @@ public class Router extends Device implements  WithControl  {
 	}
 
 	private boolean isMyIP(String addr) {
-		
-		for (Triplet<Port, IPAddress, IPAddress> trip: portIP) {
+
+		for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
 			if (trip.getValue1().toString().equals(addr)) {
 				return true;
 			}
@@ -173,24 +176,20 @@ public class Router extends Device implements  WithControl  {
 			if (!isInSubnet) {
 				for (Triplet<Port, IPAddress, IPAddress> trip : portIP) {
 
-					if (trip.getValue0() != inPort) {						
-						clock.addEvent(new PortSendsEvent(clock.getCurrentTime()				
-							+ getDelay(), trip.getValue0(), pack));
+					Port port = trip.getValue0();
+					if (port != inPort) {
+						port.sendPackage(pack, clock, getDelay());
 					}
 				}
 				return;
 			}
-			
-			
-		}
-		
 
-		clock.addEvent(new PortSendsEvent(clock.getCurrentTime() + getDelay(),
-				outPort, response));
+		}
+
+		outPort.sendPackage(response, clock, getDelay());
 
 	}
 
-	
 	public String getMac() {
 		return this.portIP.get(0).getValue0().getMAC();
 	}
@@ -200,7 +199,6 @@ public class Router extends Device implements  WithControl  {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
 
 	public RouterControl getControl() {
 		return control;

@@ -10,7 +10,7 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Switch  extends Device implements  WithControl {
+public class Switch extends Device implements WithControl {
 
 	private final List<Port> ports;
 	private HashMap<String, Port> macTable; // <MAC, Port>
@@ -91,21 +91,18 @@ public class Switch  extends Device implements  WithControl {
 		if (macLookup(destinationMAC, outPort)) {
 			// Send through desired port
 			pack.setSourceMAC(outPort.getMAC());
-			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
-					+ getDelay(), outPort, pack));
+			outPort.sendPackage(pack, clock, getDelay());
+
 		} else {
 			// Send through all ports
 			// TODO: add exception for source port
 			for (Port port : ports) {
 				// pack.setSourceMAC(outPort.getMAC());
-				clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
-						+ getDelay(), port, pack));
+				port.sendPackage(pack, clock, getDelay());
 			}
 			// TODO: maybe some ACK that package was/wasn't delivered ?
 		}
 	}
-
-	
 
 	@Override
 	public SwitchControl getControl() {

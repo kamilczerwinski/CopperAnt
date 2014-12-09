@@ -17,7 +17,7 @@ public class TwoComputersSimulationWithGuiSandbox extends
 		root.getChildren().add(simulationCanvas);
 
 		Clock clock = new Clock()
-				.withFinishCondition(new MaxTimeFinishCondition(100));
+				.withFinishCondition(new MaxTimeFinishCondition(100000));
 		clock.setRealTime(true);
 		clock.setTimeScale(100);
 		Cable cable = new Cable(true);

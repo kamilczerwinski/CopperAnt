@@ -67,9 +67,8 @@ public class Computer extends Device implements WithControl {
 	}
 
 	public void init(Clock clock) {
-		long time = clock.getCurrentTime() + this.getDelay();
 		Package pack = new Package(PackageType.DHCP, null);
-		clock.addEvent(new PortSendsEvent(time, this.port, pack));
+		port.sendPackage(pack, clock, getDelay());
 	}
 
 	@Override

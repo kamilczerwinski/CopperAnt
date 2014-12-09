@@ -13,14 +13,14 @@ public class RouterSimulationWithGuiSandbox extends AbstractControlSandbox {
 
 	@Override
 	protected void addElements(Pane root) {
-		
+
 		SimulationCanvas simulationCanvas = new SimulationCanvas();
 		root.getChildren().add(simulationCanvas);
 
 		Clock clock = new Clock()
-				.withFinishCondition(new MaxTimeFinishCondition(100));
+				.withFinishCondition(new MaxTimeFinishCondition(10000));
 		clock.setRealTime(true);
-		clock.setTimeScale(100);
+		clock.setTimeScale(50);
 		Computer computer1 = new Computer(new IPAddress("192.168.1.1"), true);
 		Computer computer2 = new Computer(new IPAddress("192.168.1.2"), true);
 		Router router = new Router(2, clock, true);

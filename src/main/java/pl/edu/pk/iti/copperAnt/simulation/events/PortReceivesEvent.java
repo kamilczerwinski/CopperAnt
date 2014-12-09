@@ -28,7 +28,7 @@ public class PortReceivesEvent extends Event {
 		if (portControl != null) {
 			portControl.acceptPackage();
 		}
-		port.getDevice().acceptPackage(pack, port);
+		port.receivePackage(pack);
 		log.info(this.toString());
 
 	}

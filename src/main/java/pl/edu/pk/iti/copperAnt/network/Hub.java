@@ -9,7 +9,7 @@ import pl.edu.pk.iti.copperAnt.gui.WithControl;
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
 import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
-public class Hub   extends Device implements  WithControl {
+public class Hub extends Device implements WithControl {
 	private final List<Port> ports;
 	private Clock clock;
 	private HubControl control;
@@ -40,8 +40,7 @@ public class Hub   extends Device implements  WithControl {
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
 		for (Port port : ports) {
-			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
-					+ getDelay(), port, pack));
+			port.sendPackage(pack, clock, getDelay());
 		}
 	}
 
