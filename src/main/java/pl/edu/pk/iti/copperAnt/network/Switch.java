@@ -45,32 +45,6 @@ public class Switch extends Device implements WithControl {
 	}
 
 	/**
-	 * Add MAC & port to macTable
-	 *
-	 * @param MAC
-	 * @param port
-	 */
-	private void addMACtoTable(String MAC, Port port) {
-		macTable.put(MAC, port);
-	}
-
-	/**
-	 * Search for MAC & port in macTable
-	 *
-	 * @param MAC
-	 * @param Port
-	 * @return true or false
-	 */
-	private boolean macLookup(String MAC, Port port) {
-		if (macTable.containsKey(MAC)) {
-			port = macTable.get(MAC);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
 	 * Process incoming Package on receiving port and forward it
 	 *
 	 * @param pack
@@ -84,28 +58,22 @@ public class Switch extends Device implements WithControl {
 		String destinationMAC = pack.getDestinationMAC();
 		String sourceMAC = pack.getSourceMAC();
 		log.info("AcceptPackage from " + sourceMAC + " to " + destinationMAC);
-		Port outPort = null;
-
-		// Save source MAC & port to macTable, if it doesn't exist
-		if (!macLookup(sourceMAC, inPort)) {
-			addMACtoTable(sourceMAC, inPort);
+		if (!macTable.containsKey(sourceMAC)) {
+			log.debug("Added new mac to macTable: " + sourceMAC + "port: "
+					+ inPort);
+			macTable.put(sourceMAC, inPort);
 		}
+		Port outPort = macTable.get(destinationMAC);
 
-		// Search for MAC & port in macTable
-		if (macLookup(destinationMAC, outPort)) {
-			// Send through desired port
+		if (outPort != null) {
 			log.debug("Known MAC address. Send to port");
-			clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
-					+ getDelay(), outPort, pack));
+			outPort.sendPackage(pack);
 		} else {
-			// Send through all ports
 			log.debug("Unknown MAC " + destinationMAC
 					+ " address. Send to all ports");
-
 			for (Port port : ports) {
 				if (port != inPort) {
-					clock.addEvent(new PortSendsEvent(clock.getCurrentTime()
-							+ getDelay(), port, pack));
+					port.sendPackage(pack);
 				}
 			}
 		}
@@ -118,5 +86,9 @@ public class Switch extends Device implements WithControl {
 
 	public void setControl(SwitchControl control) {
 		this.control = control;
+	}
+
+	public HashMap<String, Port> getMacTable() {
+		return macTable;
 	}
 }
