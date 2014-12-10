@@ -7,6 +7,7 @@ public class Package {
 	private String destinationIP;
 	private int ttl = 10;
 	private String content;
+
 	private String header;
 	private PackageType type = PackageType.ECHO_REQUEST;
 	public final static String MAC_BROADCAST = "00:00:00:00:00:00";
@@ -27,6 +28,10 @@ public class Package {
 
 	public String getContent() {
 		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getHeader() {

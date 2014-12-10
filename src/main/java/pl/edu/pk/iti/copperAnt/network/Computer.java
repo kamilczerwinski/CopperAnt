@@ -58,7 +58,7 @@ public class Computer extends Device implements WithControl {
 		return arpTable.containsKey(ip);
 	}
 
-	public String getKnownHost(String ip) {
+	public String getKnownHostMac(String ip) {
 		return arpTable.get(ip);
 
 	}
@@ -81,7 +81,7 @@ public class Computer extends Device implements WithControl {
 	public void acceptPackage(Package pack, Port inPort) {
 		log.info("Computer received package " + pack);
 		acceptPackegesWhichDoesNotRequireIP(pack);
-		if (pack.getDestinationIP() != this.ip.toString()) {
+		if (this.ip == null || pack.getDestinationIP() != this.ip.toString()) {
 			return;
 		}
 		acceptPackegesWhichRequireIP(pack);
@@ -93,10 +93,7 @@ public class Computer extends Device implements WithControl {
 		case ECHO_REQUEST:
 			// TODO: add event to pong
 			break;
-		case ARP_REP:
-			arpTable.put(pack.getSourceIP(), pack.getContent());
-			tryToSendPackagesFromQueue();
-			break;
+
 		}
 	}
 
@@ -122,6 +119,11 @@ public class Computer extends Device implements WithControl {
 				arpTable.put(pack.getSourceIP(), pack.getContent());
 			}
 			break;
+		case ARP_REP:
+			arpTable.put(pack.getSourceIP(), pack.getContent());
+			tryToSendPackagesFromQueue();
+			break;
+
 		}
 	}
 
@@ -129,7 +131,7 @@ public class Computer extends Device implements WithControl {
 		for (String toSendIP : packageQueue.keySet()) {
 			if (this.knownHost(toSendIP)) {
 				for (Package toSend : packageQueue.get(toSendIP)) {
-					toSend.setDestinationMAC(this.getKnownHost(toSendIP));
+					toSend.setDestinationMAC(this.getKnownHostMac(toSendIP));
 					ComputerSendsEvent event = new ComputerSendsEvent(
 							clock.getCurrentTime() + this.getDelay(), this,
 							toSend);

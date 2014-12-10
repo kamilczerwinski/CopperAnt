@@ -39,4 +39,37 @@ public class ComputerTest {
 
 	}
 
+	@Test
+	public void dhcpResponseTest() {
+		// given
+		Computer computer = new Computer();
+		Package pack = new Package();
+		pack.setDestinationMAC(computer.getPort().getMAC());
+		pack.setType(PackageType.DHCP);
+		pack.setContent("192.168.11.11");
+		// when
+		computer.getPort().receivePackage(pack);
+		// then
+		assertEquals(computer.getIP(), "192.168.11.11");
+
+	}
+
+	@Test
+	public void arpResponseTest() {
+		// given
+		Computer computer = new Computer();
+		Package pack = new Package();
+		pack.setDestinationMAC(computer.getPort().getMAC());
+		pack.setType(PackageType.ARP_REP);
+		pack.setContent("00:B0:D0:86:BB:F7");
+		pack.setDestinationMAC(computer.getPort().getMAC());
+		pack.setSourceIP("192.168.11.11");
+		// when
+		computer.getPort().receivePackage(pack);
+		// then
+		assertEquals(computer.getKnownHostMac("192.168.11.11"),
+				"00:B0:D0:86:BB:F7");
+
+	}
+
 }
