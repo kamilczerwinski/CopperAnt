@@ -1,6 +1,8 @@
 package pl.edu.pk.iti.copperAnt.gui;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -33,6 +35,7 @@ public class PortControl extends Control {
 
 		prepareDiods();
 		turnOn();
+		prepareContextMenu();
 
 	}
 
@@ -68,5 +71,27 @@ public class PortControl extends Control {
 	public boolean isOn() {
 		return this.isOn;
 	}
+	
+	private void prepareContextMenu() {
+		ContextMenu contextMenu = new ContextMenu();
+
+		MenuItem addComputerItem = new MenuItem("Akcja 1");
+		addComputerItem.setOnAction(e -> sampleAction());
+		contextMenu.getItems().add(addComputerItem);
+
+		MenuItem addRouterItem = new MenuItem("Akcja 2");
+		addRouterItem.setOnAction(e -> sampleAction());
+		contextMenu.getItems().add(addRouterItem);
+
+
+		// TODO
+		// MenuItem addHubItem = new MenuItem("add hub");
+		// addHubItem.setOnAction(e -> add(new ComputerControl()));
+		// contextMenu.getItems().add(addHubItem);
+
+		setContextMenu(contextMenu);
+	}
+	private void sampleAction(){}
+
 
 }
