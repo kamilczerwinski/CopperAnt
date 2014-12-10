@@ -79,10 +79,35 @@ public class Computer extends Device implements WithControl {
 
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
+		log.info("Computer received package " + pack);
+		acceptPackegesWhichDoesNotRequireIP(pack);
+		if (pack.getDestinationIP() != this.ip.toString()) {
+			return;
+		}
+		acceptPackegesWhichRequireIP(pack);
 
-		if (pack.getType() == PackageType.DHCP && this.ip == null) {
-			this.ip = new IPAddress(pack.getContent());
-		} else if (pack.getType() == PackageType.ARP_REQ) {
+	}
+
+	private void acceptPackegesWhichRequireIP(Package pack) {
+		switch (pack.getType()) {
+		case ECHO_REQUEST:
+			// TODO: add event to pong
+			break;
+		case ARP_REP:
+			arpTable.put(pack.getSourceIP(), pack.getContent());
+			tryToSendPackagesFromQueue();
+			break;
+		}
+	}
+
+	private void acceptPackegesWhichDoesNotRequireIP(Package pack) {
+		switch (pack.getType()) {
+		case DHCP:
+			if (this.ip == null) {
+				this.ip = new IPAddress(pack.getContent());
+			}
+			break;
+		case ARP_REQ:
 			if (pack.getContent() == null
 					&& pack.getHeader() == this.ip.toString()) {
 				Package outPack = new Package(PackageType.ARP_REP,
@@ -91,21 +116,16 @@ public class Computer extends Device implements WithControl {
 				outPack.setDestinationIP(pack.getSourceIP());
 				outPack.setDestinationMAC(pack.getSourceMAC());
 				// ---------------------------------------------
-				long time = clock.getCurrentTime();
 				port.sendPackage(outPack);
 
 			} else {
 				arpTable.put(pack.getSourceIP(), pack.getContent());
 			}
+			break;
 		}
-		if (pack.getDestinationIP() == this.ip.toString()) {
-			if (pack.getType() == PackageType.ECHO_REQUEST) {
-				// TODO: add event to pong
-			} else if (pack.getType() == PackageType.ARP_REP) {
-				arpTable.put(pack.getSourceIP(), pack.getContent());
+	}
 
-			}
-		}
+	private void tryToSendPackagesFromQueue() {
 		for (String toSendIP : packageQueue.keySet()) {
 			if (this.knownHost(toSendIP)) {
 				for (Package toSend : packageQueue.get(toSendIP)) {
@@ -119,9 +139,6 @@ public class Computer extends Device implements WithControl {
 				}
 			}
 		}
-
-		log.info("Computer received package " + pack);
-
 	}
 
 	public void initTrafic() {
