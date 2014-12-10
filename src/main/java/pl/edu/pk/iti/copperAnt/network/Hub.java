@@ -45,7 +45,7 @@ public class Hub extends Device implements WithControl {
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
 		for (Port port : ports) {
-			port.sendPackage(pack);
+			port.sendPackage(pack.copy());
 		}
 	}
 
