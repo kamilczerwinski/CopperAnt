@@ -87,4 +87,22 @@ public class IPAddressTest {
 		assertFalse(IPAddress.isInSubnet("192.168.12.1", "192.168.0.0",
 				"255.255.255.128"));
 	}
+
+	@Test
+	public void decrementTest() {
+		final IPAddress ipAddress = new IPAddress("192.168.1.3");
+		assertEquals(ipAddress.decrement().toString(), "192.168.1.2");
+	}
+
+	@Test
+	public void decrementTest2() {
+		final IPAddress ipAddress = new IPAddress("192.168.1.0");
+		assertEquals(ipAddress.decrement().toString(), "192.168.1.0");
+	}
+
+	@Test
+	public void getBrodcastTest() {
+		final IPAddress ipAddress = new IPAddress("192.168.1.0");
+		assertEquals(ipAddress.getBrodcast().toString(), "192.168.1.255");
+	}
 }
