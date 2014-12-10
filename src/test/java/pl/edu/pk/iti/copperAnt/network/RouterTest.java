@@ -178,6 +178,17 @@ public class RouterTest {
 	}
 
 	@Test
+	public void setAndGetIp2Test() {
+		// given
+		Router router = new Router(3);
+		// when
+		router.setIpForPort(2, new IPAddress("192.168.1.12"));
+		String ip = router.getIP(router.getPort(2));
+		// then
+		assertEquals("192.168.1.12", ip);
+	}
+
+	@Test
 	public void sendPackageIsNotTheSameAsReceived() {
 		Clock clock = mock(Clock.class);
 		Clock.setInstance(clock);
@@ -193,6 +204,31 @@ public class RouterTest {
 		for (PortSendsEvent event : capturedEvents) {
 			assertNotSame(pack, event.getPackage());
 		}
+	}
+
+	@Test
+	public void routerCanRespnseForPingTest() {
+		Clock clock = mock(Clock.class);
+		Clock.setInstance(clock);
+		ArgumentCaptor<PortSendsEvent> eventCaptor = ArgumentCaptor
+				.forClass(PortSendsEvent.class);
+		doNothing().when(clock).addEvent(eventCaptor.capture());
+		when(clock.getCurrentTime()).thenReturn(11L);
+		Router router = new Router(1);
+		router.setIpForPort(0, new IPAddress("192.158.2.55"));
+		Package pack = new Package();
+		pack.setSourceIP("192.158.2.1");
+		pack.setDestinationIP("192.158.2.55");
+		pack.setType(PackageType.ECHO_REQUEST);
+		router.acceptPackage(pack, router.getPort(0));
+		PortSendsEvent capturedEvent = eventCaptor.getValue();
+		assertEquals(capturedEvent.getPort(), router.getPort(0));
+		assertEquals(capturedEvent.getPackage().getType(),
+				PackageType.ECHO_REPLY);
+		assertEquals(capturedEvent.getPackage().getSourceIP().toString(),
+				"192.158.2.55");
+		assertEquals(capturedEvent.getPackage().getDestinationIP().toString(),
+				"192.158.2.1");
 	}
 
 }

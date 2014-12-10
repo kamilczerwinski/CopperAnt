@@ -150,6 +150,7 @@ public class Router extends Device implements WithControl {
 			response = new Package(PackageType.ECHO_REPLY, pack.getContent());
 			response.setDestinationMAC(pack.getSourceMAC());
 			response.setDestinationIP(sourceIP);
+			response.setSourceIP(destinationIP);
 			outPort = inPort;
 		}
 		if (!routingTable.containsKey(sourceIP)) {
