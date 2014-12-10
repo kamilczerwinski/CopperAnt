@@ -3,6 +3,7 @@ package pl.edu.pk.iti.copperAnt.network;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -25,19 +26,27 @@ public class RouterTest {
 
 	@Test
 	public void testEmtpyRoutingTable() {
+		// given
 		Clock clock = mock(Clock.class);
 		Clock.setInstance(clock);
-		ArgumentCaptor<Event> eventCaptor = ArgumentCaptor
-				.forClass(Event.class);
+		ArgumentCaptor<PortSendsEvent> eventCaptor = ArgumentCaptor
+				.forClass(PortSendsEvent.class);
 		doNothing().when(clock).addEvent(eventCaptor.capture());
 		when(clock.getCurrentTime()).thenReturn(11L);
-		Router router = new Router(4);
+		final int numberOfPorts = 4;
+		Router router = new Router(numberOfPorts);
 		Package pack = new Package();
 		pack.setDestinationIP("192.158.2.55");
+		pack.setSourceMAC("96:66:d5:8d:3b:cb");
+		// when
 		router.acceptPackage(pack, router.getPort(0));
-		List<Event> capturedEvent = eventCaptor.getAllValues();
-		assertEquals(3, capturedEvent.size());
-		assertEquals(capturedEvent.get(0).getPackage(), pack);
+		// then
+		List<PortSendsEvent> capturedEvents = eventCaptor.getAllValues();
+		assertEquals(3, capturedEvents.size());
+		for (int i = 1; i < numberOfPorts; i++) {
+			assertTrue(capturedEvents.stream().anyMatch(
+					e -> e.getPort().equals(router.getPort(1))));
+		}
 
 	}
 
@@ -166,6 +175,24 @@ public class RouterTest {
 		String ip = router.getIP(2);
 		// then
 		assertEquals("192.168.1.12", ip);
+	}
+
+	@Test
+	public void sendPackageIsNotTheSameAsReceived() {
+		Clock clock = mock(Clock.class);
+		Clock.setInstance(clock);
+		ArgumentCaptor<PortSendsEvent> eventCaptor = ArgumentCaptor
+				.forClass(PortSendsEvent.class);
+		doNothing().when(clock).addEvent(eventCaptor.capture());
+		when(clock.getCurrentTime()).thenReturn(11L);
+		Router router = new Router(4);
+		Package pack = new Package();
+		pack.setDestinationIP("192.158.2.55");
+		router.acceptPackage(pack, router.getPort(0));
+		List<PortSendsEvent> capturedEvents = eventCaptor.getAllValues();
+		for (PortSendsEvent event : capturedEvents) {
+			assertNotSame(pack, event.getPackage());
+		}
 	}
 
 }
