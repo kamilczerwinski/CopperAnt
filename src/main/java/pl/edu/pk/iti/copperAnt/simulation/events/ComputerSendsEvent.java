@@ -22,8 +22,6 @@ public class ComputerSendsEvent extends Event {
 		super(time);
 		this.computer = computer;
 		this.pack = pack;
-		if (this.pack.getSourceIP() == null)
-			this.pack.setSourceIP(computer.getIP());
 	}
 
 	@Override
