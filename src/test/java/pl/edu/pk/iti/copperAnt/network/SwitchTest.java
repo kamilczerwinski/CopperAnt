@@ -3,10 +3,14 @@ package pl.edu.pk.iti.copperAnt.network;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import pl.edu.pk.iti.copperAnt.simulation.Clock;
+import pl.edu.pk.iti.copperAnt.simulation.events.PortSendsEvent;
 
 public class SwitchTest {
 
@@ -140,6 +144,45 @@ public class SwitchTest {
 		Switch switch_ = new Switch(2);
 		// then
 		assertNotSame(switch_.getPort(0), switch_.getPort(1));
+	}
+
+	@Test
+	public void sendPackageIsNotTheSameAsReceived() {
+		Clock clock = mock(Clock.class);
+		Clock.setInstance(clock);
+		ArgumentCaptor<PortSendsEvent> eventCaptor = ArgumentCaptor
+				.forClass(PortSendsEvent.class);
+		doNothing().when(clock).addEvent(eventCaptor.capture());
+		when(clock.getCurrentTime()).thenReturn(11L);
+		Switch switch_ = new Switch(4);
+		Package pack = new Package();
+		pack.setDestinationIP("192.158.2.55");
+		switch_.acceptPackage(pack, switch_.getPort(0));
+		List<PortSendsEvent> capturedEvents = eventCaptor.getAllValues();
+		for (PortSendsEvent event : capturedEvents) {
+			assertNotSame(pack, event.getPackage());
+		}
+
+	}
+
+	@Test
+	public void switchDoesNotChangePackages() {
+		Clock clock = mock(Clock.class);
+		Clock.setInstance(clock);
+		ArgumentCaptor<PortSendsEvent> eventCaptor = ArgumentCaptor
+				.forClass(PortSendsEvent.class);
+		doNothing().when(clock).addEvent(eventCaptor.capture());
+		when(clock.getCurrentTime()).thenReturn(11L);
+		Switch switch_ = new Switch(4);
+		Package pack = new Package();
+		pack.setDestinationIP("192.158.2.55");
+		pack.setSourceMAC("96:66:d5:8d:3b:cb");
+		switch_.acceptPackage(pack, switch_.getPort(0));
+		List<PortSendsEvent> capturedEvents = eventCaptor.getAllValues();
+		for (PortSendsEvent event : capturedEvents) {
+			assertEquals(pack, event.getPackage());
+		}
+
 	}
 
 }

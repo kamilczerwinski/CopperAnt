@@ -59,7 +59,8 @@ public class Switch extends Device implements WithControl {
 	 */
 
 	@Override
-	public void acceptPackage(Package pack, Port inPort) {
+	public void acceptPackage(Package receivedPack, Port inPort) {
+		Package pack = receivedPack.copy();
 		String destinationMAC = pack.getDestinationMAC();
 		String sourceMAC = pack.getSourceMAC();
 		log.info("AcceptPackage from " + sourceMAC + " to " + destinationMAC);
