@@ -65,6 +65,7 @@ public class Computer extends Device implements WithControl {
 
 	public Computer(IPAddress ip, boolean withGui) {
 		this.port = new Port(this, withGui);
+		port.setControlDestinationMacOfPackages(true);
 		this.ip = ip;
 		if (withGui) {
 			this.control = new ComputerControl(port.getControl());
@@ -78,18 +79,10 @@ public class Computer extends Device implements WithControl {
 
 	@Override
 	public void acceptPackage(Package pack, Port inPort) {
-		// assume is response for arp package
-
-		if (!pack.getDestinationMAC().equals(port.getMAC())
-				&& !pack.getDestinationMAC().equals(Package.MAC_BROADCAST)) {
-			log.info("Dropping package! Wrong MAC! " + pack + " my MAC "
-					+ port.getMAC());
-			return;
-		}
 
 		if (pack.getType() == PackageType.DHCP && this.ip == null) {
 			this.ip = new IPAddress(pack.getContent());
-		} else if (pack.getType() == PackageType.ARP_REQ)
+		} else if (pack.getType() == PackageType.ARP_REQ) {
 			if (pack.getContent() == null
 					&& pack.getHeader() == this.ip.toString()) {
 				Package outPack = new Package(PackageType.ARP_REP,
@@ -104,6 +97,7 @@ public class Computer extends Device implements WithControl {
 			} else {
 				arpTable.put(pack.getSourceIP(), pack.getContent());
 			}
+		}
 		if (pack.getDestinationIP() == this.ip.toString()) {
 			if (pack.getType() == PackageType.ECHO_REQUEST) {
 				// TODO: add event to pong
