@@ -22,7 +22,10 @@ public abstract class Event {
 		return time + ": ";
 	}
 	abstract public  Package getPackage();
-
 	
+	//for notifying stats updateing in Clock
+	public void notifyAboutUsage(Clock clock) { 
+		clock.updateStatistics(System.currentTimeMillis(), this.getPackage());	
+	}
 
 }
